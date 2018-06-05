@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114229696144282230}
   - component: {fileID: 114793806981062182}
   - component: {fileID: 114970173243135508}
-  - component: {fileID: 114879348223299348}
+  - component: {fileID: 114279722325432294}
   m_Layer: 0
   m_Name: MrDude
   m_TagString: Untagged
@@ -59,6 +59,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -105,6 +106,23 @@ MonoBehaviour:
   ability4Key: 101
   ability5Key: 102
   mainCamera: {fileID: 0}
+--- !u!114 &114279722325432294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1159658488830318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a75f3c69d4e58ec4ca59135f3ca8e813, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Mr Dude
+  debugText: 
+  speedMultiplier: 1
+  decelerationMultiplier: 0.9
+  damageMultiplier: 1
+  target: {x: 0, y: 0, z: 0}
 --- !u!114 &114793806981062182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,23 +137,6 @@ MonoBehaviour:
   amount: 100
   maxEnergy: 100
   regenEnergySpeed: 1
---- !u!114 &114879348223299348
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1159658488830318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 525bb2d5d87e6514686a4b2dab92b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterName: 
-  debugText: 
-  speedMultiplier: 1
-  decelerationMultiplier: 0.9
-  damageMultiplier: 1
-  target: {x: 0, y: 0, z: 0}
 --- !u!114 &114970173243135508
 MonoBehaviour:
   m_ObjectHideFlags: 1
