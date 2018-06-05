@@ -224,6 +224,28 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 84e87181b01c8b442aaa08d527d387e0, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &631968408 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1953725701284928, guid: 84e87181b01c8b442aaa08d527d387e0,
+    type: 2}
+  m_PrefabInternal: {fileID: 631968407}
+--- !u!114 &631968409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 631968408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 324a9e8218d9e1f44b8929be8ed5b784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Necromancer
+  debugText: 
+  speedMultiplier: 1
+  decelerationMultiplier: 0.9
+  damageMultiplier: 1
+  target: {x: 0, y: 0, z: 0}
 --- !u!1 &1743605867
 GameObject:
   m_ObjectHideFlags: 0
