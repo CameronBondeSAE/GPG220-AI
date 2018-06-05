@@ -25,8 +25,8 @@ GameObject:
   - component: {fileID: 114048536695212414}
   - component: {fileID: 114931918599314320}
   - component: {fileID: 114920952113936696}
-  - component: {fileID: 114984857433920952}
   - component: {fileID: 114615591493028306}
+  - component: {fileID: 114711667520121052}
   - component: {fileID: 114776433862166028}
   m_Layer: 0
   m_Name: Cube
@@ -129,6 +129,24 @@ MonoBehaviour:
   lastHealingDealer: {fileID: 0}
   lastDamagingDealer: {fileID: 0}
   lastHealthChangedAmount: 0
+--- !u!114 &114711667520121052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1966706611021462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef332eb3e952c34d84b9fd52ad04c48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetModel: {fileID: 114931918599314320}
+  ability1Key: 304
+  ability2Key: 308
+  ability3Key: 113
+  ability4Key: 101
+  ability5Key: 102
+  mainCamera: {fileID: 0}
 --- !u!114 &114776433862166028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,18 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94cfd73210b6e8944a46c823b27b12c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114984857433920952
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1966706611021462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 525bb2d5d87e6514686a4b2dab92b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterName: 
+  characterName: Cube
   debugText: 
   speedMultiplier: 1
   decelerationMultiplier: 0.9
