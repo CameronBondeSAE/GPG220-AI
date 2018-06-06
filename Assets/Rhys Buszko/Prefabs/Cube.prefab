@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 114931918599314320}
   - component: {fileID: 114920952113936696}
   - component: {fileID: 114615591493028306}
-  - component: {fileID: 114711667520121052}
   - component: {fileID: 114776433862166028}
   - component: {fileID: 135031991671185878}
   m_Layer: 0
@@ -43,7 +42,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1966706611021462}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.047176, y: -0.112075806, z: -1.5993505}
+  m_LocalPosition: {x: -15.6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,7 +61,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -114,6 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd72fe8bd85c6b741be56244e1ef9a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  dir: {x: 0, y: 0, z: 0}
 --- !u!114 &114615591493028306
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -130,24 +130,6 @@ MonoBehaviour:
   lastHealingDealer: {fileID: 0}
   lastDamagingDealer: {fileID: 0}
   lastHealthChangedAmount: 0
---- !u!114 &114711667520121052
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1966706611021462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef332eb3e952c34d84b9fd52ad04c48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetModel: {fileID: 114931918599314320}
-  ability1Key: 304
-  ability2Key: 308
-  ability3Key: 113
-  ability4Key: 101
-  ability5Key: 102
-  mainCamera: {fileID: 0}
 --- !u!114 &114776433862166028
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -190,6 +172,7 @@ MonoBehaviour:
   decelerationMultiplier: 0.9
   damageMultiplier: 1
   target: {x: 0, y: 0, z: 0}
+  speed: 10
 --- !u!135 &135031991671185878
 SphereCollider:
   m_ObjectHideFlags: 1

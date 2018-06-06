@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Body : CharacterBase {
 
+    public float speed = 10.0f;
+
     public override void Ability1()
     {
         base.Ability1();
@@ -38,6 +40,13 @@ public class Body : CharacterBase {
     {
         print("I Died");
         debugText = "I Died";
+    }
+
+    public void Movement(Vector3 dir)
+    {
+        Quaternion rot = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime);
+        transform.position += transform.forward * speed * Time.deltaTime;
     }
 
 }
