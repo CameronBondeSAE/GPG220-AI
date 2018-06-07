@@ -11,6 +11,12 @@ namespace Rhys
     public class Controller : ControllerBase
     {
         public GameObject target;
+        public GameObject LeftEye;
+        public GameObject RightEye;
+
+        public RaycastHit hitForward;
+        public RaycastHit hitLeft;
+        public RaycastHit hitRight;
 
         Health My_Health;
         Body My_Body;
@@ -54,10 +60,9 @@ namespace Rhys
         private void Collisions()
         {
             dir = (target.transform.position - transform.position).normalized;
-            RaycastHit hitForward;
-            RaycastHit hitLeft;
-            RaycastHit hitRight;
-            if (Physics.Raycast(transform.position, transform.forward, out hitForward, 30))
+            Speed_Mult = 1;
+
+            if (Physics.Raycast(transform.position, transform.forward, out hitForward, 20))
             {
                 if (hitForward.transform != transform)
                 {
@@ -66,23 +71,20 @@ namespace Rhys
                     Speed_Mult = 0.5f;
                 }
             }
-            Transform leftR = transform;
-            Transform rightR = transform;
 
-            leftR.eulerAngles = new Vector3(0,45,0) ;
-            rightR.eulerAngles = new Vector3(0,315,0);
 
-            if (Physics.Raycast(transform.position, leftR.forward, out hitLeft, 20))
+            if (Physics.Raycast(transform.position, LeftEye.transform.forward, out hitLeft, 30))
             {
+               
                 if (hitLeft.transform != transform)
                 {
                     Debug.DrawLine(transform.position, hitLeft.point, Color.red);
-                    dir -= hitLeft.normal * 50;
+                    dir += -hitLeft.normal * 50;
                     Speed_Mult = 1;
                 }
             }
 
-            if (Physics.Raycast(transform.position, rightR.forward, out hitRight, 20))
+            if (Physics.Raycast(transform.position, RightEye.transform.forward, out hitRight, 30))
             {
                 if (hitRight.transform != transform)
                 {
