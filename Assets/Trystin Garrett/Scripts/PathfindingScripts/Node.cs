@@ -26,6 +26,11 @@ public class Node
     public int FCost { get { return (GCost + HCost); } }
     public Node ParentNode;
 
+    //public Node(Vector2Int _GridPostion, Vector3 _TileSize, Vector3 _WorldPosition)
+    //{
+
+    //}
+
     //
     public ColliderOwnerType ColliderOverlapCheck(Node _Node)
     {

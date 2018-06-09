@@ -1,52 +1,99 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using Tystin.NodeUtility;
 
-public class Pathfinder : MonoBehaviour {
+public class Pathfinder {
 
-    public NodeManager NM;
-    public Node StartNode;
-    public Node EndNode;
+    public enum PathfinderStatus
+    {
+        Incative,
+        Active
+    }
 
-    
+    public NodeManager CurrentNM;
+
+    public PathRequest CurrentPR;
+    public Thread AvaliableThread;
+    public PathfinderStatus CurrentStatus = PathfinderStatus.Incative;
+
     private void Update()
     {
-        
-        if(Input.GetKeyDown(KeyCode.Space))
+
+    }
+
+    public void SubmitFindPath(PathRequest _PR, PathFinderManager _PFM, NodeManager _NM)
+    {
+        CurrentStatus = PathfinderStatus.Active;
+        Debug.Log("PF:  Request Recived by Pathfinder!");
+
+        CurrentPR = _PR;
+        if (CurrentPR == null)
         {
-            EndNode = GetRandNode();
-            while(EndNode == null)
-                EndNode = GetRandNode();
+            Debug.Log("PF:  Incompleate Request, Null PR!");
+            CurrentStatus = PathfinderStatus.Incative;
+            return;
+        }
 
-            StartNode = GetRandNode();
-            while (StartNode == null)
-                StartNode = GetRandNode();
+        if (CurrentPR.PathIsFound == true)
+        {
+            Debug.Log("PF:  Path Request has already been solved!!");
+            _PFM.CompleatedRequests.Enqueue(CurrentPR);
+            CurrentStatus = PathfinderStatus.Incative;
+            return;
+        }
 
-            if(StartNode != null && EndNode != null)
+        if(CurrentPR.StartingNode == null || CurrentPR.TargetNode == null || CurrentPR.Requestee == null)
+        {
+            Debug.Log("PF:  Incompleate Request, Null Node/Requetee!");
+            CurrentStatus = PathfinderStatus.Incative;
+            return;
+        }
+        else if (CurrentPR.IsBeingProcessed == false && CurrentPR.CompletedPath == null)
+        {
+            CurrentNM = _NM;
+            CurrentPR.IsBeingProcessed = true;
+            AvaliableThread = new Thread(FindPath);
+            AvaliableThread.Start();
+
+            //////THIS BELLOW NEEDS TO BE PUT INTO PATHFINDER THEN CALLED BY THE THREAD RATHER THAN THE CALL SCRIPTS, IT IS WAITING FOR THE PATH IN THE PFM
+
+            while (CurrentPR.IsBeingProcessed == true)
             {
-                FindPath(StartNode.WorldPosition, EndNode.WorldPosition);
+                Debug.Log("PF:  WorkingOnPath!!!");
             }
-
+            if(CurrentPR.IsBeingProcessed == false)
+            {
+                if (CurrentPR.PathIsFound == false)
+                {
+                    Debug.Log("PF:  Failed To Find Path");
+                    _PFM.CompleatedRequests.Enqueue(CurrentPR);
+                }
+                else if (CurrentPR.PathIsFound == true)
+                {
+                    Debug.Log("PF:  Path Found");
+                    _PFM.CompleatedRequests.Enqueue(CurrentPR);
+                    ResetPathFinder();
+                }
+            } 
         }
     }
 
-    Node GetRandNode()
+    //
+    void FindPath()
     {
-        int Ranx = Random.Range(0, NM.GridXLength);
-        int RanY = Random.Range(0, NM.GridYLength);
-        Vector3 RandVec = new Vector3(Ranx, 0, RanY);
-        Node Node = NM.FindNodeFromWorldPosition(RandVec);
+        Debug.Log("PF:  StartingPathFinding");
 
-        return Node;
-    }
+        //Node StartNode = NM.FindNodeFromWorldPosition(CurrentRP.StartingNode.WorldPosition);
+        //Node TargetNode = NM.FindNodeFromWorldPosition(CurrentRP.TargetNode.WorldPosition);
 
+        //Node StartNode = CurrentNM.FindNodeFromWorldPosition(CurrentRP.StartingNode.WorldPosition);
+        //Node TargetNode = CurrentNM.FindNodeFromWorldPosition(CurrentRP.TargetNode.WorldPosition);
 
-    void FindPath(Vector3 _StartPos, Vector3 _TargetPos)
-    {
-        Debug.Log("StartingPathFinding");
+        Node StartNode = CurrentPR.StartingNode;
+        Node TargetNode = CurrentPR.TargetNode;
 
-        Node StartNode = NM.FindNodeFromWorldPosition(_StartPos);
-        Node TargetNode = NM.FindNodeFromWorldPosition(_TargetPos);
 
         List<Node> OpenSet = new List<Node>();
         HashSet<Node> CloasedSet = new HashSet<Node>();
@@ -67,9 +114,11 @@ public class Pathfinder : MonoBehaviour {
 
             if(CurrentNode == TargetNode)
             {
-                Debug.Log("Found Path!!!");
-                RetraceNodePath(StartNode, TargetNode);
-                return;
+                List<Node> RetracedPath = RetraceNodePath(StartNode, TargetNode);
+                CurrentPR.CompletedPath = RetracedPath;
+                CurrentPR.PathIsFound = true;
+                CurrentPR.IsBeingProcessed = false;
+                break;
             }
 
             for(int NeighbourIndex = 0; NeighbourIndex < CurrentNode.NeighbouringTiles.Length; ++NeighbourIndex)
@@ -81,27 +130,26 @@ public class Pathfinder : MonoBehaviour {
                     continue;
                 }
 
-                int NewMovCostToNeighbour = CurrentNode.GCost + NM.GetDistanceBetweenNode(CurrentNode, NeighbourRef);
+                int NewMovCostToNeighbour = CurrentNode.GCost + CurrentNM.GetDistanceBetweenNode(CurrentNode, NeighbourRef);
 
                 if(NewMovCostToNeighbour < NeighbourRef.GCost || !OpenSet.Contains(NeighbourRef))
                 {
                     NeighbourRef.GCost = NewMovCostToNeighbour;
-                    NeighbourRef.HCost = NM.GetDistanceBetweenNode(NeighbourRef, TargetNode);
+                    NeighbourRef.HCost = CurrentNM.GetDistanceBetweenNode(NeighbourRef, TargetNode);
                     NeighbourRef.ParentNode = CurrentNode;
 
                     if(!OpenSet.Contains(NeighbourRef))
                     {
                         OpenSet.Add(NeighbourRef);
                     }
-
-
                 }
             }
         }
-        
+        CurrentPR.IsBeingProcessed = false; 
     }
 
-    void RetraceNodePath(Node _StartNode, Node _EndNode)
+    //
+    List<Node> RetraceNodePath(Node _StartNode, Node _EndNode)
     {
         List<Node> Path = new List<Node>();
         Node CurrentNode = _EndNode;
@@ -113,6 +161,15 @@ public class Pathfinder : MonoBehaviour {
         }
 
         Path.Reverse();
-        NM.PathFound = Path;
+        return Path;
+    }
+
+    void ResetPathFinder()
+    {
+        CurrentPR = null;
+        CurrentStatus = PathfinderStatus.Incative;
+        AvaliableThread.Abort();
+        AvaliableThread = null;
+        CurrentNM = null;
     }
 }

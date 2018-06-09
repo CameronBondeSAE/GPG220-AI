@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
+using Tystin.NodeUtility;
 
 public class NodeManager : MonoBehaviour {
+
+    public static NodeManager Instance;
 
     public float SetupTotalTime = -1;
     public bool SetupCompletate;
@@ -43,12 +46,21 @@ public class NodeManager : MonoBehaviour {
     public List<CharacterBase> ActiveAICB = new List<CharacterBase>();
     public List<Node> AIOccupiedNodes = new List<Node>();
 
-    public Vector3[] TestArray;
-    public List<Node> PathFound;
+    //public Vector3[] TestArray;
+    //public List<Node> PathFound;
 
     public bool ToggleWireFrame = false;
 
-    public void Start()
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this);
+    }
+
+    private void Start()
     {
         CallInitialSetup();
     }
@@ -83,9 +95,11 @@ public class NodeManager : MonoBehaviour {
         NeighbourSetThreadCall();
 
         yield return new WaitUntil(() => CurrentNeighbourState == ProgressState.Complete);
-        Debug.Log("Node Grid Setup Compleate!");
+        Debug.Log("NM:    Node Grid Setup Compleate!");
         SetupCompletate = true;
     }
+
+    #region GridNodeSetup
 
     //
     void CallCreateGrid()
@@ -99,7 +113,7 @@ public class NodeManager : MonoBehaviour {
     }
     void CreateGrindThreadCall()
     {
-        Debug.Log("Grid Creation Started");
+        Debug.Log("NM:    Grid Creation Started");
         int CurrentNodeCount = 0;
 
         Node[,] NewTileGrid = new Node[GridXLength, GridYLength];
@@ -118,7 +132,7 @@ public class NodeManager : MonoBehaviour {
         }
         NodeGrid = NewTileGrid;
         CurrentGridState = ProgressState.Complete;
-        Debug.Log("Grid Creation Finished");
+        Debug.Log("NM:    Grid Creation Finished");
     }
 
     //
@@ -130,7 +144,7 @@ public class NodeManager : MonoBehaviour {
     }
     void SetTileNeighbours()
     {
-        Debug.Log("Setting up Node Neighbours");
+        Debug.Log("NM:    Setting up Node Neighbours");
 
         if (NodeGrid == null)
             return;
@@ -141,7 +155,7 @@ public class NodeManager : MonoBehaviour {
                     NodeGrid[XIndex, YIndex].NeighbouringTiles = GetNeighbouringNodeTiles(NodeGrid[XIndex, YIndex]);
 
         CurrentNeighbourState = ProgressState.Complete;
-        Debug.Log("Node Neighbours setup compleate!!");
+        Debug.Log("NM:    Node Neighbours setup compleate!!");
     }
 
     //
@@ -170,6 +184,9 @@ public class NodeManager : MonoBehaviour {
         }
         return Neighbours.ToArray();
     }
+    #endregion
+
+    #region GridPing
 
     //
     public void CallPing(bool _ObsticleCleanUp)
@@ -180,7 +197,7 @@ public class NodeManager : MonoBehaviour {
     }
     IEnumerator PingGrid(bool _ObsticleCleanUp)
     {
-        Debug.Log("PingStarted");
+        Debug.Log("NM:    PingStarted");
 
         CallTerrainSweep();
 
@@ -191,7 +208,7 @@ public class NodeManager : MonoBehaviour {
         }
 
         yield return new WaitUntil(() => CurrentPingState == PingState.Complete);
-        Debug.Log("PingEnded");
+        Debug.Log("NM:    PingEnded");
     }
 
     //
@@ -202,7 +219,7 @@ public class NodeManager : MonoBehaviour {
     }
     IEnumerator SweepTerrain()
     {
-        Debug.Log("Sorting Terrain from AI");
+        Debug.Log("NM:    Sorting Terrain from AI");
         int CurrentNodeCount = 0;
 
         for (int XIndex = 0; XIndex < GridXLength; ++XIndex)
@@ -230,7 +247,7 @@ public class NodeManager : MonoBehaviour {
             }
         }
         CurrentPingState = PingState.Inactive;
-        Debug.Log("Sorting Terrain from AI Complete!");
+        Debug.Log("NM:    Sorting Terrain from AI Complete!");
     }
 
     //
@@ -241,7 +258,7 @@ public class NodeManager : MonoBehaviour {
     }
     IEnumerator CleanUpObsticlesTiles()
     {
-        Debug.Log("Cleaning Up obsticle Tiles");
+        Debug.Log("NM:    Cleaning Up obsticle Tiles");
         int CurrentTerrainRemovalCount = 0;
         Vector2Int TempV2I = new Vector2Int();
 
@@ -256,8 +273,11 @@ public class NodeManager : MonoBehaviour {
         }
         TerrainOccupiedNodes = null;
         CurrentPingState = PingState.Complete;
-        Debug.Log("Cleaning Up obsticle Tiles Compleate!");
+        Debug.Log("NM:    Cleaning Up obsticle Tiles Compleate!");
     }
+    #endregion
+
+    #region VisualDebugging
 
     //
     private void OnDrawGizmos()
@@ -265,14 +285,14 @@ public class NodeManager : MonoBehaviour {
         if (ToggleWireFrame == false)
             return;
 
-        if (TestArray != null)
-        {
-            for (int XIndex = 0; XIndex < TestArray.Length; ++XIndex)
-            {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(TestArray[XIndex], 0.1f);
-            }
-        }
+        //if (TestArray != null)
+        //{
+        //    for (int XIndex = 0; XIndex < TestArray.Length; ++XIndex)
+        //    {
+        //        Gizmos.color = Color.magenta;
+        //        Gizmos.DrawWireSphere(TestArray[XIndex], 0.1f);
+        //    }
+        //}
 
         if (NodeGrid != null && CurrentGridState == ProgressState.Complete)
         {
@@ -304,15 +324,18 @@ public class NodeManager : MonoBehaviour {
                 }
             }
         }
-        if(PathFound != null)
-        {
-            for (int NodeIndex = 0; NodeIndex < PathFound.Count; ++NodeIndex)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(PathFound[NodeIndex].WorldPosition, PathFound[NodeIndex].TileSize);
-            }
-        }
+        //if(PathFound != null)
+        //{
+        //    for (int NodeIndex = 0; NodeIndex < PathFound.Count; ++NodeIndex)
+        //    {
+        //        Gizmos.color = Color.red;
+        //        Gizmos.DrawWireCube(PathFound[NodeIndex].WorldPosition, PathFound[NodeIndex].TileSize);
+        //    }
+        //}
     }
+    #endregion
+
+    #region Utility Methods
 
     //
     public Node FindNodeFromWorldPosition(Vector3 _WorldPos)
@@ -367,7 +390,7 @@ public class NodeManager : MonoBehaviour {
                 Corners[3] = new Vector3(AIPos.x - XExtends, AIPos.y, AIPos.z + ZExtends);
                 //////MIGHT NEED TO ADD MORE HERE FOR N,S,E,W Positions .. Or just add a method to return all node between 2 nodes....
 
-                TestArray = Corners;
+                //TestArray = Corners;
 
                 for (int PointIndex = 0; PointIndex < Corners.Length; ++PointIndex)
                 {
@@ -384,12 +407,14 @@ public class NodeManager : MonoBehaviour {
         }
     }
 
+    //
     Node GetBetweenNodes()
     {
 
         return null;
     }
 
+    //
     public int GetDistanceBetweenNode(Node _NodeA, Node _NodeB)
     {
         int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
@@ -403,6 +428,17 @@ public class NodeManager : MonoBehaviour {
         {
             return 14 * DistX + 10 * (DistY - DistX);
         }
-
     }
+
+    //
+    public Node GetRandNode()
+    {
+        int Ranx = Random.Range(0, GridXLength);
+        int RanY = Random.Range(0, GridYLength);
+        Vector3 RandVec = new Vector3(Ranx, 0, RanY);
+        Node Node = FindNodeFromWorldPosition(RandVec);
+
+        return Node;
+    }
+    #endregion
 }
