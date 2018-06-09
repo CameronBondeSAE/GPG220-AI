@@ -49,6 +49,7 @@ public class PathFinderManager : MonoBehaviour {
     public void RequestPathFromNodes(Node _StartingNode, Node _TargetNode, TestMovementAI _Requestee)
     {
         PathRequest PR = new PathRequest(_StartingNode, _TargetNode, _Requestee);
+        _Requestee.TargetWaypoint = _TargetNode;
         PathRequests.Enqueue(PR);
     }
     
@@ -77,6 +78,7 @@ public class PathFinderManager : MonoBehaviour {
 
         Debug.Log("PFM:   Found Random Node! Starting Node is: " + StartingNode.GridPostion.X + "/" + StartingNode.GridPostion.Y + " To " + TargetNode.GridPostion.X + "/" + TargetNode.GridPostion.Y);
         PathRequest PR = new PathRequest(StartingNode, TargetNode, _Requestee);
+        _Requestee.TargetWaypoint = TargetNode;
         PathRequests.Enqueue(PR);
     }
 
@@ -87,6 +89,7 @@ public class PathFinderManager : MonoBehaviour {
         Node TargetNode = NM.FindNodeFromWorldPosition(_TargetPos);
 
         PathRequest PR = new PathRequest(StartingNode, TargetNode, _Requestee);
+        _Requestee.TargetWaypoint = TargetNode;
         PathRequests.Enqueue(PR);
     }
 

@@ -13,9 +13,12 @@ public class AIMovementTestInspector : Editor
 
         TestMovementAI TargetTestMovementAI = (TestMovementAI)target;
 
-        if (GUILayout.Button("Request Path"))
+        if (GUILayout.Button("Request Random Path"))
         {
-            TargetTestMovementAI.RequestRandomPath();
+            if (NodeManager.Instance.SetupCompletate)
+                TargetTestMovementAI.RequestRandomPath();
+            else
+                Debug.Log("Wait for NodeManager Setup is compleate");
         }
     }
 }

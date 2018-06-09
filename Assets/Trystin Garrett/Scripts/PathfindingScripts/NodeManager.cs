@@ -125,7 +125,7 @@ public class NodeManager : MonoBehaviour {
                 Node NewNodeScript = new Node();
                 NewNodeScript.GridPostion = new Vector2Int(XIndex, YIndex);
                 NewNodeScript.WorldPosition = new Vector3((NewNodeScript.GridPostion.X * GridXScale), 0f, (NewNodeScript.GridPostion.Y * GridYScale)); 
-                NewNodeScript.TileSize = new Vector3(GridXScale - 0.01f, 0.2f, GridYScale - 0.01f);
+                NewNodeScript.TileSize = new Vector3(GridXScale - 0.01f, 0.1f, GridYScale - 0.01f);
                 NewTileGrid[XIndex, YIndex] = NewNodeScript;
                 NewNodeScript.GridPostion = new Vector2Int(XIndex, YIndex);
             }
