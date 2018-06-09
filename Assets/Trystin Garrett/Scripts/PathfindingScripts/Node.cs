@@ -20,6 +20,7 @@ public class Node
 
     public bool IsOccupied;
     public bool IsInProximity;
+    public bool IsCorner;
 
     public int GCost;
     public int HCost;

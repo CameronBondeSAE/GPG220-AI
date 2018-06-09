@@ -732,7 +732,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 933714434}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.8, y: 0, z: 11}
+  m_LocalPosition: {x: 19.37, y: 0, z: 11}
   m_LocalScale: {x: 7.85, y: 1.5, z: 12.43}
   m_Children: []
   m_Father: {fileID: 1763221424}
@@ -1467,8 +1467,8 @@ MonoBehaviour:
   CurrentWaypointIndex: 0
   RotationToNextWaypoint: {x: 0, y: 0, z: 0}
   TogglePathFound: 1
-  CurrentMovementSpeed: 0
-  RotationSpeed: 5
+  CurrentMovementSpeed: 1
+  RotationSpeed: 7.5
 --- !u!114 &1665892854
 MonoBehaviour:
   m_ObjectHideFlags: 0

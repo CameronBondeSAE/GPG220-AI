@@ -102,17 +102,19 @@ public class Pathfinder {
         while(OpenSet.Count > 0)
         {
             Node CurrentNode = OpenSet[0];
-            for(int OSIndex = 1; OSIndex < OpenSet.Count; ++OSIndex)
+            for (int OSIndex = 1; OSIndex < OpenSet.Count; ++OSIndex)
             {
-                if(OpenSet[OSIndex].FCost< CurrentNode.FCost || OpenSet[OSIndex].FCost == CurrentNode.FCost && OpenSet[OSIndex].HCost < CurrentNode.HCost)
+                if (OpenSet[OSIndex].FCost < CurrentNode.FCost || OpenSet[OSIndex].FCost == CurrentNode.FCost && OpenSet[OSIndex].HCost < CurrentNode.HCost)
                 {
                     CurrentNode = OpenSet[OSIndex];
                 }
             }
+
             OpenSet.Remove(CurrentNode);
             CloasedSet.Add(CurrentNode);
 
-            if(CurrentNode == TargetNode)
+
+            if (CurrentNode == TargetNode)
             {
                 List<Node> RetracedPath = RetraceNodePath(StartNode, TargetNode);
                 CurrentPR.CompletedPath = RetracedPath;
@@ -120,6 +122,9 @@ public class Pathfinder {
                 CurrentPR.IsBeingProcessed = false;
                 break;
             }
+
+            List<Node> ToAddToOpenSet = new List<Node>();
+            Node CornorNode = null;
 
             for(int NeighbourIndex = 0; NeighbourIndex < CurrentNode.NeighbouringTiles.Length; ++NeighbourIndex)
             {
@@ -130,22 +135,53 @@ public class Pathfinder {
                     continue;
                 }
 
-                int NewMovCostToNeighbour = CurrentNode.GCost + CurrentNM.GetDistanceBetweenNode(CurrentNode, NeighbourRef);
+                int NewMovCostToNeighbour = CurrentNode.GCost + GetDistanceBetweenNode(CurrentNode, NeighbourRef);
 
                 if(NewMovCostToNeighbour < NeighbourRef.GCost || !OpenSet.Contains(NeighbourRef))
                 {
                     NeighbourRef.GCost = NewMovCostToNeighbour;
-                    NeighbourRef.HCost = CurrentNM.GetDistanceBetweenNode(NeighbourRef, TargetNode);
+                    NeighbourRef.HCost = GetDistanceBetweenNode(NeighbourRef, TargetNode);
                     NeighbourRef.ParentNode = CurrentNode;
 
-                    if(!OpenSet.Contains(NeighbourRef))
+                    //
+                    if (NeighbourRef.IsCorner)
+                        CornorNode = NeighbourRef;
+
+                    if (!OpenSet.Contains(NeighbourRef))
                     {
-                        OpenSet.Add(NeighbourRef);
+                        ToAddToOpenSet.Add(NeighbourRef);
+                        //OpenSet.Add(NeighbourRef);
                     }
                 }
             }
+            //
+            if (CornorNode != null && !OpenSet.Contains(CornorNode))
+            {
+                OpenSet.Add(CornorNode);
+                CornorNode = null;
+            }
+            else
+                for (int ToAddIndex = 0; ToAddIndex < ToAddToOpenSet.Count; ++ToAddIndex)
+                    OpenSet.Add(ToAddToOpenSet[ToAddIndex]);
+
         }
         CurrentPR.IsBeingProcessed = false; 
+    }
+
+
+    public int GetDistanceBetweenNode(Node _NodeA, Node _NodeB)
+    {
+        int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
+        int DistY = Mathf.Abs(_NodeA.GridPostion.Y - _NodeB.GridPostion.Y);
+
+        if (DistX > DistY)
+        {
+            return 14 * DistY + 10 * (DistX - DistY);
+        }
+        else
+        {
+            return 14 * DistX + 10 * (DistY - DistX);
+        }
     }
 
     //

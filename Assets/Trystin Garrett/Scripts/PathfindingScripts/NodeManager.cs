@@ -182,6 +182,9 @@ public class NodeManager : MonoBehaviour {
                         Neighbours.Add(NodeGrid[CheckX, CheckZ]);
             }
         }
+        if (Neighbours.Count == 7 || Neighbours.Count <= 4)
+            _NodeTile.IsCorner = true;
+
         return Neighbours.ToArray();
     }
     #endregion
@@ -301,6 +304,8 @@ public class NodeManager : MonoBehaviour {
                     if (NodeGrid[XIndex, YIndex] != null)
                     {
                         Gizmos.color = Color.cyan;
+                        if(NodeGrid[XIndex, YIndex].IsCorner)
+                            Gizmos.color = Color.blue;
                         Gizmos.DrawWireCube(NodeGrid[XIndex, YIndex].WorldPosition, NodeGrid[XIndex, YIndex].TileSize);
                     }  
         }
@@ -412,22 +417,6 @@ public class NodeManager : MonoBehaviour {
     {
 
         return null;
-    }
-
-    //
-    public int GetDistanceBetweenNode(Node _NodeA, Node _NodeB)
-    {
-        int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
-        int DistY = Mathf.Abs(_NodeA.GridPostion.Y - _NodeB.GridPostion.Y);
-
-        if(DistX > DistY)
-        {
-            return 14 * DistY + 10 * (DistX - DistY);
-        }
-        else
-        {
-            return 14 * DistX + 10 * (DistY - DistX);
-        }
     }
 
     //
