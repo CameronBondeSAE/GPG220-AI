@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Tystin;
+using Tystin.NodeUtility;
 
 namespace Tystin
 {
     namespace NodeUtility
     {
+
         public struct NodeUtility
         {
 
             //
-            public Node FindNodeFromWorldPosition(Vector3 _WorldPos, NodeManager _NM)
+            public Trystin.Node FindNodeFromWorldPosition(Vector3 _WorldPos, Trystin.NodeManager _NM)
             {
                 float XIndex = _WorldPos.x * _NM.GridXScale;
                 float YIndex = _WorldPos.z * _NM.GridYScale;
@@ -24,7 +27,7 @@ namespace Tystin
                     return null;
                 }
 
-                Node ReturnNode = _NM.NodeGrid[XIntIndex, YIntIndex];
+                Trystin.Node ReturnNode = _NM.NodeGrid[XIntIndex, YIntIndex];
                 if (ReturnNode != null)
                 {
                     return ReturnNode;
@@ -34,14 +37,14 @@ namespace Tystin
             }
 
             //
-            public Node GetBetweenNodes()
+            public Trystin.Node GetBetweenNodes()
             {
 
                 return null;
             }
 
             //
-            public int GetDistanceBetweenNode(Node _NodeA, Node _NodeB)
+            public int GetDistanceBetweenNode(Trystin.Node _NodeA, Trystin.Node _NodeB)
             {
                 int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
                 int DistY = Mathf.Abs(_NodeA.GridPostion.Y - _NodeB.GridPostion.Y);
@@ -57,12 +60,12 @@ namespace Tystin
             }
 
             //
-            public static Node GetRandNode(NodeManager _NM)
+            public static Trystin.Node GetRandNode(Trystin.NodeManager _NM)
             {
                 int Ranx = Random.Range(0, _NM.GridXLength);
                 int RanY = Random.Range(0, _NM.GridYLength);
                 Vector3 RandVec = new Vector3(Ranx, 0, RanY);
-                Node Node = _NM.FindNodeFromWorldPosition(RandVec);
+                Trystin.Node Node = _NM.FindNodeFromWorldPosition(RandVec);
 
                 return Node;
             }

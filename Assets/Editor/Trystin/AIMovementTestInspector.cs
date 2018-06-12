@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
-[CustomEditor(typeof(TestMovementAI))]
-public class AIMovementTestInspector : Editor
+namespace Trystin
 {
-
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(TestMovementAI))]
+    public class AIMovementTestInspector : Editor
     {
-        base.OnInspectorGUI();
 
-        TestMovementAI TargetTestMovementAI = (TestMovementAI)target;
-
-        if (GUILayout.Button("Request Random Path"))
+        public override void OnInspectorGUI()
         {
-            if (NodeManager.Instance.SetupCompletate)
-                TargetTestMovementAI.RequestRandomPath();
-            else
-                Debug.Log("Wait for NodeManager Setup is compleate");
+            base.OnInspectorGUI();
+
+            TestMovementAI TargetTestMovementAI = (TestMovementAI)target;
+
+            if (GUILayout.Button("Request Random Path"))
+            {
+                if (NodeManager.Instance.SetupCompletate)
+                    TargetTestMovementAI.RequestRandomPath();
+                else
+                    Debug.Log("Wait for NodeManager Setup is compleate");
+            }
         }
     }
 }
