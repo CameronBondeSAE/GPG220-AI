@@ -67,7 +67,7 @@ public class PathFinderManager : MonoBehaviour {
             while(TargetNode == null)
             {
                 ++RandAttempts;
-                Debug.Log("PFM:   Retrying Random Node Find... Attempt: " + RandAttempts);
+                //Debug.Log("PFM:   Retrying Random Node Find... Attempt: " + RandAttempts);
                 TargetNode = NM.GetRandNode();
 
                 if(RandAttempts > 20)

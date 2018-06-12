@@ -95,7 +95,7 @@ public class NodeManager : MonoBehaviour {
         NeighbourSetThreadCall();
 
         yield return new WaitUntil(() => CurrentNeighbourState == ProgressState.Complete);
-        Debug.Log("NM:    Node Grid Setup Compleate!");
+        //Debug.Log("NM:    Node Grid Setup Compleate!");
         SetupCompletate = true;
     }
 
@@ -113,7 +113,7 @@ public class NodeManager : MonoBehaviour {
     }
     void CreateGrindThreadCall()
     {
-        Debug.Log("NM:    Grid Creation Started");
+        //Debug.Log("NM:    Grid Creation Started");
         int CurrentNodeCount = 0;
 
         Node[,] NewTileGrid = new Node[GridXLength, GridYLength];
@@ -132,7 +132,7 @@ public class NodeManager : MonoBehaviour {
         }
         NodeGrid = NewTileGrid;
         CurrentGridState = ProgressState.Complete;
-        Debug.Log("NM:    Grid Creation Finished");
+        //Debug.Log("NM:    Grid Creation Finished");
     }
 
     //
@@ -144,7 +144,7 @@ public class NodeManager : MonoBehaviour {
     }
     void SetTileNeighbours()
     {
-        Debug.Log("NM:    Setting up Node Neighbours");
+        //Debug.Log("NM:    Setting up Node Neighbours");
 
         if (NodeGrid == null)
             return;
@@ -155,7 +155,7 @@ public class NodeManager : MonoBehaviour {
                     NodeGrid[XIndex, YIndex].NeighbouringTiles = GetNeighbouringNodeTiles(NodeGrid[XIndex, YIndex]);
 
         CurrentNeighbourState = ProgressState.Complete;
-        Debug.Log("NM:    Node Neighbours setup compleate!!");
+        //Debug.Log("NM:    Node Neighbours setup compleate!!");
     }
 
     //
@@ -200,7 +200,7 @@ public class NodeManager : MonoBehaviour {
     }
     IEnumerator PingGrid(bool _ObsticleCleanUp)
     {
-        Debug.Log("NM:    PingStarted");
+        //Debug.Log("NM:    PingStarted");
 
         CallTerrainSweep();
 
@@ -211,7 +211,7 @@ public class NodeManager : MonoBehaviour {
         }
 
         yield return new WaitUntil(() => CurrentPingState == PingState.Complete);
-        Debug.Log("NM:    PingEnded");
+        //Debug.Log("NM:    PingEnded");
     }
 
     //
@@ -222,7 +222,7 @@ public class NodeManager : MonoBehaviour {
     }
     IEnumerator SweepTerrain()
     {
-        Debug.Log("NM:    Sorting Terrain from AI");
+        //Debug.Log("NM:    Sorting Terrain from AI");
         int CurrentNodeCount = 0;
 
         for (int XIndex = 0; XIndex < GridXLength; ++XIndex)
@@ -250,7 +250,7 @@ public class NodeManager : MonoBehaviour {
             }
         }
         CurrentPingState = PingState.Inactive;
-        Debug.Log("NM:    Sorting Terrain from AI Complete!");
+        //Debug.Log("NM:    Sorting Terrain from AI Complete!");
     }
 
     //
@@ -261,7 +261,7 @@ public class NodeManager : MonoBehaviour {
     }
     IEnumerator CleanUpObsticlesTiles()
     {
-        Debug.Log("NM:    Cleaning Up obsticle Tiles");
+        //Debug.Log("NM:    Cleaning Up obsticle Tiles");
         int CurrentTerrainRemovalCount = 0;
         Vector2Int TempV2I = new Vector2Int();
 
@@ -276,7 +276,7 @@ public class NodeManager : MonoBehaviour {
         }
         TerrainOccupiedNodes = null;
         CurrentPingState = PingState.Complete;
-        Debug.Log("NM:    Cleaning Up obsticle Tiles Compleate!");
+        //Debug.Log("NM:    Cleaning Up obsticle Tiles Compleate!");
     }
     #endregion
 
@@ -353,7 +353,7 @@ public class NodeManager : MonoBehaviour {
 
         if(XIntIndex > GridXLength || YIntIndex > GridYLength || XIntIndex < 0 || YIntIndex < 0)
         {
-            Debug.Log("Node does not exist or player is out of bounds");
+            //Debug.Log("Node does not exist or player is out of bounds");
             return null;
         }
 

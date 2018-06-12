@@ -16,6 +16,7 @@ public class Pathfinder {
 
     public PathRequest CurrentPR;
     public Thread AvaliableThread;
+    public PathFinderManager PFM;
     public PathfinderStatus CurrentStatus = PathfinderStatus.Incative;
 
     private void Update()
@@ -26,19 +27,20 @@ public class Pathfinder {
     public void SubmitFindPath(PathRequest _PR, PathFinderManager _PFM, NodeManager _NM)
     {
         CurrentStatus = PathfinderStatus.Active;
-        Debug.Log("PF:  Request Recived by Pathfinder!");
+        //Debug.Log("PF:  Request Recived by Pathfinder!");
 
         CurrentPR = _PR;
+        PFM = _PFM;
         if (CurrentPR == null)
         {
-            Debug.Log("PF:  Incompleate Request, Null PR!");
+            //Debug.Log("PF:  Incompleate Request, Null PR!");
             CurrentStatus = PathfinderStatus.Incative;
             return;
         }
 
         if (CurrentPR.PathIsFound == true)
         {
-            Debug.Log("PF:  Path Request has already been solved!!");
+            //Debug.Log("PF:  Path Request has already been solved!!");
             _PFM.CompleatedRequests.Enqueue(CurrentPR);
             CurrentStatus = PathfinderStatus.Incative;
             return;
@@ -46,7 +48,7 @@ public class Pathfinder {
 
         if(CurrentPR.StartingNode == null || CurrentPR.TargetNode == null || CurrentPR.Requestee == null)
         {
-            Debug.Log("PF:  Incompleate Request, Null Node/Requetee!");
+            //Debug.Log("PF:  Incompleate Request, Null Node/Requetee!");
             CurrentStatus = PathfinderStatus.Incative;
             return;
         }
@@ -54,36 +56,42 @@ public class Pathfinder {
         {
             CurrentNM = _NM;
             CurrentPR.IsBeingProcessed = true;
-            AvaliableThread = new Thread(FindPath);
-            AvaliableThread.Start();
+            CallFindPath();
 
             //////THIS BELLOW NEEDS TO BE PUT INTO PATHFINDER THEN CALLED BY THE THREAD RATHER THAN THE CALL SCRIPTS, IT IS WAITING FOR THE PATH IN THE PFM
 
-            while (CurrentPR.IsBeingProcessed == true)
-            {
-                Debug.Log("PF:  WorkingOnPath!!!");
-            }
-            if(CurrentPR.IsBeingProcessed == false)
-            {
-                if (CurrentPR.PathIsFound == false)
-                {
-                    Debug.Log("PF:  Failed To Find Path");
-                    _PFM.CompleatedRequests.Enqueue(CurrentPR);
-                }
-                else if (CurrentPR.PathIsFound == true)
-                {
-                    Debug.Log("PF:  Path Found");
-                    _PFM.CompleatedRequests.Enqueue(CurrentPR);
-                    ResetPathFinder();
-                }
-            } 
+            //while (CurrentPR.IsBeingProcessed == true)
+            //{
+            //    //Debug.Log("PF:  WorkingOnPath!!!");
+            //}
+            //if(CurrentPR.IsBeingProcessed == false)
+            //{
+            //    if (CurrentPR.PathIsFound == false)
+            //    {
+            //        Debug.Log("PF:  Failed To Find Path");
+            //        _PFM.CompleatedRequests.Enqueue(CurrentPR);
+            //    }
+            //    else if (CurrentPR.PathIsFound == true)
+            //    {
+            //        //Debug.Log("PF:  Path Found");
+            //        _PFM.CompleatedRequests.Enqueue(CurrentPR);
+            //        ResetPathFinder();
+            //    }
+            //} 
         }
+    }
+
+
+    void CallFindPath()
+    {
+        AvaliableThread = new Thread(FindPath);
+        AvaliableThread.Start();
     }
 
     //
     void FindPath()
     {
-        Debug.Log("PF:  StartingPathFinding");
+        //Debug.Log("PF:  StartingPathFinding");
 
         //Node StartNode = NM.FindNodeFromWorldPosition(CurrentRP.StartingNode.WorldPosition);
         //Node TargetNode = NM.FindNodeFromWorldPosition(CurrentRP.TargetNode.WorldPosition);
@@ -120,6 +128,7 @@ public class Pathfinder {
                 CurrentPR.CompletedPath = RetracedPath;
                 CurrentPR.PathIsFound = true;
                 CurrentPR.IsBeingProcessed = false;
+                EjectPath();
                 break;
             }
 
@@ -165,10 +174,11 @@ public class Pathfinder {
                     OpenSet.Add(ToAddToOpenSet[ToAddIndex]);
 
         }
-        CurrentPR.IsBeingProcessed = false; 
+        CurrentPR.IsBeingProcessed = false;
+        EjectPath();
     }
 
-
+    //
     public int GetDistanceBetweenNode(Node _NodeA, Node _NodeB)
     {
         int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
@@ -200,6 +210,23 @@ public class Pathfinder {
         return Path;
     }
 
+    //
+    void EjectPath()
+    {
+        if (CurrentPR.PathIsFound == false)
+        {
+            //Debug.Log("PF:  Failed To Find Path");
+            PFM.CompleatedRequests.Enqueue(CurrentPR);
+        }
+        else if (CurrentPR.PathIsFound == true)
+        {
+            //Debug.Log("PF:  Path Found");
+            PFM.CompleatedRequests.Enqueue(CurrentPR);
+            ResetPathFinder();
+        }
+    }
+
+    //
     void ResetPathFinder()
     {
         CurrentPR = null;
@@ -207,5 +234,6 @@ public class Pathfinder {
         AvaliableThread.Abort();
         AvaliableThread = null;
         CurrentNM = null;
+        PFM = null;
     }
 }

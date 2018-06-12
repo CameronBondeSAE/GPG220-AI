@@ -97,7 +97,7 @@ public class TestMovementAI : MonoBehaviour {
     {
         WayPoints = _NodePath;
         CurrentPathStatus = PathRequestStatus.Recived;
-        Debug.Log(gameObject.name + " Recived a Path! It is " + WayPoints.Count + " Nodes Long");
+        //Debug.Log(gameObject.name + " Recived a Path! It is " + WayPoints.Count + " Nodes Long");
     }
 
     void ResetPathing()
