@@ -25,9 +25,9 @@ GameObject:
   - component: {fileID: 114229696144282230}
   - component: {fileID: 114793806981062182}
   - component: {fileID: 114970173243135508}
-  - component: {fileID: 114879348223299348}
-  - component: {fileID: 114724340742090774}
-  - component: {fileID: 114415228496850860}
+  - component: {fileID: 114684517760590826}
+  - component: {fileID: 114656462505112506}
+  - component: {fileID: 114723382588977928}
   m_Layer: 0
   m_Name: MrDude
   m_TagString: Untagged
@@ -108,7 +108,7 @@ MonoBehaviour:
   ability4Key: 101
   ability5Key: 102
   mainCamera: {fileID: 0}
---- !u!114 &114415228496850860
+--- !u!114 &114656462505112506
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -119,9 +119,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serializedBlackboard: '{"_variables":{}}'
+  _serializedBlackboard: '{"_variables":{"EnemyIsNear":{"_value":true,"_name":"EnemyIsNear","_id":"3198f5d9-bf5a-4bb5-b3a5-afb345100821","$type":"NodeCanvas.Framework.Variable`1[[System.Boolean,
+    mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"},"Health":{"_value":100,"_name":"Health","_id":"7c92a6c6-728b-4bd2-88ce-8b9dc87c9d9c","$type":"NodeCanvas.Framework.Variable`1[[System.Int32,
+    mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"}}}'
   _objectReferences: []
---- !u!114 &114724340742090774
+--- !u!114 &114684517760590826
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1159658488830318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 552123d9a0022204a8ca0e8837e869f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: 
+  debugText: 
+  speedMultiplier: 1
+  decelerationMultiplier: 0.9
+  damageMultiplier: 1
+  target: {x: 0, y: 0, z: 0}
+--- !u!114 &114723382588977928
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -132,13 +151,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundGraphSerialization: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":5215.0,"y":5148.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"2"}],"connections":[],"primeNode":{"$ref":"2"},"localBlackboard":{"_name":"Local
+  boundGraphSerialization: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4907.0,"y":-5093.0},"nodes":[{"_position":{"x":5464.0,"y":5178.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":5274.0,"y":5330.0},"_tag":"Check
+    for attacking enemies","_comment":"","$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"EnemyIsNear","_targetVariableID":"3198f5d9-bf5a-4bb5-b3a5-afb345100821"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":5068.0,"y":5439.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_position":{"x":5277.0,"y":5452.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"7c92a6c6-728b-4bd2-88ce-8b9dc87c9d9c"},"checkType":"LessThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5149.0,"y":5593.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"9"},{"_action":{"log":{"_value":"Run
+    away!"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5305.0,"y":5589.0},"_tag":"Run
+    away!","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"13"},{"_action":{"actions":[{"log":{"_value":"Attack!"},"labelYOffset":3.1,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},{"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":5427.0,"y":5454.0},"_tag":"Attack","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"16"},{"_action":{"log":{"_value":"Wander"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5707.0,"y":5327.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"25"}],"connections":[{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"25"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"primeNode":{"$ref":"2"},"localBlackboard":{"_name":"Local
     Blackboard","_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
   boundGraphObjectReferences: []
   enableAction: 0
   disableAction: 0
   _graph: {fileID: 0}
-  _blackboard: {fileID: 114415228496850860}
+  _blackboard: {fileID: 114656462505112506}
 --- !u!114 &114793806981062182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -153,23 +175,6 @@ MonoBehaviour:
   amount: 100
   maxEnergy: 100
   regenEnergySpeed: 1
---- !u!114 &114879348223299348
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1159658488830318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 525bb2d5d87e6514686a4b2dab92b7c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterName: 
-  debugText: 
-  speedMultiplier: 1
-  decelerationMultiplier: 0.9
-  damageMultiplier: 1
-  target: {x: 0, y: 0, z: 0}
 --- !u!114 &114970173243135508
 MonoBehaviour:
   m_ObjectHideFlags: 1

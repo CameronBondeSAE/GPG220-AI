@@ -113,6 +113,26 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &25928113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: MrDude BehaviourTree
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4996.0,"y":-5108.0},"nodes":[{"_position":{"x":5464.0,"y":5178.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":5274.0,"y":5330.0},"_tag":"Check
+    for attacking enemies","_comment":"","$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"EnemyIsNear","_targetVariableID":"3198f5d9-bf5a-4bb5-b3a5-afb345100821"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":5068.0,"y":5439.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_position":{"x":5277.0,"y":5452.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"7c92a6c6-728b-4bd2-88ce-8b9dc87c9d9c"},"checkType":"LessThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5149.0,"y":5593.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"9"},{"_action":{"log":{"_value":"Run
+    away!"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5305.0,"y":5589.0},"_tag":"Run
+    away!","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"13"},{"_action":{"actions":[{"log":{"_value":"Attack!"},"labelYOffset":3.1,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},{"method":{"_baseInfo":"CharacterBase|Ability1|System.Void","_paramsInfo":""},"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":5427.0,"y":5454.0},"_tag":"Attack","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"16"},{"_action":{"log":{"_value":"Wander"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5707.0,"y":5327.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"26"}],"connections":[{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"26"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"primeNode":{"$ref":"2"},"localBlackboard":{"_name":"Local
+    Blackboard","_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _objectReferences: []
+  _deserializationFailed: 0
+  repeat: 1
+  updateInterval: 0
 --- !u!1 &277929357
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,14 +237,43 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114724340742090774, guid: bac0700aea0c6b0448921f99c263eeca,
+    - target: {fileID: 114723382588977928, guid: bac0700aea0c6b0448921f99c263eeca,
         type: 2}
       propertyPath: _graph
       value: 
-      objectReference: {fileID: 1803332117}
+      objectReference: {fileID: 25928113}
+    - target: {fileID: 114723382588977928, guid: bac0700aea0c6b0448921f99c263eeca,
+        type: 2}
+      propertyPath: boundGraphSerialization
+      value: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4996.0,"y":-5108.0},"nodes":[{"_position":{"x":5464.0,"y":5178.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":5274.0,"y":5330.0},"_tag":"Check
+        for attacking enemies","_comment":"","$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"EnemyIsNear","_targetVariableID":"3198f5d9-bf5a-4bb5-b3a5-afb345100821"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":5068.0,"y":5439.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_position":{"x":5277.0,"y":5452.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"7c92a6c6-728b-4bd2-88ce-8b9dc87c9d9c"},"checkType":"LessThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5149.0,"y":5593.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"9"},{"_action":{"log":{"_value":"Run
+        away!"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5305.0,"y":5589.0},"_tag":"Run
+        away!","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"13"},{"_action":{"actions":[{"log":{"_value":"Attack!"},"labelYOffset":3.1,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},{"method":{"_baseInfo":"CharacterBase|Ability1|System.Void","_paramsInfo":""},"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":5427.0,"y":5454.0},"_tag":"Attack","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"16"},{"_action":{"log":{"_value":"Wander"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5707.0,"y":5327.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"26"}],"connections":[{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"26"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"primeNode":{"$ref":"2"},"localBlackboard":{"_name":"Local
+        Blackboard","_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bac0700aea0c6b0448921f99c263eeca, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1449252896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
+  m_Name: MrDude BehaviourTree
+  m_EditorClassIdentifier: 
+  _serializedGraph: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4996.0,"y":-5108.0},"nodes":[{"_position":{"x":5464.0,"y":5178.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":5274.0,"y":5330.0},"_tag":"Check
+    for attacking enemies","_comment":"","$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"EnemyIsNear","_targetVariableID":"3198f5d9-bf5a-4bb5-b3a5-afb345100821"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":5068.0,"y":5439.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_position":{"x":5277.0,"y":5452.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"7c92a6c6-728b-4bd2-88ce-8b9dc87c9d9c"},"checkType":"LessThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5149.0,"y":5593.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"9"},{"_action":{"log":{"_value":"Run
+    away!"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5305.0,"y":5589.0},"_tag":"Run
+    away!","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"13"},{"_action":{"actions":[{"log":{"_value":"Attack!"},"labelYOffset":3.1,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},{"method":{"_baseInfo":"CharacterBase|Ability1|System.Void","_paramsInfo":""},"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":5427.0,"y":5454.0},"_tag":"Attack","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"16"},{"_action":{"log":{"_value":"Wander"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":5707.0,"y":5327.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"26"}],"connections":[{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"3"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"2"},"_targetNode":{"$ref":"26"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"4"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"8"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"3"},"_targetNode":{"$ref":"16"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"9"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"},{"_sourceNode":{"$ref":"8"},"_targetNode":{"$ref":"13"},"$type":"NodeCanvas.BehaviourTrees.BTConnection"}],"primeNode":{"$ref":"2"},"localBlackboard":{"_name":"Local
+    Blackboard","_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
+  _objectReferences: []
+  _deserializationFailed: 0
+  repeat: 1
+  updateInterval: 0
 --- !u!1 &1464189140
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,20 +355,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1803332117
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a686a47eee2fa44cb0a34b5d86e4d5e, type: 3}
-  m_Name: MrDude BehaviourTree
-  m_EditorClassIdentifier: 
-  _serializedGraph: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","nodes":[{"_position":{"x":5215.0,"y":5148.0},"$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"2"}],"connections":[],"primeNode":{"$ref":"2"},"localBlackboard":{"_name":"Local
-    Blackboard","_variables":{}},"derivedData":{"repeat":true,"$type":"NodeCanvas.BehaviourTrees.BehaviourTree+DerivedSerializationData"}}'
-  _objectReferences: []
-  _deserializationFailed: 0
-  repeat: 1
-  updateInterval: 0
