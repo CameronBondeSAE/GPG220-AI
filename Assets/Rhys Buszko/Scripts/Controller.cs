@@ -18,6 +18,7 @@ namespace Rhys
         public RaycastHit hitLeft;
         public RaycastHit hitRight;
 
+
         Health My_Health;
         Body My_Body;
 
@@ -62,7 +63,7 @@ namespace Rhys
             dir = (target.transform.position - transform.position).normalized;
             Speed_Mult = 1;
 
-            if (Physics.Raycast(transform.position, transform.forward, out hitForward, 20))
+            if (Physics.Raycast(transform.position, transform.forward, out hitForward, 20, 1, QueryTriggerInteraction.Ignore))
             {
                 if (hitForward.transform != transform)
                 {
@@ -73,18 +74,18 @@ namespace Rhys
             }
 
 
-            if (Physics.Raycast(transform.position, LeftEye.transform.forward, out hitLeft, 30))
+            if (Physics.Raycast(transform.position, LeftEye.transform.forward, out hitLeft, 25, 1, QueryTriggerInteraction.Ignore))
             {
-               
+
                 if (hitLeft.transform != transform)
                 {
                     Debug.DrawLine(transform.position, hitLeft.point, Color.red);
-                    dir += -hitLeft.normal * 50;
+                    dir += hitLeft.normal * 50;
                     Speed_Mult = 1;
                 }
             }
 
-            if (Physics.Raycast(transform.position, RightEye.transform.forward, out hitRight, 30))
+            if (Physics.Raycast(transform.position, RightEye.transform.forward, out hitRight, 25, 1, QueryTriggerInteraction.Ignore))
             {
                 if (hitRight.transform != transform)
                 {
@@ -94,22 +95,53 @@ namespace Rhys
                 }
 
             }
+            
+            Direction(hitForward, hitRight, hitLeft);
 
-            My_Body.Movement(dir, Speed_Mult); 
+            My_Body.Movement(dir, Speed_Mult);
+
 
         }
+    
 
         public Vector3 Direction(RaycastHit forward, RaycastHit right, RaycastHit left)
         {
             Vector3 direction = new Vector3(0,0,0);
+            Vector3 m_Size, m_Min, m_Max;
 
-            
+            List<RaycastHit> hit = new List<RaycastHit>();
 
+            hit.Add(forward);
+            hit.Add(right);
+            hit.Add(left);
 
-           return direction;
+            foreach(RaycastHit n in hit)
+            {
+                if (n.collider != null)
+                {
+                    direction = n.collider.bounds.center;
+                    m_Size = n.collider.bounds.size;
+                    m_Min = n.collider.bounds.min;
+                    m_Max = n.collider.bounds.max;
+                    OutputData(direction, m_Size, m_Min, m_Max);
+                    Debug.Log("Hit Local : " + n.point);
+                }
+            }
+
+            return direction;
 
 
         }
- 
+
+
+        void OutputData(Vector3 m_Center, Vector3 m_Size, Vector3 m_Min, Vector3 m_Max)
+        {
+            //Output to the console the center and size of the Collider volume
+            Debug.Log("Collider Center : " + m_Center);
+            Debug.Log("Collider Size : " + m_Size);
+            Debug.Log("Collider bound Minimum : " + m_Min);
+            Debug.Log("Collider bound Maximum : " + m_Max);
+        }
+
     }
 }

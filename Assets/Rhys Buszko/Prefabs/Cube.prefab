@@ -60,6 +60,8 @@ GameObject:
   - component: {fileID: 135031991671185878}
   - component: {fileID: 54623601150145740}
   - component: {fileID: 120878902742346960}
+  - component: {fileID: 114571489579290630}
+  - component: {fileID: 114425613718025670}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -192,6 +194,36 @@ MonoBehaviour:
   RightEye: {fileID: 1612051736728700}
   Speed_Mult: 1
   dir: {x: 50.432266, y: 0, z: 0.9017464}
+--- !u!114 &114425613718025670
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1966706611021462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _serializedBlackboard: '{"_variables":{}}'
+  _objectReferences: []
+--- !u!114 &114571489579290630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1966706611021462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boundGraphSerialization: 
+  boundGraphObjectReferences: []
+  enableAction: 0
+  disableAction: 0
+  _graph: {fileID: 11400000, guid: 71144f0e3cb2fe34ab809062dfb54216, type: 2}
+  _blackboard: {fileID: 114425613718025670}
 --- !u!114 &114615591493028306
 MonoBehaviour:
   m_ObjectHideFlags: 1
