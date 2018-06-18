@@ -12,6 +12,7 @@ namespace Trystin
 
         public NodeManager NM;
         public Pathfinder[] PathFinders = new Pathfinder[2];
+        public bool PathFinderIsActive = false;
 
         public Queue<PathRequest> PathRequests = new Queue<PathRequest>();
         public Queue<PathRequest> CompleatedRequests = new Queue<PathRequest>();
@@ -36,6 +37,9 @@ namespace Trystin
 
         private void Update()
         {
+            if (!PathFinderIsActive)
+                return;
+
             if (FrameToggle == false)
             {
                 DesignateRequestsToPathfinder();
@@ -49,17 +53,17 @@ namespace Trystin
         }
 
         //
-        public void RequestPathFromNodes(Node _StartingNode, Node _TargetNode, TestMovementAI _Requestee)
+        public void RequestPathFromNodes(Node _StartingNode, Node _TargetNode, GunCrewMember _Requestee)
         {
             PathRequest PR = new PathRequest(_StartingNode, _TargetNode, _Requestee);
-            _Requestee.TargetWaypoint = _TargetNode;
+            _Requestee.MovementScript.TargetWaypoint = _TargetNode;
             PathRequests.Enqueue(PR);
         }
 
         //
-        public void RequestRandomPathFromVec3(Vector3 _CurrentPos, TestMovementAI _Requestee)
+        public void RequestRandomPathFromVec3(Vector3 _CurrentPos, GunCrewMember _Requestee)
         {
-            Debug.Log("PFM:   Random Request Made");
+            //Debug.Log("PFM:   Random Request Made");
             Node StartingNode = NM.FindNodeFromWorldPosition(_CurrentPos);
             Node TargetNode = NM.GetRandNode();
 
@@ -79,20 +83,20 @@ namespace Trystin
 
             }
 
-            Debug.Log("PFM:   Found Random Node! Starting Node is: " + StartingNode.GridPostion.X + "/" + StartingNode.GridPostion.Y + " To " + TargetNode.GridPostion.X + "/" + TargetNode.GridPostion.Y);
+            //Debug.Log("PFM:   Found Random Node! Starting Node is: " + StartingNode.GridPostion.X + "/" + StartingNode.GridPostion.Y + " To " + TargetNode.GridPostion.X + "/" + TargetNode.GridPostion.Y);
             PathRequest PR = new PathRequest(StartingNode, TargetNode, _Requestee);
-            _Requestee.TargetWaypoint = TargetNode;
+            _Requestee.MovementScript.TargetWaypoint = TargetNode;
             PathRequests.Enqueue(PR);
         }
 
         //
-        public void RequestPathFromVec3s(Vector3 _CurrentPos, Vector3 _TargetPos, TestMovementAI _Requestee)
+        public void RequestPathFromVec3s(Vector3 _CurrentPos, Vector3 _TargetPos, GunCrewMember _Requestee)
         {
             Node StartingNode = NM.FindNodeFromWorldPosition(_CurrentPos);
             Node TargetNode = NM.FindNodeFromWorldPosition(_TargetPos);
 
             PathRequest PR = new PathRequest(StartingNode, TargetNode, _Requestee);
-            _Requestee.TargetWaypoint = TargetNode;
+            _Requestee.MovementScript.TargetWaypoint = TargetNode;
             PathRequests.Enqueue(PR);
         }
 
@@ -107,7 +111,7 @@ namespace Trystin
                 if (PathFinders[PFIndex].CurrentStatus == Pathfinder.PathfinderStatus.Incative)
                 {
                     PathRequest PR = PathRequests.Dequeue();
-                    Debug.Log("PFM:   Request Designated from " + PR.Requestee.gameObject.name);
+                    //Debug.Log("PFM:   Request Designated from " + PR.Requestee.gameObject.name);
                     PathFinders[PFIndex].SubmitFindPath(PR, this, NM);
                     break;
                 }
@@ -123,7 +127,7 @@ namespace Trystin
             for (int CRIndex = 0; CRIndex < CompleatedRequests.Count; ++CRIndex)
             {
                 PathRequest CPR = CompleatedRequests.Dequeue();
-                CPR.Requestee.RecivePath(CPR.CompletedPath);
+                CPR.Requestee.MovementScript.RecivePath(CPR.CompletedPath);
             }
         }
     }
@@ -131,7 +135,7 @@ namespace Trystin
     //
     public class PathRequest
     {
-        public PathRequest(Node _StartingNode, Node _TargetNode, TestMovementAI _Requestee)
+        public PathRequest(Node _StartingNode, Node _TargetNode, GunCrewMember _Requestee)
         {
             StartingNode = _StartingNode;
             TargetNode = _TargetNode;
@@ -139,13 +143,14 @@ namespace Trystin
             PathIsFound = false;
             IsBeingProcessed = false;
             CompletedPath = null;
+
         }
 
         public bool PathIsFound;
         public bool IsBeingProcessed;
         public Node StartingNode;
         public Node TargetNode;
-        public TestMovementAI Requestee;
+        public GunCrewMember Requestee;
         public List<Node> CompletedPath;
     }
 }

@@ -17,6 +17,7 @@ namespace Trystin
 
         public float VisualUpdateTiming = 0;
         public float VisualUpdateTimingInterval = 0.5f;
+
         // Use this for initialization
         void Start()
         {
@@ -58,8 +59,8 @@ namespace Trystin
 
                     int GridXPlusOffset = CurrentGridPos.X + DepthXIndex;
                     int GridYPlusOffset = CurrentGridPos.Y + DepthYIndex;
-                    GridXPlusOffset = Mathf.Clamp(GridXPlusOffset, 0, NodeManager.Instance.GridXLength);
-                    GridYPlusOffset = Mathf.Clamp(GridYPlusOffset, 0, NodeManager.Instance.GridYLength);
+                    GridXPlusOffset = Mathf.Clamp(GridXPlusOffset, 0, NodeManager.Instance.GridXLength -1);
+                    GridYPlusOffset = Mathf.Clamp(GridYPlusOffset, 0, NodeManager.Instance.GridYLength -1 );
 
 
                     if (NodeManager.Instance.NodeGrid[GridXPlusOffset, GridYPlusOffset] == null)

@@ -50,7 +50,7 @@ namespace Trystin
                 return;
             }
 
-            if (CurrentPR.StartingNode == null || CurrentPR.TargetNode == null || CurrentPR.Requestee == null)
+            if (CurrentPR.StartingNode == null || CurrentPR.TargetNode == null || CurrentPR.Requestee.MovementScript == null)
             {
                 //Debug.Log("PF:  Incompleate Request, Null Node/Requetee!");
                 CurrentStatus = PathfinderStatus.Incative;
