@@ -13,11 +13,13 @@ namespace Rhys
         public GameObject target;
         public GameObject LeftEye;
         public GameObject RightEye;
+        public GameObject Defult;
 
         public RaycastHit hitForward;
         public RaycastHit hitLeft;
         public RaycastHit hitRight;
 
+        List<Collider> Enemys;
 
         Health My_Health;
         Body My_Body;
@@ -44,18 +46,50 @@ namespace Rhys
         private void OnTriggerEnter(Collider other)
         {
 
+            if (other.gameObject.GetComponent<Health>() != null)
+            {
+                if (other != null)
+                {
+                    Enemys.Add(other);
+                }
+            }
+
         }
 
         private void OnTriggerExit(Collider other)
         {
+            if (Enemys != null)
+            {
+                foreach (Collider n in Enemys)
+                {
+                    if (n == other)
+                    {
+                        Enemys.Remove(n);
+                    }
+                }
 
+                if (target == other.gameObject)
+                {
+                    target = null;
+                }
+            }
         }
 
         
 
         void Update()
         {
+            if(target == null)
+            {
+                target = Defult;
+            }
+
             Collisions();
+        }
+
+        private void FixedUpdate()
+        {
+            Retarget();
         }
 
         private void Collisions()
@@ -109,22 +143,23 @@ namespace Rhys
             Vector3 direction = new Vector3(0,0,0);
             Vector3 m_Size, m_Min, m_Max;
 
-            List<RaycastHit> hit = new List<RaycastHit>();
-
-            hit.Add(forward);
-            hit.Add(right);
-            hit.Add(left);
+            List<RaycastHit> hit = new List<RaycastHit>
+            {
+                forward,
+                right,
+                left
+            };
 
             foreach(RaycastHit n in hit)
             {
-                if (n.collider != null)
+                if(n.collider != null)
                 {
                     direction = n.collider.bounds.center;
                     m_Size = n.collider.bounds.size;
                     m_Min = n.collider.bounds.min;
                     m_Max = n.collider.bounds.max;
                     OutputData(direction, m_Size, m_Min, m_Max);
-                    Debug.Log("Hit Local : " + n.point);
+                    Debug.Log("Hit Local : " + n.point);                 
                 }
             }
 
@@ -141,6 +176,50 @@ namespace Rhys
             Debug.Log("Collider Size : " + m_Size);
             Debug.Log("Collider bound Minimum : " + m_Min);
             Debug.Log("Collider bound Maximum : " + m_Max);
+        }
+
+        public void Wander()
+        {
+            
+        }
+
+        public void Retarget()
+        {
+            if (Vector3.Distance(target.transform.position, transform.position) <= 1)
+            {
+                Defult.gameObject.transform.position = new Vector3(transform.position.x + Random.Range(-50, 50), transform.position.y, transform.position.z + Random.Range(-50, 50));
+            }
+            float dist = Mathf.Infinity;
+            if (Enemys != null)
+            {
+                foreach (Collider n in Enemys)
+                {
+                    if (n != null)
+                    {
+                        float mesure = Vector3.Distance(transform.position, n.transform.position);
+                        if (mesure < dist)
+                        {
+                            target = n.gameObject;
+                        }
+                    }
+                }
+            }
+
+            if(target == null)
+            {
+                target = Defult;
+            }
+
+        }
+
+        public void Attack()
+        {
+
+        }
+
+        public void Run()
+        {
+
         }
 
     }
