@@ -33,6 +33,7 @@ namespace Trystin
             Sprinting
         }
 
+        public GunCrewMember ThisGCM;
         public Rigidbody ThisRB;
 
         public MovementStatus CurrentMovementStatus = MovementStatus.Idle;
@@ -44,6 +45,7 @@ namespace Trystin
         public int CurrentWaypointIndex = 0;
 
         public Vector3 RotationToNextWaypoint;
+
 
         public bool TogglePathFound = false;
         public MovementSpeed CurrentMovementSpeed = MovementSpeed.Walking;
@@ -65,8 +67,15 @@ namespace Trystin
                 return 0;
             }
         }
-
         public float RotationSpeed;
+
+        //
+        private void Start()
+        {
+            if (ThisGCM == null)
+                ThisGCM = GetComponent<GunCrewMember>();
+
+        }
 
         //
         private void FixedUpdate()
@@ -81,7 +90,7 @@ namespace Trystin
             {
                 ResetPathing();
                 CurrentPathStatus = PathRequestStatus.RequestedAndWaiting;
-                PathFinderManager.Instance.RequestRandomPathFromVec3(transform.position, this);
+                PathFinderManager.Instance.RequestRandomPathFromVec3(transform.position, ThisGCM);
             }
         }
 
@@ -93,7 +102,7 @@ namespace Trystin
             {
                 ResetPathing();
                 CurrentPathStatus = PathRequestStatus.RequestedAndWaiting;
-                PathFinderManager.Instance.RequestPathFromNodes(_StartNode, _TargetNode, this);
+                PathFinderManager.Instance.RequestPathFromNodes(_StartNode, _TargetNode, ThisGCM);
             }
         }
 

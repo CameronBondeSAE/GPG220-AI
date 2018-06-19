@@ -32,13 +32,13 @@ namespace Trystin
 
         public int GridXLength = 100;
         public int GridYLength = 100;
-        public float GridXScale;
-        public float GridYScale;
+        public float GridXScale = 1;
+        public float GridYScale = 1;
 
         public Node[,] NodeGrid;
 
-        public int SweepInterval = 100;
-        public int RemovalInterval = 10;
+        public int SweepInterval = 200;
+        public int RemovalInterval = 50;
 
         public Coroutine CurrentPing;
 
