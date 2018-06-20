@@ -13,23 +13,27 @@ namespace Trystin
             GunOperator
         }
 
-        [Space]
         [Header("AI Components")]
+        public StateMachine ThisStateMachine;
+        public StateTableType AITableType = StateTableType.Null;
         public TestMovementAI MovementScript;
         public TestVisionAI VistionScript;
-        public GameObject Mesh;
+
 
         [Space]
         [Header("Crew Variables")]
-        public GunCrew OwnerGC;
+        public Artillery OwnerGC;
+        public GameObject Mesh;
         public GunCrewRole CrewRole = GunCrewRole.UnAssigned;
         public bool HasSpawnCompleated = false;
+
 
         // Update is called once per frame
         void Update()
         {
-
+            //ThisStateMachine.UpdateSM();
         }
+
 
         //
         public void CallChangeCrewRole(GunCrewRole _NewRole)
@@ -38,15 +42,26 @@ namespace Trystin
             {
                 case GunCrewRole.GunOperator:
                     CrewRole = GunCrewRole.GunOperator;
+                    ThisStateMachine.SetupStateMachine(this);
                     break;
                 case GunCrewRole.Spotter:
                     CrewRole = GunCrewRole.Spotter;
+                    ThisStateMachine.SetupStateMachine(this);
                     break;
             }
         }
 
+        #region Setup Methods
+
         //
-        public void CallAnimateSpawnIn(GunCrew _OwnerGC, Node _SpawnLocation)
+        private void SetUpSM()
+        {
+            ThisStateMachine = new StateMachine();
+            ThisStateMachine.SetupStateMachine(this);
+        }
+
+        //
+        public void CallAnimateSpawnIn(Artillery _OwnerGC, Node _SpawnLocation)
         {
             SetupGunCrewMember(_OwnerGC);
             if (_SpawnLocation != null && OwnerGC != null)
@@ -69,15 +84,17 @@ namespace Trystin
             HasSpawnCompleated = true;
             ++OwnerGC.CrewSetupCounter;
             if (OwnerGC.CrewSetupCounter == OwnerGC.CrewMembers.Length)
-                OwnerGC.CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.CrewLanded;
+                OwnerGC.CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.CrewLanded;
         }
 
         // Setsup Components
-        public void SetupGunCrewMember(GunCrew _OwnerGC)
+        public void SetupGunCrewMember(Artillery _OwnerGC)
         {
             MovementScript = GetComponent<TestMovementAI>();
             VistionScript = GetComponent<TestVisionAI>();
             OwnerGC = _OwnerGC;
+            SetUpSM();
         }
+        #endregion
     }
 }

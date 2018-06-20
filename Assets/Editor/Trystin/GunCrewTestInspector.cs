@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 namespace Trystin
 {
-    [CustomEditor(typeof(GunCrew))]
+    [CustomEditor(typeof(Artillery))]
     public class GunCrewTestInspector : Editor
     {
 
@@ -12,7 +12,7 @@ namespace Trystin
         {
             base.OnInspectorGUI();
 
-            GunCrew TargetTestGunCrewAI = (GunCrew)target;
+            Artillery TargetTestGunCrewAI = (Artillery)target;
 
             if (GUILayout.Button("Request GunSpawn"))
             {

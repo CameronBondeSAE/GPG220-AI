@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Trystin
 {
-    public class GunCrewSpawnManager : MonoBehaviour
+    public class ArtillerySpawnManager : MonoBehaviour
     {
-        public static GunCrewSpawnManager Instance;
+        public static ArtillerySpawnManager Instance;
 
-        public enum GunSpawnStatus
+        public enum ArtillerySpawnStatus
         {
             UnSpawned,
             SpawnRequested,
@@ -20,7 +20,7 @@ namespace Trystin
             Ready
         }
 
-        public enum GCSMStatus
+        public enum ASMStatus
         {
             Inactive,
             SearchingForDropZone,
@@ -30,23 +30,23 @@ namespace Trystin
         }
 
         [Header("Status")]
-        public GCSMStatus CurrentStatus = GCSMStatus.Inactive;
+        public ASMStatus CurrentStatus = ASMStatus.Inactive;
 
         [Space]
         [Header("Prefabs")]
-        public GameObject GunPrefab;
+        public GameObject FieldGunPrefab;
         public GameObject GunCrewMemberPrefab;
 
         [Space]
         [Header("Search Parameters")]
-        public int GunCrewAreaX = 3;
-        public int GunCrewAreaY = 3;
+        public int ArtilleryAreaX = 3;
+        public int ArtilleryAreaY = 3;
         public int DepthOfScan = 10;
 
         [Space]
         [Header("Operational Variables")]
-        public Queue<GunCrew> CallRequests = new Queue<GunCrew>();
-        public GunCrew CurrentRequestee;
+        public Queue<Artillery> CallRequests = new Queue<Artillery>();
+        public Artillery CurrentRequestee;
 
         //Temp Variables
         Node DropPointLocation;
@@ -81,7 +81,7 @@ namespace Trystin
         }
 
         //
-        public void RequestSpawn(GunCrew _Requestee)
+        public void RequestSpawn(Artillery _Requestee)
         {
             if(_Requestee != null)
                 CallRequests.Enqueue(_Requestee);
@@ -92,7 +92,7 @@ namespace Trystin
         {
             if(CallRequests.Count > 0)
             {
-                if (CurrentStatus != GCSMStatus.Inactive || CurrentRequestee != null)
+                if (CurrentStatus != ASMStatus.Inactive || CurrentRequestee != null)
                     return;
 
                 StartCoroutine(ProcessSpaqnRequest(CallRequests.Dequeue()));
@@ -100,29 +100,29 @@ namespace Trystin
         }
 
         //Yeah could be moved into a switch and then a shift call could be made to move onto the next step...
-        IEnumerator ProcessSpaqnRequest(GunCrew _Requestee)
+        IEnumerator ProcessSpaqnRequest(Artillery _Requestee)
         {
             CurrentRequestee = _Requestee;
-            CurrentStatus = GCSMStatus.SearchingForDropZone;
+            CurrentStatus = ASMStatus.SearchingForDropZone;
             ScanForDropZone();
-            yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus ==  GunSpawnStatus.GunDropPointFound);
+            yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus ==  ArtillerySpawnStatus.GunDropPointFound);
 
             if (DropPointLocation != null && DropPointLocationSpawnCentre != null)
             {
-                CurrentStatus = GCSMStatus.SpawningGun;
-                DropInGun();
-                yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded);
+                CurrentStatus = ASMStatus.SpawningGun;
+                DropInGun(_Requestee);
+                yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == ArtillerySpawnStatus.GunLanded);
             }
-            if(CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded)
+            if(CurrentRequestee.CurrentSpawnStatus == ArtillerySpawnStatus.GunLanded)
             {
-                CurrentStatus = GCSMStatus.SpawningCrew;
+                CurrentStatus = ASMStatus.SpawningCrew;
                 DropInGunCrew(_Requestee);
-                yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.CrewLanded);
+                yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == ArtillerySpawnStatus.CrewLanded);
             }
             if(CheckSpawnIsCompleate())
             {
-                CurrentStatus = GCSMStatus.CleaningUp;
-                CurrentRequestee.CurrentSpawnStatus = GunSpawnStatus.Ready;
+                CurrentStatus = ASMStatus.CleaningUp;
+                CurrentRequestee.CurrentSpawnStatus = ArtillerySpawnStatus.Ready;
                 ResetSpawner();
             }
         }
@@ -136,11 +136,11 @@ namespace Trystin
         //
         void ScanForDropZone()
         {
-            DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
+            DropPointLocation = ScanForMapEdgesForDropZone(ArtilleryAreaX, ArtilleryAreaY, DepthOfScan);
             if (DropPointLocationSpawnCentre != null)
             {
                 CurrentRequestee.SpawnNode = DropPointLocationSpawnCentre;
-                CurrentRequestee.CurrentSpawnStatus = GunSpawnStatus.GunDropPointFound;
+                CurrentRequestee.CurrentSpawnStatus = ArtillerySpawnStatus.GunDropPointFound;
             }
         }
 
@@ -301,21 +301,24 @@ namespace Trystin
         }
 
         //
-        void DropInGun()
+        void DropInGun(Artillery _requestee)
         {
             if (DropPointLocation != null && DropPointLocationSpawnCentre != null)
             {
+                Node SpawnNode = DropPointLocationSpawnCentre;
                 CurrentRequestee.SpawnNode = DropPointLocationSpawnCentre;
-                CurrentRequestee.Gun = Instantiate(GunPrefab, DropPointLocationSpawnCentre.WorldPosition, Quaternion.identity, CurrentRequestee.transform);
-                CurrentRequestee.CallAnimateGunSpawnIn();
+
+                FieldGun NewFG = Instantiate(FieldGunPrefab, CurrentRequestee.transform).GetComponent<FieldGun>(); ;
+                NewFG.CallAnimateGunSpawnIn(_requestee, SpawnNode);
+                _requestee.FieldGun = NewFG;
             }
         }
 
         //
-        void DropInGunCrew(GunCrew _requestee)
+        void DropInGunCrew(Artillery _requestee)
         {
             _requestee.CrewMembers = new GunCrewMember[4];
-            if (_requestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded)
+            if (_requestee.CurrentSpawnStatus == ArtillerySpawnStatus.GunLanded)
             {
                 for (int CrewMemberIndex = 0; CrewMemberIndex < _requestee.CrewMembers.Length; ++CrewMemberIndex)
                 {
@@ -343,7 +346,7 @@ namespace Trystin
             DropPointLocation = null;
             DropPointLocationSpawnCentre = null;
             CrewMemberSpawnLocations = null;
-            CurrentStatus = GCSMStatus.Inactive;
+            CurrentStatus = ASMStatus.Inactive;
         }
 
         //These Visual Debuggings are really really costly and inefficent!!

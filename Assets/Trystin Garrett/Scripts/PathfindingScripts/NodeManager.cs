@@ -10,11 +10,7 @@ namespace Trystin
 {
     public class NodeManager : MonoBehaviour
     {
-
         public static NodeManager Instance;
-
-        public float SetupTotalTime = -1;
-        public bool SetupCompletate;
 
         public enum ProgressState
         {
@@ -31,6 +27,7 @@ namespace Trystin
             Complete
         }
 
+        [Header("Grid Variables")]
         public int GridXLength = 100;
         public int GridYLength = 100;
         public float GridXScale = 1;
@@ -38,23 +35,37 @@ namespace Trystin
 
         public Node[,] NodeGrid;
 
+
+        [Space]
+        [Header("Setup Variables")]
         public int SweepInterval = 200;
         public int RemovalInterval = 50;
         public int DetectionFrameSkip = 3;
         int CurrentFrame = 0;
+        public float SetupTotalTime = -1;
+        public bool SetupCompletate;
+
 
         public Coroutine CurrentPing;
         Action<CharacterBase> AddEntirtesAction;
         Action<CharacterBase> RemoveEntitiesAction;
 
+
+        [Space]
+        [Header("Setup Status")]
         public ProgressState CurrentGridState = ProgressState.Inactive;
         public PingState CurrentPingState = PingState.Inactive;
         public ProgressState CurrentNeighbourState = ProgressState.Inactive;
 
+
+        [Space]
+        [Header("Monitoring Lists")]
         public List<Node> TerrainOccupiedNodes = new List<Node>();
         public List<CharacterBase> ActiveAICB = new List<CharacterBase>();
         public List<Node> AIOccupiedNodes = new List<Node>();
 
+        [Space]
+        [Header("Debugging")]
         public bool ToggleWireFrame = false;
         
 
@@ -112,7 +123,6 @@ namespace Trystin
             NeighbourSetThreadCall();
 
             yield return new WaitUntil(() => CurrentNeighbourState == ProgressState.Complete);
-            //Debug.Log("NM:    Node Grid Setup Compleate!");
             SetupCompletate = true;
         }
         void AddCreatedEntities(CharacterBase _Entity)
@@ -381,7 +391,6 @@ namespace Trystin
 
             if (XIntIndex > GridXLength || YIntIndex > GridYLength || XIntIndex < 0 || YIntIndex < 0)
             {
-                //Debug.Log("Node does not exist or player is out of bounds");
                 return null;
             }
 
@@ -440,8 +449,6 @@ namespace Trystin
                     Corners[3] = new Vector3(AIPos.x - XExtends, AIPos.y, AIPos.z + ZExtends);
                     //////MIGHT NEED TO ADD MORE HERE FOR N,S,E,W Positions .. Or just add a method to return all node between 2 nodes....
 
-                    //TestArray = Corners;
-
                     for (int PointIndex = 0; PointIndex < Corners.Length; ++PointIndex)
                     {
                         Node PointNode = FindNodeFromWorldPosition(Corners[PointIndex]);
@@ -458,7 +465,7 @@ namespace Trystin
         }
 
         //
-        Node GetBetweenNodes()
+        Node[] GetBetweenNodes()
         {
 
             return null;

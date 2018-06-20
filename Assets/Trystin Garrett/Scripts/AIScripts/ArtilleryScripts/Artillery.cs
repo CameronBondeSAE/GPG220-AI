@@ -4,21 +4,22 @@ using UnityEngine;
 
 namespace Trystin
 {
-    public class GunCrew : MonoBehaviour
+    public class Artillery : MonoBehaviour
     {
+        [Header("Components")]
+        public FieldGun FieldGun;
+        public GunCrewMember[] CrewMembers;
+        public Node SpawnNode;
+
+        [Space]
+        [Header("Setup Variables")]
+        public ArtillerySpawnManager.ArtillerySpawnStatus CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.UnSpawned;
+        public int CrewSetupCounter = 0;
         public bool HasPreDefinedLocation = false;
 
-        //Need to segragate Gun from GunCrew.... Wh
-        public GameObject Gun;
-        public GunCrewMember[] CrewMembers;
-
-        public Node SpawnNode;
-        public Transform[] GunSpotterPositions = new Transform[2];
-        public Transform GunLoaderPosition;
-        public int CrewSetupCounter = 0;
-
+        [Space]
+        [Header("Debugging")]
         public bool VisualDebugging = false;
-        public GunCrewSpawnManager.GunSpawnStatus CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.UnSpawned;
 
         private void Awake()
         {
@@ -37,32 +38,11 @@ namespace Trystin
 
         }
 
-
-
         //
         public void RequestSpawnIn()
         {
-            GunCrewSpawnManager.Instance.RequestSpawn(this);
-            CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.SpawnRequested;
-        }
-        public void CallAnimateGunSpawnIn()
-        {
-            if(CurrentSpawnStatus == GunCrewSpawnManager.GunSpawnStatus.GunDropPointFound && SpawnNode != null)
-            {
-                StartCoroutine(AnimateGunSpawnIn());
-            }
-
-        }
-        IEnumerator AnimateGunSpawnIn()
-        {
-            CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.GunDroppingIn;
-            Gun.transform.position = SpawnNode.WorldPosition;
-
-            //Placeholderspawn animation
-            yield return new WaitForSeconds(3);
-            Gun.gameObject.SetActive(true);
-
-            CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.GunLanded;
+            ArtillerySpawnManager.Instance.RequestSpawn(this);
+            CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.SpawnRequested;
         }
 
         //
@@ -88,7 +68,7 @@ namespace Trystin
                 NMExists = true;
             if (PathFinderManager.Instance != null)
                 PMExists = true;
-            if (GunCrewSpawnManager.Instance != null)
+            if (ArtillerySpawnManager.Instance != null)
                 GCSMExists = true;
 
             if (!NMExists)
@@ -100,7 +80,7 @@ namespace Trystin
             if (!PMExists)
                 NodeManager.Instance.gameObject.AddComponent<PathFinderManager>();
             if(!GCSMExists)
-                NodeManager.Instance.gameObject.AddComponent<GunCrewSpawnManager>();
+                NodeManager.Instance.gameObject.AddComponent<ArtillerySpawnManager>();
         }
 
 
