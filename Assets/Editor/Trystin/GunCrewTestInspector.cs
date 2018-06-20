@@ -14,10 +14,10 @@ namespace Trystin
 
             GunCrew TargetTestGunCrewAI = (GunCrew)target;
 
-            if (GUILayout.Button("Test DropZone Scan"))
+            if (GUILayout.Button("Request GunSpawn"))
             {
                 if (NodeManager.Instance.SetupCompletate)
-                    TargetTestGunCrewAI.TestScanForDropZone();
+                    TargetTestGunCrewAI.RequestSpawnIn();
                 else
                     Debug.Log("Wait for NodeManager Setup is compleate");
             }
