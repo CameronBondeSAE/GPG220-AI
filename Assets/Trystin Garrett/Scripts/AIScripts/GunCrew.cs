@@ -66,6 +66,18 @@ namespace Trystin
         }
 
         //
+        public void AssignCrewRoles()
+        {
+            for (int CrewIndex = 0; CrewIndex < CrewMembers.Length; CrewIndex++)
+            { 
+                if(CrewIndex >= CrewMembers.Length/2)
+                    CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.GunOperator);
+                else
+                    CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.Spotter);
+            }
+        }
+
+        //
         void CheckForManagers()
         {
             bool NMExists = false;

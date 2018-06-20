@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
@@ -39,8 +40,12 @@ namespace Trystin
 
         public int SweepInterval = 200;
         public int RemovalInterval = 50;
+        public int DetectionFrameSkip = 3;
+        int CurrentFrame = 0;
 
         public Coroutine CurrentPing;
+        Action<CharacterBase> AddEntirtesAction;
+        Action<CharacterBase> RemoveEntitiesAction;
 
         public ProgressState CurrentGridState = ProgressState.Inactive;
         public PingState CurrentPingState = PingState.Inactive;
@@ -51,7 +56,7 @@ namespace Trystin
         public List<Node> AIOccupiedNodes = new List<Node>();
 
         public bool ToggleWireFrame = false;
-
+        
 
         private void Awake()
         {
@@ -73,7 +78,13 @@ namespace Trystin
 
             if (SetupCompletate)
             {
-                DectectAIGridLocations();
+                if (CurrentFrame == DetectionFrameSkip)
+                {
+                    DectectAIGridLocations();
+                    CurrentFrame = 0;
+                }
+                else
+                    ++CurrentFrame;
             }
         }
 
@@ -85,6 +96,11 @@ namespace Trystin
         }
         IEnumerator InitialSetup()
         {
+            AddEntirtesAction = AddCreatedEntities;
+            RemoveEntitiesAction = RemoveEntities;
+            CharacterBase.OnSpawned += AddEntirtesAction;
+            CharacterBase.OnDestroyed += RemoveEntitiesAction;
+
             yield return new WaitForSeconds(1f);
 
             CallCreateGrid();
@@ -99,6 +115,17 @@ namespace Trystin
             //Debug.Log("NM:    Node Grid Setup Compleate!");
             SetupCompletate = true;
         }
+        void AddCreatedEntities(CharacterBase _Entity)
+        {
+            if (_Entity != null)
+                ActiveAICB.Add(_Entity);
+        }
+        void RemoveEntities(CharacterBase _Entity)
+        {
+            if (_Entity != null)
+                ActiveAICB.Remove(_Entity);
+        }
+
 
         #region GridNodeSetup
 
@@ -382,7 +409,24 @@ namespace Trystin
                 if (ActiveAICB[AIIndex] != null)
                 {
                     Vector3 AIPos = ActiveAICB[AIIndex].transform.position;
+
+                    Collider[] AIColArray = ActiveAICB[AIIndex].GetComponentsInChildren<Collider>();
+                    if(AIColArray.Length > 1)
+                        for(int ColIndex = 0; ColIndex < AIColArray.Length; ++ColIndex)
+                        {
+                            Node ColNode = FindNodeFromWorldPosition(AIColArray[ColIndex].bounds.center);
+                            if (ColNode != null)
+                                AIOccupiedNodes.Add(ColNode);
+                        }
+
                     Collider AICol = ActiveAICB[AIIndex].GetComponent<Collider>();
+                    if(AICol == null)
+                        AICol = ActiveAICB[AIIndex].GetComponentInChildren<Collider>();
+
+                    if (AICol == null)
+                    {
+                        continue;
+                    }
                     Vector3 BoundsExtents = AICol.bounds.extents;
                     Vector3[] Corners = new Vector3[4];
                     Node CentreNode = FindNodeFromWorldPosition(AIPos);
@@ -423,8 +467,8 @@ namespace Trystin
         //
         public Node GetRandNode()
         {
-            int Ranx = Random.Range(0, GridXLength);
-            int RanY = Random.Range(0, GridYLength);
+            int Ranx = UnityEngine.Random.Range(0, GridXLength);
+            int RanY = UnityEngine.Random.Range(0, GridYLength);
             Vector3 RandVec = new Vector3(Ranx, 0, RanY);
             Node Node = FindNodeFromWorldPosition(RandVec);
 

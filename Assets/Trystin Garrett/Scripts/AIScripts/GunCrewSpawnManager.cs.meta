@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - GunPrefab: {fileID: 1672049064255866, guid: af7f0bba47896f643b6da598156cb7b1,
+  - GunPrefab: {fileID: 1851830719296000, guid: af7f0bba47896f643b6da598156cb7b1,
       type: 2}
   - GunCrewMemberPrefab: {fileID: 1428616897110710, guid: 4965a650d8e28c34190e5e735eb23562,
       type: 2}

@@ -25,16 +25,24 @@ namespace Trystin
         public GunCrewRole CrewRole = GunCrewRole.UnAssigned;
         public bool HasSpawnCompleated = false;
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
         // Update is called once per frame
         void Update()
         {
 
+        }
+
+        //
+        public void CallChangeCrewRole(GunCrewRole _NewRole)
+        {
+            switch(_NewRole)
+            {
+                case GunCrewRole.GunOperator:
+                    CrewRole = GunCrewRole.GunOperator;
+                    break;
+                case GunCrewRole.Spotter:
+                    CrewRole = GunCrewRole.Spotter;
+                    break;
+            }
         }
 
         //

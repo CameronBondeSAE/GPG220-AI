@@ -109,7 +109,6 @@ namespace Trystin
 
             if (DropPointLocation != null && DropPointLocationSpawnCentre != null)
             {
-                Debug.Log(DropPointLocationSpawnCentre.GridPostion.X + " / " + DropPointLocationSpawnCentre.GridPostion.Y);
                 CurrentStatus = GCSMStatus.SpawningGun;
                 DropInGun();
                 yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded);
@@ -128,28 +127,11 @@ namespace Trystin
             }
         }
 
-
-
-
         //
         void ScanForRandomDropZone()
         {
 
         }
-        //
-        //public void TestScanForDropZone()
-        //{
-        //    if (NodeManager.Instance.SetupCompletate == true)
-        //    {
-        //        DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
-        //        if (DropPointLocation != null && DropPointLocationSpawnCorner != null)
-        //        {
-        //            Gun = Instantiate(GunPrefab, DropPointLocationSpawnCorner.WorldPosition, Quaternion.identity, transform);
-        //            GunIsDeployed = true;
-        //            DropInGunCrew();
-        //        }
-        //    }
-        //}
 
         //
         void ScanForDropZone()
@@ -345,6 +327,7 @@ namespace Trystin
                     NewCrew.CallAnimateSpawnIn(_requestee, SpawnNode);
                     CrewMemberSpawnLocations.RemoveAt(RandInt);
                 }
+                _requestee.AssignCrewRoles();
             }
         }
 
@@ -362,31 +345,6 @@ namespace Trystin
             CrewMemberSpawnLocations = null;
             CurrentStatus = GCSMStatus.Inactive;
         }
-
-
-
-
-        ////
-        //void CheckForManagers()
-        //{
-        //    bool NMExists = false;
-        //    bool PMExists = false;
-
-        //    if (NodeManager.Instance != null)
-        //        NMExists = true;
-        //    if (PathFinderManager.Instance != null)
-        //        PMExists = true;
-
-        //    if (!NMExists)
-        //    {
-        //        GameObject NewNManagerGO = new GameObject();
-        //        NewNManagerGO.AddComponent<NodeManager>();
-        //        NewNManagerGO.name = "GunCrewManagers";
-        //    }
-        //    if (!PMExists)
-        //        NodeManager.Instance.gameObject.AddComponent<PathFinderManager>();
-        //}
-
 
         //These Visual Debuggings are really really costly and inefficent!!
         private void OnDrawGizmos()
