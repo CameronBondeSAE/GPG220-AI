@@ -50,9 +50,6 @@ namespace Trystin
         public List<CharacterBase> ActiveAICB = new List<CharacterBase>();
         public List<Node> AIOccupiedNodes = new List<Node>();
 
-        //public Vector3[] TestArray;
-        //public List<Node> PathFound;
-
         public bool ToggleWireFrame = false;
 
 

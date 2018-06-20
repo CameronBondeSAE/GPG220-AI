@@ -6,45 +6,66 @@ namespace Trystin
 {
     public class GunCrewSpawnManager : MonoBehaviour
     {
+        public static GunCrewSpawnManager Instance;
 
         public enum GunSpawnStatus
         {
             UnSpawned,
-            DroppingIn,
-            Landed,
+            SpawnRequested,
+            GunDropPointFound,
+            GunDroppingIn,
+            GunLanded,
             DroppingCrew,
+            CrewLanded,
             Ready
         }
 
-        public bool HasPreDefinedLocation = false;
+        public enum GCSMStatus
+        {
+            Inactive,
+            SearchingForDropZone,
+            SpawningGun,
+            SpawningCrew,
+            CleaningUp
+        }
 
+        [Header("Status")]
+        public GCSMStatus CurrentStatus = GCSMStatus.Inactive;
+
+        [Space]
+        [Header("Prefabs")]
         public GameObject GunPrefab;
-        public GameObject Gun;
-        public GameObject GunCrewMemberPrefabs;
+        public GameObject GunCrewMemberPrefab;
 
-
-        public GunCrewMember[] CrewMembers;
-        public Vector3 GunCrewArea = new Vector3(3, 3, 3);
-        //public GameObject GunCrewPrefab;
-
-        public int GunCrewAreaX;
-        public int GunCrewAreaY;
+        [Space]
+        [Header("Search Parameters")]
+        public int GunCrewAreaX = 3;
+        public int GunCrewAreaY = 3;
         public int DepthOfScan = 10;
 
+        [Space]
+        [Header("Operational Variables")]
+        public Queue<GunCrew> CallRequests = new Queue<GunCrew>();
+        public GunCrew CurrentRequestee;
 
-        public Node DropPointLocation;
-        public Node DropPointLocationSpawnCorner;
-        public List<Node> CrewMemberSpawnLocations;
-        public List<Node> PosibleDropSections;
+        //Temp Variables
+        Node DropPointLocation;
+        Node DropPointLocationSpawnCentre;
+        List<Node> CrewMemberSpawnLocations;
+        List<Node> PosibleEdgeDropSections;
 
-
-
+        [Space]
+        [Header("Visual Debugging")]
         public bool VisualDebugging = false;
-        public int PossibleDropZonePoints;
+
+
 
         private void Awake()
         {
-            CheckForManagers();
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
         }
 
         // Use this for initialization
@@ -56,55 +77,121 @@ namespace Trystin
         // Update is called once per frame
         void Update()
         {
-
+            CheckForRequests();
         }
 
+        //
+        public void RequestSpawn(GunCrew _Requestee)
+        {
+            if(_Requestee != null)
+                CallRequests.Enqueue(_Requestee);
+        }
+
+        //
+        void CheckForRequests()
+        {
+            if(CallRequests.Count > 0)
+            {
+                if (CurrentStatus != GCSMStatus.Inactive || CurrentRequestee != null)
+                    return;
+
+                StartCoroutine(ProcessSpaqnRequest(CallRequests.Dequeue()));
+            }
+        }
+
+        //Yeah could be moved into a switch and then a shift call could be made to move onto the next step...
+        IEnumerator ProcessSpaqnRequest(GunCrew _Requestee)
+        {
+            CurrentRequestee = _Requestee;
+            CurrentStatus = GCSMStatus.SearchingForDropZone;
+            ScanForDropZone();
+            yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus ==  GunSpawnStatus.GunDropPointFound);
+
+            if (DropPointLocation != null && DropPointLocationSpawnCentre != null)
+            {
+                Debug.Log(DropPointLocationSpawnCentre.GridPostion.X + " / " + DropPointLocationSpawnCentre.GridPostion.Y);
+                CurrentStatus = GCSMStatus.SpawningGun;
+                DropInGun();
+                yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded);
+            }
+            if(CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded)
+            {
+                CurrentStatus = GCSMStatus.SpawningCrew;
+                DropInGunCrew(_Requestee);
+                yield return new WaitUntil(() => CurrentRequestee.CurrentSpawnStatus == GunSpawnStatus.CrewLanded);
+            }
+            if(CheckSpawnIsCompleate())
+            {
+                CurrentStatus = GCSMStatus.CleaningUp;
+                CurrentRequestee.CurrentSpawnStatus = GunSpawnStatus.Ready;
+                ResetSpawner();
+            }
+        }
+
+
+
+
+        //
         void ScanForRandomDropZone()
         {
 
         }
-        public void TestScanForDropZone()
+        //
+        //public void TestScanForDropZone()
+        //{
+        //    if (NodeManager.Instance.SetupCompletate == true)
+        //    {
+        //        DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
+        //        if (DropPointLocation != null && DropPointLocationSpawnCorner != null)
+        //        {
+        //            Gun = Instantiate(GunPrefab, DropPointLocationSpawnCorner.WorldPosition, Quaternion.identity, transform);
+        //            GunIsDeployed = true;
+        //            DropInGunCrew();
+        //        }
+        //    }
+        //}
+
+        //
+        void ScanForDropZone()
         {
-            if (NodeManager.Instance.SetupCompletate == true)
+            DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
+            if (DropPointLocationSpawnCentre != null)
             {
-                DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
-                if (DropPointLocation != null && DropPointLocationSpawnCorner != null)
-                {
-                    Gun = Instantiate(GunPrefab, DropPointLocationSpawnCorner.WorldPosition, Quaternion.identity, transform);
-                }
+                CurrentRequestee.SpawnNode = DropPointLocationSpawnCentre;
+                CurrentRequestee.CurrentSpawnStatus = GunSpawnStatus.GunDropPointFound;
             }
         }
 
+        //
         Node ScanForMapEdgesForDropZone(int _GunCrewAreaX, int _GunCrewAreaY, int _DepthOfScanBox)
         {
             int RequiredXLengh = _GunCrewAreaX + 2;
             int RequiredYLengh = _GunCrewAreaY + 2;
 
-            if (PosibleDropSections == null)
+            //Aquires possible spawn locations based on scan distance to scan through.
+            if (PosibleEdgeDropSections == null)
             {
                 List<Node> NodeSections = GrabNodeScanSections(_DepthOfScanBox);
-                PosibleDropSections = NodeSections;
+                PosibleEdgeDropSections = NodeSections;
             }
+            int ListIndex = PosibleEdgeDropSections.Count;
 
-
-            int ListIndex = PosibleDropSections.Count;
-
-            //For Random SpawnLocations
+            //For Random SpawnLocations along edge
             for (int SectionIndex = ListIndex; SectionIndex > 0; --SectionIndex)
             {
-                int RanIndex = Random.Range(0, PosibleDropSections.Count);
-                Node NV2I = PosibleDropSections[RanIndex];
+                int RanIndex = Random.Range(0, PosibleEdgeDropSections.Count);
+                Node NV2I = PosibleEdgeDropSections[RanIndex];
                 Node[] SectionNodes = ReturnScanAreaNodes(NV2I.GridPostion, _DepthOfScanBox, RequiredXLengh, RequiredYLengh).ToArray();
 
                 for (int SectionNodeIndex = 0; SectionNodeIndex < SectionNodes.Length; ++SectionNodeIndex)
                 {
-                    bool DropLocationFound = ScanNodeLocation(RequiredXLengh, RequiredYLengh, SectionNodes[SectionNodeIndex], out DropPointLocationSpawnCorner, out CrewMemberSpawnLocations);
+                    bool DropLocationFound = ScanNodeLocation(RequiredXLengh, RequiredYLengh, SectionNodes[SectionNodeIndex], out DropPointLocationSpawnCentre, out CrewMemberSpawnLocations);
                     if (DropLocationFound == true)
                     {
-                        PosibleDropSections.RemoveAt(RanIndex);
+                        PosibleEdgeDropSections.RemoveAt(RanIndex);
                         return SectionNodes[SectionNodeIndex];
                     }
-                    PosibleDropSections.RemoveAt(RanIndex);
+                    PosibleEdgeDropSections.RemoveAt(RanIndex);
                 }
             }
             // For Systematic spawn locations
@@ -121,7 +208,6 @@ namespace Trystin
             //            return SectionNodes[SectionNodeIndex];
             //        }
             //    }
-
             //}
             return null;
         }
@@ -232,50 +318,74 @@ namespace Trystin
             return true;
         }
 
-
+        //
         void DropInGun()
         {
-            if (NodeManager.Instance.SetupCompletate == true)
+            if (DropPointLocation != null && DropPointLocationSpawnCentre != null)
             {
-                DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
-            }
-
-            if (DropPointLocation != null && DropPointLocationSpawnCorner != null)
-            {
-                Gun = Instantiate(GunPrefab, DropPointLocationSpawnCorner.WorldPosition, Quaternion.identity, transform);
+                CurrentRequestee.SpawnNode = DropPointLocationSpawnCentre;
+                CurrentRequestee.Gun = Instantiate(GunPrefab, DropPointLocationSpawnCentre.WorldPosition, Quaternion.identity, CurrentRequestee.transform);
+                CurrentRequestee.CallAnimateGunSpawnIn();
             }
         }
-
-        void DropInGunCrew()
-        {
-            CrewMembers = new GunCrewMember[4];
-            //if ()
-            //{
-
-            //}
-        }
-
 
         //
-        void CheckForManagers()
+        void DropInGunCrew(GunCrew _requestee)
         {
-            bool NMExists = false;
-            bool PMExists = false;
-
-            if (NodeManager.Instance != null)
-                NMExists = true;
-            if (PathFinderManager.Instance != null)
-                PMExists = true;
-
-            if (!NMExists)
+            _requestee.CrewMembers = new GunCrewMember[4];
+            if (_requestee.CurrentSpawnStatus == GunSpawnStatus.GunLanded)
             {
-                GameObject NewNManagerGO = new GameObject();
-                NewNManagerGO.AddComponent<NodeManager>();
-                NewNManagerGO.name = "GunCrewManagers";
+                for (int CrewMemberIndex = 0; CrewMemberIndex < _requestee.CrewMembers.Length; ++CrewMemberIndex)
+                {
+                    int RandInt = Random.Range(0, CrewMemberSpawnLocations.Count);
+                    Node SpawnNode = CrewMemberSpawnLocations[RandInt];
+
+                    GunCrewMember NewCrew = Instantiate(GunCrewMemberPrefab,_requestee.transform).GetComponent<GunCrewMember>();
+                    _requestee.CrewMembers[CrewMemberIndex] = NewCrew;
+                    NewCrew.CallAnimateSpawnIn(_requestee, SpawnNode);
+                    CrewMemberSpawnLocations.RemoveAt(RandInt);
+                }
             }
-            if (!PMExists)
-                NodeManager.Instance.gameObject.AddComponent<PathFinderManager>();
         }
+
+        bool CheckSpawnIsCompleate()
+        {
+            return true;
+        }
+
+        //
+        void ResetSpawner()
+        {
+            CurrentRequestee = null;
+            DropPointLocation = null;
+            DropPointLocationSpawnCentre = null;
+            CrewMemberSpawnLocations = null;
+            CurrentStatus = GCSMStatus.Inactive;
+        }
+
+
+
+
+        ////
+        //void CheckForManagers()
+        //{
+        //    bool NMExists = false;
+        //    bool PMExists = false;
+
+        //    if (NodeManager.Instance != null)
+        //        NMExists = true;
+        //    if (PathFinderManager.Instance != null)
+        //        PMExists = true;
+
+        //    if (!NMExists)
+        //    {
+        //        GameObject NewNManagerGO = new GameObject();
+        //        NewNManagerGO.AddComponent<NodeManager>();
+        //        NewNManagerGO.name = "GunCrewManagers";
+        //    }
+        //    if (!PMExists)
+        //        NodeManager.Instance.gameObject.AddComponent<PathFinderManager>();
+        //}
 
 
         //These Visual Debuggings are really really costly and inefficent!!
@@ -291,10 +401,10 @@ namespace Trystin
                     Gizmos.color = Color.green;
                     Gizmos.DrawWireCube(DropPointLocation.WorldPosition, DropPointLocation.TileSize / 3);
                 }
-                if (DropPointLocationSpawnCorner != null)
+                if (DropPointLocationSpawnCentre != null)
                 {
                     Gizmos.color = Color.red;
-                    Gizmos.DrawWireCube(DropPointLocationSpawnCorner.WorldPosition, DropPointLocationSpawnCorner.TileSize / 3);
+                    Gizmos.DrawWireCube(DropPointLocationSpawnCentre.WorldPosition, DropPointLocationSpawnCentre.TileSize / 3);
                 }
 
                 if (CrewMemberSpawnLocations != null)
@@ -306,11 +416,11 @@ namespace Trystin
                     }
                 }
 
-                if (PosibleDropSections != null)
-                    for (int XIndex = 0; XIndex < PosibleDropSections.Count; XIndex++)
+                if (PosibleEdgeDropSections != null)
+                    for (int XIndex = 0; XIndex < PosibleEdgeDropSections.Count; XIndex++)
                     {
                         Gizmos.color = Color.magenta;
-                        Gizmos.DrawWireCube(PosibleDropSections[XIndex].WorldPosition, PosibleDropSections[XIndex].TileSize / 2);
+                        Gizmos.DrawWireCube(PosibleEdgeDropSections[XIndex].WorldPosition, PosibleEdgeDropSections[XIndex].TileSize / 2);
                     }
             }
         }
