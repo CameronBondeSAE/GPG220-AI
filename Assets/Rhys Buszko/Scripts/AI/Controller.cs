@@ -19,6 +19,8 @@ namespace Rhys
         public RaycastHit hitLeft;
         public RaycastHit hitRight;
 
+        public Manager manager;
+
         List<Collider> Enemys;
 
         Health My_Health;
@@ -34,6 +36,7 @@ namespace Rhys
             My_Health.OnDeathEvent += Death;
             My_Body = GetComponent<Body>();
             My_Body.Initalize_Me();
+            manager = Manager.Instance;
         }
 
         // Update is called once per frame
