@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Trystin
 {
-    public class GunCrew : MonoBehaviour
+    public class GunCrewSpawnManager : MonoBehaviour
     {
+
         public enum GunSpawnStatus
         {
             UnSpawned,
@@ -19,11 +20,11 @@ namespace Trystin
 
         public GameObject GunPrefab;
         public GameObject Gun;
-        public GameObject GunCrewMemberPrefab;
+        public GameObject GunCrewMemberPrefabs;
 
 
         public GunCrewMember[] CrewMembers;
-        public Vector3 GunCrewArea = new Vector3(3,3,3);
+        public Vector3 GunCrewArea = new Vector3(3, 3, 3);
         //public GameObject GunCrewPrefab;
 
         public int GunCrewAreaX;
@@ -40,7 +41,6 @@ namespace Trystin
 
         public bool VisualDebugging = false;
         public int PossibleDropZonePoints;
-        public bool GunIsDeployed = false;
 
         private void Awake()
         {
@@ -68,11 +68,9 @@ namespace Trystin
             if (NodeManager.Instance.SetupCompletate == true)
             {
                 DropPointLocation = ScanForMapEdgesForDropZone(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
-                if(DropPointLocation != null && DropPointLocationSpawnCorner != null)
+                if (DropPointLocation != null && DropPointLocationSpawnCorner != null)
                 {
                     Gun = Instantiate(GunPrefab, DropPointLocationSpawnCorner.WorldPosition, Quaternion.identity, transform);
-                    GunIsDeployed = true;
-                    DropInGunCrew();
                 }
             }
         }
@@ -133,11 +131,11 @@ namespace Trystin
         {
             List<Node> ListOfNodesToQueue = new List<Node>();
 
-            for(int XIndex = 0; XIndex < NodeManager.Instance.GridXLength; XIndex += _DepthOfScan)
+            for (int XIndex = 0; XIndex < NodeManager.Instance.GridXLength; XIndex += _DepthOfScan)
             {
                 if (XIndex > NodeManager.Instance.GridXLength - 1)
                     continue;
-                if(NodeManager.Instance.NodeGrid[XIndex,0] != null)
+                if (NodeManager.Instance.NodeGrid[XIndex, 0] != null)
                     ListOfNodesToQueue.Add(NodeManager.Instance.NodeGrid[XIndex, 0]);
                 if (NodeManager.Instance.NodeGrid[XIndex, NodeManager.Instance.GridYLength - 1] != null)
                     ListOfNodesToQueue.Add(NodeManager.Instance.NodeGrid[XIndex, NodeManager.Instance.GridYLength - 1]);
@@ -162,7 +160,7 @@ namespace Trystin
             bool StartingXIterationValue = true;
             bool StartingYIterationValue = true;
 
-            if (_AreaScanOriginPoint.X > (NodeManager.Instance.GridXLength/2 + _GunCrewAreaX))
+            if (_AreaScanOriginPoint.X > (NodeManager.Instance.GridXLength / 2 + _GunCrewAreaX))
                 StartingXIterationValue = false;
 
             if (_AreaScanOriginPoint.Y > (NodeManager.Instance.GridYLength / 2 + _GunCrewAreaY))
@@ -225,7 +223,7 @@ namespace Trystin
                     if (XIndex == CentreXIndex && YIndex == CentreYIndex)
                         _SpawnCentre = NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)];
 
-                    if(XIndex == 0 || XIndex == _GunCrewAreaX - 1)
+                    if (XIndex == 0 || XIndex == _GunCrewAreaX - 1)
                         CrewSpawnLocations.Add(NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)]);
                     if (YIndex == 0 || YIndex == _GunCrewAreaY - 1)
                         CrewSpawnLocations.Add(NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)]);
@@ -251,19 +249,10 @@ namespace Trystin
         void DropInGunCrew()
         {
             CrewMembers = new GunCrewMember[4];
-            if(GunIsDeployed)
-            {
-                for(int CrewMemberIndex = 0; CrewMemberIndex < CrewMembers.Length; ++CrewMemberIndex)
-                {
-                    int RandInt = Random.Range(0, CrewMemberSpawnLocations.Count);
-                    Node SpawnNode = CrewMemberSpawnLocations[RandInt];
+            //if ()
+            //{
 
-                    GunCrewMember NewCrew = Instantiate(GunCrewMemberPrefab).GetComponent<GunCrewMember>();
-                    NewCrew.transform.position = SpawnNode.WorldPosition;
-                    CrewMembers[CrewMemberIndex] = NewCrew;
-                    CrewMemberSpawnLocations.RemoveAt(RandInt);
-                }
-            }
+            //}
         }
 
 
@@ -273,12 +262,12 @@ namespace Trystin
             bool NMExists = false;
             bool PMExists = false;
 
-            if(NodeManager.Instance != null)
+            if (NodeManager.Instance != null)
                 NMExists = true;
             if (PathFinderManager.Instance != null)
                 PMExists = true;
 
-            if(!NMExists)
+            if (!NMExists)
             {
                 GameObject NewNManagerGO = new GameObject();
                 NewNManagerGO.AddComponent<NodeManager>();
@@ -297,7 +286,7 @@ namespace Trystin
                 if (!NodeManager.Instance.SetupCompletate)
                     return;
 
-                if(DropPointLocation != null)
+                if (DropPointLocation != null)
                 {
                     Gizmos.color = Color.green;
                     Gizmos.DrawWireCube(DropPointLocation.WorldPosition, DropPointLocation.TileSize / 3);
@@ -308,7 +297,7 @@ namespace Trystin
                     Gizmos.DrawWireCube(DropPointLocationSpawnCorner.WorldPosition, DropPointLocationSpawnCorner.TileSize / 3);
                 }
 
-                if(CrewMemberSpawnLocations != null)
+                if (CrewMemberSpawnLocations != null)
                 {
                     for (int XIndex = 0; XIndex < CrewMemberSpawnLocations.Count; XIndex++)
                     {
@@ -318,13 +307,12 @@ namespace Trystin
                 }
 
                 if (PosibleDropSections != null)
-                    for(int XIndex = 0; XIndex < PosibleDropSections.Count; XIndex++)
+                    for (int XIndex = 0; XIndex < PosibleDropSections.Count; XIndex++)
                     {
                         Gizmos.color = Color.magenta;
                         Gizmos.DrawWireCube(PosibleDropSections[XIndex].WorldPosition, PosibleDropSections[XIndex].TileSize / 2);
                     }
             }
         }
-
     }
 }
