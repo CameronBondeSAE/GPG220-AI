@@ -8,14 +8,22 @@ namespace Trystin
     {
         public enum GunCrewRole
         {
+            UnAssigned,
             Spotter,
             GunOperator
         }
 
-        public GunCrew OwnerGC;
+        [Space]
+        [Header("AI Components")]
         public TestMovementAI MovementScript;
         public TestVisionAI VistionScript;
-        
+        public GameObject Mesh;
+
+        [Space]
+        [Header("Crew Variables")]
+        public GunCrew OwnerGC;
+        public GunCrewRole CrewRole = GunCrewRole.UnAssigned;
+        public bool HasSpawnCompleated = false;
 
         // Use this for initialization
         void Start()
@@ -29,9 +37,34 @@ namespace Trystin
 
         }
 
+        //
+        public void CallAnimateSpawnIn(GunCrew _OwnerGC, Node _SpawnLocation)
+        {
+            SetupGunCrewMember(_OwnerGC);
+            if (_SpawnLocation != null && OwnerGC != null)
+            {
+                gameObject.SetActive(true);
+                StartCoroutine(AnimateSpawnIn(_SpawnLocation));
+            }
 
+        }
+        IEnumerator AnimateSpawnIn(Node _SpawnLocation)
+        {
+            transform.position = _SpawnLocation.WorldPosition;
+            float RanTimeWait = Random.Range(0f, 1.5f);
+            yield return new WaitForSeconds(RanTimeWait);
 
+            //Placeholderspawn animation
+            yield return new WaitForSeconds(3);
+            Mesh.SetActive(true);
 
+            HasSpawnCompleated = true;
+            ++OwnerGC.CrewSetupCounter;
+            if (OwnerGC.CrewSetupCounter == OwnerGC.CrewMembers.Length)
+                OwnerGC.CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.CrewLanded;
+        }
+
+        // Setsup Components
         public void SetupGunCrewMember(GunCrew _OwnerGC)
         {
             MovementScript = GetComponent<TestMovementAI>();

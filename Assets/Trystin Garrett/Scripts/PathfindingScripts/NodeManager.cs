@@ -50,9 +50,6 @@ namespace Trystin
         public List<CharacterBase> ActiveAICB = new List<CharacterBase>();
         public List<Node> AIOccupiedNodes = new List<Node>();
 
-        //public Vector3[] TestArray;
-        //public List<Node> PathFound;
-
         public bool ToggleWireFrame = false;
 
 
@@ -128,7 +125,7 @@ namespace Trystin
                     ++CurrentNodeCount;
                     Node NewNodeScript = new Node();
                     NewNodeScript.GridPostion = new Vector2Int(XIndex, YIndex);
-                    NewNodeScript.WorldPosition = new Vector3((NewNodeScript.GridPostion.X * GridXScale), 0f, (NewNodeScript.GridPostion.Y * GridYScale));
+                    NewNodeScript.WorldPosition = new Vector3((NewNodeScript.GridPostion.X * GridXScale), 0.3f, (NewNodeScript.GridPostion.Y * GridYScale));
                     NewNodeScript.TileSize = new Vector3(GridXScale - 0.01f, 0.1f, GridYScale - 0.01f);
                     NewTileGrid[XIndex, YIndex] = NewNodeScript;
                     NewNodeScript.GridPostion = new Vector2Int(XIndex, YIndex);

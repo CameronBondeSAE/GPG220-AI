@@ -6,30 +6,19 @@ namespace Trystin
 {
     public class GunCrew : MonoBehaviour
     {
-        public enum GunSpawnStatus
-        {
-            UnSpawned,
-            DroppingIn,
-            Landed,
-            DroppingCrew,
-            Ready
-        }
-
         public bool HasPreDefinedLocation = false;
 
+        //Need to segragate Gun from GunCrew.... Wh
+        public GameObject Gun;
         public GunCrewMember[] CrewMembers;
-        public Vector3 GunCrewArea = new Vector3(3,3,3);
 
-        public List<Node> CurrentScanNodeList;
-        public Vector2 CurrentNodePos;
-        //public GameObject GunCrewPrefab;
+        public Node SpawnNode;
+        public Transform[] GunSpotterPositions = new Transform[2];
+        public Transform GunLoaderPosition;
+        public int CrewSetupCounter = 0;
 
-        public int GunCrewAreaX;
-        public int GunCrewAreaY;
-        public int DepthOfScan = 5;
-
-        public int CheckedNodeLength = 0;
         public bool VisualDebugging = false;
+        public GunCrewSpawnManager.GunSpawnStatus CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.UnSpawned;
 
         private void Awake()
         {
@@ -45,110 +34,52 @@ namespace Trystin
         // Update is called once per frame
         void Update()
         {
-            if(NodeManager.Instance.SetupCompletate == true)
+
+        }
+
+
+
+        //
+        public void RequestSpawnIn()
+        {
+            GunCrewSpawnManager.Instance.RequestSpawn(this);
+            CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.SpawnRequested;
+        }
+        public void CallAnimateGunSpawnIn()
+        {
+            if(CurrentSpawnStatus == GunCrewSpawnManager.GunSpawnStatus.GunDropPointFound && SpawnNode != null)
             {
-                Node Location = NodeManager.Instance.FindNodeFromWorldPosition(transform.position);
-                if (Location != null)
-                    CurrentNodePos = new Vector2(Location.GridPostion.X, Location.GridPostion.Y);
-            }
-        }
-
-        void ScanForRandomDropZone()
-        {
-
-        }
-        public void TestScanForDropZone()
-        {
-            ScanForMapEdgesDropZones(GunCrewAreaX, GunCrewAreaY, DepthOfScan);
-        }
-
-        void ScanForMapEdgesDropZones(int _GunCrewAreaX, int _GunCrewAreaY, int _DepthOfScanBox)
-        {
-            int RequiredXLengh = _GunCrewAreaX + 2;
-            int RequiredYLengh = _GunCrewAreaY + 2;
-            Vector2Int NV2I = new Vector2Int((int)CurrentNodePos.x, (int)CurrentNodePos.y);
-
-            CurrentScanNodeList = ReturnScanAreaNodes(NV2I, _DepthOfScanBox, RequiredXLengh, RequiredYLengh);
-            CheckedNodeLength = CurrentScanNodeList.Count;
-        }
-
-        List<Node> ReturnScanAreaNodes(Vector2Int _AreaScanOriginPoint, int _DepthOfScanBox, int _GunCrewAreaX, int _GunCrewAreaY)
-        {
-            List<Node> ListOfNodesToScan = new List<Node>();
-            bool StartingXIterationValue = true;
-            bool StartingYIterationValue = true;
-
-            if (_AreaScanOriginPoint.X > (NodeManager.Instance.GridXLength/2 + _GunCrewAreaX))
-            {
-                StartingXIterationValue = false;
-                //if (_AreaScanOriginPoint.Y > (NodeManager.Instance.GridYLength / 2 + _GunCrewAreaY))
-                //    StartingYIterationValue = false;
+                StartCoroutine(AnimateGunSpawnIn());
             }
 
-            if (_AreaScanOriginPoint.Y > (NodeManager.Instance.GridYLength / 2 + _GunCrewAreaY))
-                StartingYIterationValue = false;
-
-            for (int XIndex = 0; XIndex < _DepthOfScanBox; ++XIndex)
-            {
-                for (int YIndex = 0; YIndex < _DepthOfScanBox; ++YIndex)
-                {
-                    int ModIndexX = XIndex;
-                    int ModIndexY = YIndex;
-                    if (!StartingXIterationValue)
-                        ModIndexX = -ModIndexX;
-                    if (!StartingYIterationValue)
-                        ModIndexY = -ModIndexY;
-
-                    if (NodeManager.Instance.NodeGrid[(_AreaScanOriginPoint.X + ModIndexX), (_AreaScanOriginPoint.Y + ModIndexY)] != null)
-                        if (!NodeManager.Instance.NodeGrid[(_AreaScanOriginPoint.X + ModIndexX), (_AreaScanOriginPoint.Y + ModIndexY)].IsOccupied)
-                            ListOfNodesToScan.Add(NodeManager.Instance.NodeGrid[(_AreaScanOriginPoint.X + ModIndexX), (_AreaScanOriginPoint.Y + ModIndexY)]);
-                }
-            }
-            return ListOfNodesToScan;
         }
-
-
-        bool ScanNodeLocation(int _GunCrewAreaX, int _GunCrewAreaY, Node _Node)
+        IEnumerator AnimateGunSpawnIn()
         {
-            for (int XIndex = 0; XIndex < _GunCrewAreaX; XIndex++)
-            {
-                for (int YIndex = 0; YIndex < _GunCrewAreaY; YIndex++)
-                {
-                    if (NodeManager.Instance.NodeGrid[_Node.GridPostion.X + XIndex , _Node.GridPostion.Y + YIndex] == null)
-                        return false;
+            CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.GunDroppingIn;
+            Gun.transform.position = SpawnNode.WorldPosition;
 
-                    if (NodeManager.Instance.NodeGrid[_Node.GridPostion.X + XIndex, _Node.GridPostion.Y + YIndex].IsOccupied == true)
-                        return false;
+            //Placeholderspawn animation
+            yield return new WaitForSeconds(3);
+            Gun.gameObject.SetActive(true);
 
-                }
-            }
-            return true;
+            CurrentSpawnStatus = GunCrewSpawnManager.GunSpawnStatus.GunLanded;
         }
-
-
-        void DropInGun()
-        {
-
-        }
-
-        void DropInGunCrew()
-        {
-
-        }
-
 
         //
         void CheckForManagers()
         {
             bool NMExists = false;
             bool PMExists = false;
+            bool GCSMExists = false;
 
             if(NodeManager.Instance != null)
                 NMExists = true;
             if (PathFinderManager.Instance != null)
                 PMExists = true;
+            if (GunCrewSpawnManager.Instance != null)
+                GCSMExists = true;
 
-            if(!NMExists)
+            if (!NMExists)
             {
                 GameObject NewNManagerGO = new GameObject();
                 NewNManagerGO.AddComponent<NodeManager>();
@@ -156,6 +87,8 @@ namespace Trystin
             }
             if (!PMExists)
                 NodeManager.Instance.gameObject.AddComponent<PathFinderManager>();
+            if(!GCSMExists)
+                NodeManager.Instance.gameObject.AddComponent<GunCrewSpawnManager>();
         }
 
 
@@ -164,23 +97,7 @@ namespace Trystin
         {
             if (VisualDebugging)
             {
-                if (!NodeManager.Instance.SetupCompletate || CurrentScanNodeList == null)
-                    return;
-
-                if (CurrentScanNodeList.Count == 0)
-                    return;
-
-                for (int XIndex = 0; XIndex < CurrentScanNodeList.Count; ++XIndex)
-                {
-
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawWireCube(CurrentScanNodeList[XIndex].WorldPosition, CurrentScanNodeList[XIndex].TileSize / 2);
-                }
-
-                        
-
             }
-
         }
 
     }
