@@ -90,6 +90,9 @@ namespace Trystin
         //
         void CheckForRequests()
         {
+            if (!NodeManager.Instance.SetupCompletate)
+                return;
+
             if(CallRequests.Count > 0)
             {
                 if (CurrentStatus != ASMStatus.Inactive || CurrentRequestee != null)
@@ -330,7 +333,7 @@ namespace Trystin
                     NewCrew.CallAnimateSpawnIn(_requestee, SpawnNode);
                     CrewMemberSpawnLocations.RemoveAt(RandInt);
                 }
-                _requestee.AssignCrewRoles();
+                _requestee.AssignInitialCrewRoles();
             }
         }
 

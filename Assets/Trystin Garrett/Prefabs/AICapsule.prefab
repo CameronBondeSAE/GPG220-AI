@@ -141,9 +141,14 @@ MonoBehaviour:
   decelerationMultiplier: 0.9
   damageMultiplier: 1
   target: {x: 0, y: 0, z: 0}
-  OwnerGC: {fileID: 0}
-  MovementScript: {fileID: 0}
+  MovementScript: {fileID: 114005444355637036}
   VistionScript: {fileID: 0}
+  OwnerGC: {fileID: 0}
+  Mesh: {fileID: 0}
+  CrewRole: 0
+  GunnerSubRole: 0
+  SpotterSubRole: 0
+  HasSpawnCompleated: 0
 --- !u!114 &114291188038283674
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -99,6 +99,8 @@ namespace Trystin
             }
         }
 
+        #region Initial Setup Calls
+
         //
         public void CallInitialSetup()
         {
@@ -124,6 +126,7 @@ namespace Trystin
 
             yield return new WaitUntil(() => CurrentNeighbourState == ProgressState.Complete);
             SetupCompletate = true;
+            PathFinderManager.Instance.PathFinderIsActive = true;
         }
         void AddCreatedEntities(CharacterBase _Entity)
         {
@@ -136,6 +139,7 @@ namespace Trystin
                 ActiveAICB.Remove(_Entity);
         }
 
+        #endregion
 
         #region GridNodeSetup
 
@@ -425,7 +429,11 @@ namespace Trystin
                         {
                             Node ColNode = FindNodeFromWorldPosition(AIColArray[ColIndex].bounds.center);
                             if (ColNode != null)
+                            {
+                                ColNode.IsOccupied = true;
+                                ColNode.Occupant = ActiveAICB[AIIndex];
                                 AIOccupiedNodes.Add(ColNode);
+                            }
                         }
 
                     Collider AICol = ActiveAICB[AIIndex].GetComponent<Collider>();

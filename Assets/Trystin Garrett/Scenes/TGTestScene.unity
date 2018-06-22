@@ -152,6 +152,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1490341823448034, guid: b70b0f3f2deb45540975976b408821da, type: 2}
+      propertyPath: m_Name
+      value: ArtilleryPiece
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b70b0f3f2deb45540975976b408821da, type: 2}
   m_IsPrefabParent: 0

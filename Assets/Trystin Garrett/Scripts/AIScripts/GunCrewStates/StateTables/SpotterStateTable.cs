@@ -11,11 +11,11 @@ namespace Trystin
         public override State ReturnState(object _StateEnum)
         {
             //Casting to an enum not the besting thing...
-            SpotterState State = (SpotterState)_StateEnum;
+            SpotterSubRole State = (SpotterSubRole)_StateEnum;
 
             switch (State)
             {
-                case SpotterState.Idle:
+                case SpotterSubRole.Idle:
                     return null;
             }
             return NullState.Instance;

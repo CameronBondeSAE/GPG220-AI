@@ -155,7 +155,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1428616897110710}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f90aa8542c8de4d458362453f36dbed0, type: 3}
   m_Name: 
@@ -186,11 +186,13 @@ MonoBehaviour:
   decelerationMultiplier: 0.9
   damageMultiplier: 1
   target: {x: 0, y: 0, z: 0}
-  MovementScript: {fileID: 0}
+  MovementScript: {fileID: 114585474256977898}
   VistionScript: {fileID: 0}
-  Mesh: {fileID: 1251812254550766}
   OwnerGC: {fileID: 0}
+  Mesh: {fileID: 1251812254550766}
   CrewRole: 0
+  GunnerSubRole: 0
+  SpotterSubRole: 0
   HasSpawnCompleated: 0
 --- !u!114 &114748445507957692
 MonoBehaviour:

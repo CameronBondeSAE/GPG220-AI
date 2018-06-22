@@ -19,6 +19,7 @@ namespace Trystin
 
         public enum MovementStatus
         {
+            Null,
             Idle,
             MovingToNextWapoint,
             ArrivedAtWaypoint,
@@ -36,7 +37,7 @@ namespace Trystin
         public GunCrewMember ThisGCM;
         public Rigidbody ThisRB;
 
-        public MovementStatus CurrentMovementStatus = MovementStatus.Idle;
+        public MovementStatus CurrentMovementStatus = MovementStatus.Null;
         public PathRequestStatus CurrentPathStatus = PathRequestStatus.NoneRequested;
         public List<Node> WayPoints;
 
@@ -70,7 +71,7 @@ namespace Trystin
         public float RotationSpeed;
 
         //
-        private void Start()
+        private void Awake()
         {
             if (ThisGCM == null)
                 ThisGCM = GetComponent<GunCrewMember>();
@@ -95,14 +96,14 @@ namespace Trystin
         }
 
         //
-        public void RequestPath(Node _StartNode, Node _TargetNode)
+        public void RequestPath(Node _StartNode, Node _TargetNode, GunCrewMember _GCM, bool _SkipDiagnals)
         {
 
             if (CurrentPathStatus == PathRequestStatus.NoneRequested)
             {
                 ResetPathing();
                 CurrentPathStatus = PathRequestStatus.RequestedAndWaiting;
-                PathFinderManager.Instance.RequestPathFromNodes(_StartNode, _TargetNode, ThisGCM);
+                PathFinderManager.Instance.RequestPathFromNodes(_StartNode, _TargetNode, _GCM, _SkipDiagnals);
             }
         }
 
@@ -137,6 +138,10 @@ namespace Trystin
 
             switch (CurrentMovementStatus)
             {
+                case MovementStatus.Null:
+                    ThisRB.velocity = Vector3.zero;
+                    break;
+
                 case MovementStatus.Idle:
                     ThisRB.velocity = Vector3.zero;
                     break;
@@ -180,7 +185,7 @@ namespace Trystin
                 case MovementStatus.ArrivedAtTargetNode:
                     ThisRB.velocity = Vector3.zero;
                     transform.rotation = Quaternion.Euler(transform.forward);
-                    RequestRandomPath();
+                    //RequestRandomPath();
                     CurrentMovementStatus = MovementStatus.Idle;
                     break;
             }

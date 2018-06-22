@@ -6,16 +6,9 @@ namespace Trystin
 {
     public class GunCrewMember : CharacterBase
     {
-        public enum GunCrewRole
-        {
-            UnAssigned,
-            Spotter,
-            GunOperator
-        }
 
         [Header("AI Components")]
         public StateMachine ThisStateMachine;
-        public StateTableType AITableType = StateTableType.Null;
         public TestMovementAI MovementScript;
         public TestVisionAI VistionScript;
 
@@ -24,28 +17,42 @@ namespace Trystin
         [Header("Crew Variables")]
         public Artillery OwnerGC;
         public GameObject Mesh;
+        public Node OccupiedNode;
         public GunCrewRole CrewRole = GunCrewRole.UnAssigned;
+        public GunnerSubRole GunnerSubRole = GunnerSubRole.Idle;
+        public SpotterSubRole SpotterSubRole = SpotterSubRole.Idle;
         public bool HasSpawnCompleated = false;
 
 
         // Update is called once per frame
         void Update()
         {
-            //ThisStateMachine.UpdateSM();
+            if(HasSpawnCompleated)
+                ThisStateMachine.UpdateSM();
         }
 
 
         //
-        public void CallChangeCrewRole(GunCrewRole _NewRole)
+        public void CallChangeCrewRole(GunCrewRole _NewRole, GunnerSubRole _GunnerSubRole)
         {
             switch(_NewRole)
             {
                 case GunCrewRole.GunOperator:
                     CrewRole = GunCrewRole.GunOperator;
+                    GunnerSubRole = _GunnerSubRole;
+                    SpotterSubRole = SpotterSubRole.Idle;
                     ThisStateMachine.SetupStateMachine(this);
                     break;
+            }
+        }
+        public void CallChangeCrewRole(GunCrewRole _NewRole, SpotterSubRole _SpotterSubRole)
+        {
+            switch (_NewRole)
+            {
                 case GunCrewRole.Spotter:
                     CrewRole = GunCrewRole.Spotter;
+                    GunnerSubRole = GunnerSubRole.Idle;
+                    SpotterSubRole = _SpotterSubRole;
                     ThisStateMachine.SetupStateMachine(this);
                     break;
             }
@@ -74,6 +81,7 @@ namespace Trystin
         IEnumerator AnimateSpawnIn(Node _SpawnLocation)
         {
             transform.position = _SpawnLocation.WorldPosition;
+            OccupiedNode = _SpawnLocation;
             float RanTimeWait = Random.Range(0f, 1.5f);
             yield return new WaitForSeconds(RanTimeWait);
 
@@ -81,7 +89,6 @@ namespace Trystin
             yield return new WaitForSeconds(3);
             Mesh.SetActive(true);
 
-            HasSpawnCompleated = true;
             ++OwnerGC.CrewSetupCounter;
             if (OwnerGC.CrewSetupCounter == OwnerGC.CrewMembers.Length)
                 OwnerGC.CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.CrewLanded;

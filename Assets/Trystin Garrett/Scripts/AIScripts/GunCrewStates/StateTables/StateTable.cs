@@ -6,13 +6,13 @@ namespace Trystin
 {
     public abstract class StateTable
     {
-        protected StateTableType StateTableType;
+        //protected StateTableType StateTableType;
         public static State NullStateInstance = NullState.Instance;
 
-        public StateTableType GetStateTableType()
-        {
-            return StateTableType;
-        }
+        //public StateTableType GetStateTableType()
+        //{
+        //    return StateTableType;
+        //}
 
         public abstract void SetUpStates(StateMachine _SM);
 

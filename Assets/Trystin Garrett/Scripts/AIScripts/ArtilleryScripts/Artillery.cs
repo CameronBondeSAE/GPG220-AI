@@ -46,15 +46,34 @@ namespace Trystin
         }
 
         //
-        public void AssignCrewRoles()
+        void ReassignAllCrewRoles()
         {
-            for (int CrewIndex = 0; CrewIndex < CrewMembers.Length; CrewIndex++)
-            { 
-                if(CrewIndex >= CrewMembers.Length/2)
-                    CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.GunOperator);
-                else
-                    CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.Spotter);
-            }
+            //This will need to be called Also on a charaterbase death and check if the characterbase is a crew emmber
+
+
+        }
+
+
+
+
+        //
+        public void AssignInitialCrewRoles()
+        {
+            //for (int CrewIndex = 0; CrewIndex < CrewMembers.Length; CrewIndex++)
+            //{ 
+            //    if(CrewIndex >= CrewMembers.Length/2)
+            //        CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.GunOperator);
+            //    else
+            //        CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.Spotter);
+            //}
+            CrewMembers[0].CallChangeCrewRole(GunCrewRole.GunOperator, GunnerSubRole.Loader);
+            CrewMembers[1].CallChangeCrewRole(GunCrewRole.GunOperator, GunnerSubRole.Lookout);
+            //CrewMembers[2].CallChangeCrewRole(GunCrewRole.Spotter, SpotterSubRole.Radio);
+            //CrewMembers[3].CallChangeCrewRole(GunCrewRole.Spotter, SpotterSubRole.Runner);
+            //for (int CrewIndex = 0; CrewIndex < CrewMembers.Length; CrewIndex++)
+            //{
+            //    CrewMembers[CrewIndex].HasSpawnCompleated = true;
+            //}
         }
 
         //

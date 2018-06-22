@@ -535,7 +535,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.25, y: 1.25, z: 1.25}
+  m_Size: {x: 1.2, y: 1.25, z: 1.2}
   m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!65 &65525580462826000
 BoxCollider:
@@ -608,4 +608,7 @@ MonoBehaviour:
   GunLoaderPosition: {fileID: 4689250446947836}
   OwnerGC: {fileID: 0}
   HasSpawnCompleated: 0
+  CurrentState: 0
+  TrackingInterval: 1
+  CurrentTime: 0
   VisualDebugging: 0

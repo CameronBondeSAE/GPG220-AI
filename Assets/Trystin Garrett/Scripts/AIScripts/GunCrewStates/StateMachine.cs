@@ -10,8 +10,8 @@ namespace Trystin
         public GunCrewMember SMOwner { get; private set; }
 
         public StateTable LoadedStateTable = NullStateTable.Instance;
-        private SpotterStateTable SpotterStateTable;
-        private GunnerStateTable GunnerStateTable;
+        private SpotterStateTable SpotterStateTable = new SpotterStateTable();
+        private GunnerStateTable GunnerStateTable = new GunnerStateTable();
 
 
         State CurrentState = NullState.Instance;
@@ -43,20 +43,29 @@ namespace Trystin
         public void SetupStateMachine(GunCrewMember _SMOwner)
         {
             SMOwner = _SMOwner;
-            switch (SMOwner.AITableType)
+            switch (SMOwner.CrewRole)
             {
-                case StateTableType.Null:
+                case GunCrewRole.UnAssigned:
 
                     break;
-                case StateTableType.Spotter:
+                case GunCrewRole.Spotter:
                     LoadedStateTable = SpotterStateTable;
                     SpotterStateTable.SetUpStates(this);
-                    ChangeState(LoadedStateTable.ReturnState(null));
+                    ChangeState(LoadedStateTable.ReturnState(SpotterSubRole.Idle));
                     break;
-                case StateTableType.Gunner:
+                case GunCrewRole.GunOperator:
                     LoadedStateTable = GunnerStateTable;
                     GunnerStateTable.SetUpStates(this);
-                    ChangeState(LoadedStateTable.ReturnState(null));
+
+                    switch(_SMOwner.GunnerSubRole)
+                    {
+                        case GunnerSubRole.Loader:
+                            ChangeState(LoadedStateTable.ReturnState(GunnerSubRole.Loader));
+                            break;
+                        case GunnerSubRole.Lookout:
+
+                            break;
+                    }
                     break;
             }
 

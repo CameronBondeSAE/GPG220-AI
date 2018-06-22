@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4177440603927984}
   - component: {fileID: 114807462794595744}
   m_Layer: 0
-  m_Name: GunCrew
+  m_Name: ArtilleryPiece
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,13 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bdf3a940e2275547a79b743d1cd43a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HasPreDefinedLocation: 0
   FieldGun: {fileID: 0}
   CrewMembers: []
-  GunSpotterPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  GunLoaderPosition: {fileID: 0}
-  CrewSetupCounter: 0
-  VisualDebugging: 0
   CurrentSpawnStatus: 0
+  CrewSetupCounter: 0
+  HasPreDefinedLocation: 0
+  VisualDebugging: 0

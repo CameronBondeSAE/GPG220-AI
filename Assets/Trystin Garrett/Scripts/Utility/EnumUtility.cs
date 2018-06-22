@@ -4,20 +4,46 @@ using UnityEngine;
 
 namespace Trystin
 {
-    public enum StateTableType
+    public enum FieldGunState
     {
-        Null,
+        Idle,
+        Loading,
+        Rotating,
+        MovingBarrel,
+        Firing
+    }
+
+
+
+
+
+    public enum GunCrewRole
+    {
+        UnAssigned,
         Spotter,
-        Gunner
+        GunOperator
     }
 
-    public enum SpotterState
+    public enum SpotterSubRole
     {
-        Idle
+        Idle,
+        Runner,
+        Radio
     }
 
-    public enum GunnerState
+    public enum GunnerSubRole
     {
-        Idle
+        Idle,
+        Loader,
+        Lookout,
+    }
+
+    public enum GSLoaderState
+    {
+        Idle,
+        MovingToBreach,
+        AtBreach,
+        LoadingShell,
+        LoadingComplete
     }
 }

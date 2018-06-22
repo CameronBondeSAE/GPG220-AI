@@ -7,16 +7,23 @@ namespace Trystin
     public class GunnerStateTable : StateTable
     {
         //Implment instantations of each state here.
+        GunnerStateLoader GSL = new GunnerStateLoader();
+
 
         public override State ReturnState(object _StateEnum)
         {
             //Casting to an enum not the besting thing...
-            GunnerState State = (GunnerState)_StateEnum;
+            GunnerSubRole State = (GunnerSubRole)_StateEnum;
 
             switch (State)
             {
-                case GunnerState.Idle:
+                case GunnerSubRole.Idle:
                     return null;
+                case GunnerSubRole.Loader:
+                    return GSL;
+                case GunnerSubRole.Lookout:
+
+                    break;
             }
             return NullState.Instance;
         }
@@ -24,6 +31,7 @@ namespace Trystin
         public override void SetUpStates(StateMachine _SM)
         {
             //Setup each state here
+            GSL.StateSetup(_SM);
         }
     }
 }

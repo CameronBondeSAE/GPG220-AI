@@ -148,7 +148,13 @@ namespace Trystin
                         continue;
                     }
 
-                    int NewMovCostToNeighbour = CurrentNode.GCost + GetDistanceBetweenNode(CurrentNode, NeighbourRef);
+                    int DistanceBetweenNodes = GetDistanceBetweenNode(CurrentNode, NeighbourRef);
+
+                    if (CurrentPR.SkipDiagnals)
+                        if(DistanceBetweenNodes == 14)
+                            continue;
+
+                    int NewMovCostToNeighbour = CurrentNode.GCost + DistanceBetweenNodes;
 
                     if (NewMovCostToNeighbour < NeighbourRef.GCost || !OpenSet.Contains(NeighbourRef))
                     {
