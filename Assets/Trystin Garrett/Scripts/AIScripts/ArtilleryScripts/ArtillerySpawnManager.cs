@@ -126,6 +126,9 @@ namespace Trystin
             {
                 CurrentStatus = ASMStatus.CleaningUp;
                 CurrentRequestee.CurrentSpawnStatus = ArtillerySpawnStatus.Ready;
+
+                StartCoroutine( CurrentRequestee.ActivateCrew());
+
                 ResetSpawner();
             }
         }
@@ -333,7 +336,7 @@ namespace Trystin
                     NewCrew.CallAnimateSpawnIn(_requestee, SpawnNode);
                     CrewMemberSpawnLocations.RemoveAt(RandInt);
                 }
-                _requestee.AssignInitialCrewRoles();
+                //_requestee.AssignInitialCrewRoles();
             }
         }
 

@@ -14,7 +14,11 @@ namespace Trystin
     }
 
 
-
+    public enum AIStatus
+    {
+        InActive,
+        Active
+    }
 
 
     public enum GunCrewRole
@@ -41,6 +45,7 @@ namespace Trystin
     public enum GSLoaderState
     {
         Idle,
+        RequestingPathToBreach,
         MovingToBreach,
         AtBreach,
         LoadingShell,

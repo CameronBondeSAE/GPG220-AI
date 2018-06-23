@@ -21,8 +21,6 @@ GameObject:
   - component: {fileID: 4445054777091896}
   - component: {fileID: 33358314083114554}
   - component: {fileID: 23040068421912324}
-  - component: {fileID: 136218399415120760}
-  - component: {fileID: 54393661451536424}
   m_Layer: 0
   m_Name: CrewMemberMesh
   m_TagString: Untagged
@@ -42,6 +40,8 @@ GameObject:
   - component: {fileID: 114549837490053004}
   - component: {fileID: 114585474256977898}
   - component: {fileID: 114650302382520326}
+  - component: {fileID: 136774244821553830}
+  - component: {fileID: 54632796451100908}
   m_Layer: 0
   m_Name: GunCrewMember
   m_TagString: AI
@@ -118,20 +118,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1251812254550766}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54393661451536424
+--- !u!54 &54632796451100908
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1251812254550766}
+  m_GameObject: {fileID: 1428616897110710}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!114 &114549837490053004
 MonoBehaviour:
@@ -161,14 +161,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThisGCM: {fileID: 0}
-  ThisRB: {fileID: 54393661451536424}
+  ThisRB: {fileID: 54632796451100908}
   CurrentMovementStatus: 0
   CurrentPathStatus: 0
   CurrentWaypointIndex: 0
   RotationToNextWaypoint: {x: 0, y: 0, z: 0}
   TogglePathFound: 1
-  CurrentMovementSpeed: 1
-  RotationSpeed: 7.5
+  CurrentMovementSpeed: 0
+  RotationSpeed: 10
 --- !u!114 &114650302382520326
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -190,6 +190,7 @@ MonoBehaviour:
   VistionScript: {fileID: 0}
   OwnerGC: {fileID: 0}
   Mesh: {fileID: 1251812254550766}
+  CurrentStatus: 0
   CrewRole: 0
   GunnerSubRole: 0
   SpotterSubRole: 0
@@ -211,12 +212,12 @@ MonoBehaviour:
   decelerationMultiplier: 0.9
   damageMultiplier: 1
   target: {x: 0, y: 0, z: 0}
---- !u!136 &136218399415120760
+--- !u!136 &136774244821553830
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1251812254550766}
+  m_GameObject: {fileID: 1428616897110710}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1

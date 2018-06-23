@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace Trystin
@@ -26,6 +27,9 @@ namespace Trystin
         [Space]
         [Header("Debugging")]
         public bool VisualDebugging = false;
+
+        //EVEnt setup drivent
+        public event Action GunPositionsHaveChanged;
 
         // Use this for initialization
         void Start()
@@ -62,18 +66,48 @@ namespace Trystin
             ReturnPositionNodes();
         }
 
+        //
         void ReturnPositionNodes()
         {
+            Node[] PotentalSpotterNodes = new Node[GunSpotterPositions.Length];
+            Node PotentalBreachNode;
+
             for (int SpotterNodeIndex = 0; SpotterNodeIndex < GunSpotterPositions.Length; ++SpotterNodeIndex)
             {
-                Node PotentalSpotterNode = NodeManager.Instance.FindNodeFromWorldPosition(GunSpotterPositions[SpotterNodeIndex].position);
-                if (PotentalSpotterNode != null && PotentalSpotterNode.IsOccupied == false)
-                    GunSpotterNodes[SpotterNodeIndex] = PotentalSpotterNode;
+                PotentalSpotterNodes[SpotterNodeIndex] = NodeManager.Instance.FindNodeFromWorldPosition(GunSpotterPositions[SpotterNodeIndex].position);
+                if (PotentalSpotterNodes[SpotterNodeIndex] == null || PotentalSpotterNodes[SpotterNodeIndex].IsOccupied == true)
+                    PotentalSpotterNodes[SpotterNodeIndex] = null;
             }
 
-            Node PotentalBreachNode = NodeManager.Instance.FindNodeFromWorldPosition(GunLoaderPosition.position);
-            if (PotentalBreachNode != null && PotentalBreachNode.IsOccupied == false)
-                BreachNode = PotentalBreachNode;
+            PotentalBreachNode = NodeManager.Instance.FindNodeFromWorldPosition(GunLoaderPosition.position);
+            if (PotentalBreachNode == null || PotentalBreachNode.IsOccupied == true)
+                PotentalBreachNode = null;
+
+            bool IsThereAChangeOfNodes = false;
+            for(int SpotterNodeIndex = 0; SpotterNodeIndex < PotentalSpotterNodes.Length; ++SpotterNodeIndex)
+            {
+                if (PotentalSpotterNodes[SpotterNodeIndex] != null)
+                {
+                    if (PotentalSpotterNodes[SpotterNodeIndex] != GunSpotterNodes[SpotterNodeIndex])
+                    {
+                        IsThereAChangeOfNodes = true;
+                        GunSpotterNodes[SpotterNodeIndex] = PotentalSpotterNodes[SpotterNodeIndex];
+                    }
+                }
+                if(PotentalBreachNode != null)
+                {
+                    if (PotentalBreachNode != BreachNode)
+                    {
+                        IsThereAChangeOfNodes = true;
+                        BreachNode = PotentalBreachNode;
+                    }
+                }
+            }
+            if(IsThereAChangeOfNodes)
+            {
+                if (GunPositionsHaveChanged != null)
+                    GunPositionsHaveChanged();
+            }
         }
 
         #region Setup Methods

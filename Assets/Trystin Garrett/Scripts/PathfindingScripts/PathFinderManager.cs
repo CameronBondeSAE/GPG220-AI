@@ -126,8 +126,26 @@ namespace Trystin
             for (int CRIndex = 0; CRIndex < CompleatedRequests.Count; ++CRIndex)
             {
                 PathRequest CPR = CompleatedRequests.Dequeue();
-                CPR.Requestee.MovementScript.RecivePath(CPR.CompletedPath);
+
+                if (CPR.PathIsFound == false)
+                    RetryPath(CPR);
+                else
+                    CPR.Requestee.MovementScript.RecivePath(CPR.CompletedPath);
             }
+        }
+        //
+        void RetryPath(PathRequest _CPR)
+        {
+            Debug.Log("Retrying Path");
+            _CPR.IsBeingProcessed = false;
+            _CPR.CompletedPath = null;
+
+            PathRequests.Enqueue(_CPR);
+        }
+
+        IEnumerator Wait()
+        {
+            yield return new WaitForSeconds(0.25f);
         }
     }
 

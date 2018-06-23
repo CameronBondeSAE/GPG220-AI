@@ -22,6 +22,8 @@ namespace Trystin
         public Thread AvaliableThread;
         public PathFinderManager PFM;
         public PathfinderStatus CurrentStatus = PathfinderStatus.Incative;
+        public int SkipDiagnalIndex = 0;
+
 
         private void Update()
         {
@@ -151,8 +153,12 @@ namespace Trystin
                     int DistanceBetweenNodes = GetDistanceBetweenNode(CurrentNode, NeighbourRef);
 
                     if (CurrentPR.SkipDiagnals)
-                        if(DistanceBetweenNodes == 14)
-                            continue;
+                    {
+                        //if (DistanceBetweenNodes == 14 && NeighbourRef != TargetNode)
+                        //    continue;
+                    }
+
+
 
                     int NewMovCostToNeighbour = CurrentNode.GCost + DistanceBetweenNodes;
 

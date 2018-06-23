@@ -129,12 +129,8 @@ namespace Trystin
                 return;
             CurrentPathStatus = PathRequestStatus.NoneRequested;
 
-            if (CurrentWaypoint == null)
-                if (WayPoints[CurrentWaypointIndex] != null)
-                    CurrentWaypoint = WayPoints[CurrentWaypointIndex];
-
-            if (CurrentMovementStatus == MovementStatus.Idle && CurrentWaypoint != null)
-                CurrentMovementStatus = MovementStatus.MovingToNextWapoint;
+            //if (CurrentMovementStatus == MovementStatus.Idle && CurrentWaypoint != null)
+            //    CurrentMovementStatus = MovementStatus.MovingToNextWapoint;
 
             switch (CurrentMovementStatus)
             {
@@ -147,12 +143,15 @@ namespace Trystin
                     break;
 
                 case MovementStatus.MovingToNextWapoint:
+
+                    CheckForWayPointExistance();
                     float CurrentDisFromWaypoint = Vector3.Distance(transform.position, CurrentWaypoint.WorldPosition);
                     if (CurrentDisFromWaypoint < 0.3f)
                     {
                         if (CurrentWaypoint == TargetWaypoint)
                         {
                             CurrentMovementStatus = MovementStatus.ArrivedAtTargetNode;
+                            ThisGCM.OccupiedNode = CurrentWaypoint;
                             return;
                         }
 
@@ -160,6 +159,7 @@ namespace Trystin
                         if (WayPoints[CurrentWaypointIndex] != null)
                         {
                             CurrentWaypoint = WayPoints[CurrentWaypointIndex];
+                            ThisGCM.OccupiedNode = CurrentWaypoint;
                             CurrentMovementStatus = MovementStatus.MovingToNextWapoint;
                         }
                     }
@@ -185,6 +185,9 @@ namespace Trystin
                 case MovementStatus.ArrivedAtTargetNode:
                     ThisRB.velocity = Vector3.zero;
                     transform.rotation = Quaternion.Euler(transform.forward);
+                    WayPoints = null;
+                    CurrentWaypointIndex = 0;
+                    ThisGCM.OccupiedNode = CurrentWaypoint;
                     //RequestRandomPath();
                     CurrentMovementStatus = MovementStatus.Idle;
                     break;
@@ -193,7 +196,22 @@ namespace Trystin
 
         }
 
-
+        //
+        void CheckForWayPointExistance()
+        {
+            if (CurrentWaypoint == null)
+            {
+                if (WayPoints != null)
+                {
+                    if (WayPoints[CurrentWaypointIndex] != null)
+                        CurrentWaypoint = WayPoints[CurrentWaypointIndex];
+                    else
+                        CurrentMovementStatus = MovementStatus.Idle;
+                }
+                else
+                    CurrentMovementStatus = MovementStatus.Idle;
+            }
+        }
 
 
 

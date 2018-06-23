@@ -18,6 +18,7 @@ namespace Trystin
         public Artillery OwnerGC;
         public GameObject Mesh;
         public Node OccupiedNode;
+        public AIStatus CurrentStatus = AIStatus.InActive;
         public GunCrewRole CrewRole = GunCrewRole.UnAssigned;
         public GunnerSubRole GunnerSubRole = GunnerSubRole.Idle;
         public SpotterSubRole SpotterSubRole = SpotterSubRole.Idle;
@@ -27,7 +28,7 @@ namespace Trystin
         // Update is called once per frame
         void Update()
         {
-            if(HasSpawnCompleated)
+            if(CurrentStatus == AIStatus.Active)
                 ThisStateMachine.UpdateSM();
         }
 

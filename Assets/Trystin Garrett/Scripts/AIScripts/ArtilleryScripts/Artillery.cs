@@ -21,6 +21,9 @@ namespace Trystin
         [Header("Debugging")]
         public bool VisualDebugging = false;
 
+
+
+
         private void Awake()
         {
             CheckForManagers();
@@ -44,6 +47,15 @@ namespace Trystin
             ArtillerySpawnManager.Instance.RequestSpawn(this);
             CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.SpawnRequested;
         }
+
+        public IEnumerator ActivateCrew()
+        {
+
+            yield return new WaitForSeconds(0.5f);
+            CrewMembers[0].CallChangeCrewRole(GunCrewRole.GunOperator, GunnerSubRole.Loader);
+            CrewMembers[0].CurrentStatus = AIStatus.Active;
+        }
+
 
         //
         void ReassignAllCrewRoles()
