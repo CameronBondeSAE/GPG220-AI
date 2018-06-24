@@ -91,7 +91,7 @@ namespace Trystin
             {
                 ResetPathing();
                 CurrentPathStatus = PathRequestStatus.RequestedAndWaiting;
-                PathFinderManager.Instance.RequestRandomPathFromVec3(transform.position, ThisGCM);
+                //PathFinderManager.Instance.RequestRandomPathFromVec3(transform.position, ThisGCM);
             }
         }
 
@@ -103,12 +103,12 @@ namespace Trystin
             {
                 ResetPathing();
                 CurrentPathStatus = PathRequestStatus.RequestedAndWaiting;
-                PathFinderManager.Instance.RequestPathFromNodes(_StartNode, _TargetNode, _GCM, _SkipDiagnals);
+                //PathFinderManager.Instance.RequestPathFromNodes(_StartNode, _TargetNode, _GCM);
             }
         }
 
         //
-        public void RecivePath(List<Node> _NodePath)
+        public void RecivePathRequest(List<Node> _NodePath)
         {
             WayPoints = _NodePath;
             CurrentPathStatus = PathRequestStatus.Recived;

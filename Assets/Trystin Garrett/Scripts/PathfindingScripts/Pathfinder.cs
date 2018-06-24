@@ -9,7 +9,6 @@ namespace Trystin
 
     public class Pathfinder
     {
-
         public enum PathfinderStatus
         {
             Incative,
@@ -23,7 +22,6 @@ namespace Trystin
         public PathFinderManager PFM;
         public PathfinderStatus CurrentStatus = PathfinderStatus.Incative;
         public int SkipDiagnalIndex = 0;
-
 
         private void Update()
         {
@@ -52,7 +50,7 @@ namespace Trystin
                 return;
             }
 
-            if (CurrentPR.StartingNode == null || CurrentPR.TargetNode == null || CurrentPR.Requestee.MovementScript == null)
+            if (CurrentPR.StartingNode == null || CurrentPR.TargetNode == null || CurrentPR.Requestee == null)
             {
                 //Debug.Log("PF:  Incompleate Request, Null Node/Requetee!");
                 CurrentStatus = PathfinderStatus.Incative;
@@ -63,31 +61,10 @@ namespace Trystin
                 CurrentNM = _NM;
                 CurrentPR.IsBeingProcessed = true;
                 CallFindPath();
-
-                //////THIS BELLOW NEEDS TO BE PUT INTO PATHFINDER THEN CALLED BY THE THREAD RATHER THAN THE CALL SCRIPTS, IT IS WAITING FOR THE PATH IN THE PFM
-
-                //while (CurrentPR.IsBeingProcessed == true)
-                //{
-                //    //Debug.Log("PF:  WorkingOnPath!!!");
-                //}
-                //if(CurrentPR.IsBeingProcessed == false)
-                //{
-                //    if (CurrentPR.PathIsFound == false)
-                //    {
-                //        Debug.Log("PF:  Failed To Find Path");
-                //        _PFM.CompleatedRequests.Enqueue(CurrentPR);
-                //    }
-                //    else if (CurrentPR.PathIsFound == true)
-                //    {
-                //        //Debug.Log("PF:  Path Found");
-                //        _PFM.CompleatedRequests.Enqueue(CurrentPR);
-                //        ResetPathFinder();
-                //    }
-                //} 
             }
         }
 
-
+        //
         void CallFindPath()
         {
             AvaliableThread = new Thread(FindPath);
@@ -98,13 +75,6 @@ namespace Trystin
         void FindPath()
         {
             //Debug.Log("PF:  StartingPathFinding");
-
-            //Node StartNode = NM.FindNodeFromWorldPosition(CurrentRP.StartingNode.WorldPosition);
-            //Node TargetNode = NM.FindNodeFromWorldPosition(CurrentRP.TargetNode.WorldPosition);
-
-            //Node StartNode = CurrentNM.FindNodeFromWorldPosition(CurrentRP.StartingNode.WorldPosition);
-            //Node TargetNode = CurrentNM.FindNodeFromWorldPosition(CurrentRP.TargetNode.WorldPosition);
-
             Node StartNode = CurrentPR.StartingNode;
             Node TargetNode = CurrentPR.TargetNode;
 
@@ -146,9 +116,7 @@ namespace Trystin
                     Node NeighbourRef = CurrentNode.NeighbouringTiles[NeighbourIndex];
 
                     if (NeighbourRef.IsOccupied == true || CloasedSet.Contains(NeighbourRef))
-                    {
                         continue;
-                    }
 
                     int DistanceBetweenNodes = GetDistanceBetweenNode(CurrentNode, NeighbourRef);
 
@@ -157,8 +125,6 @@ namespace Trystin
                         //if (DistanceBetweenNodes == 14 && NeighbourRef != TargetNode)
                         //    continue;
                     }
-
-
 
                     int NewMovCostToNeighbour = CurrentNode.GCost + DistanceBetweenNodes;
 
@@ -201,13 +167,9 @@ namespace Trystin
             int DistY = Mathf.Abs(_NodeA.GridPostion.Y - _NodeB.GridPostion.Y);
 
             if (DistX > DistY)
-            {
                 return 14 * DistY + 10 * (DistX - DistY);
-            }
             else
-            {
                 return 14 * DistX + 10 * (DistY - DistX);
-            }
         }
 
         //

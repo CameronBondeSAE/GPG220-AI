@@ -8,10 +8,12 @@ namespace Trystin
     {
 
         [Header("AI Components")]
+        public List<Command> ActiveOrders = new List<Command>();
+        public MovementCommand MovementOrder;
+
         public StateMachine ThisStateMachine;
         public TestMovementAI MovementScript;
         public TestVisionAI VistionScript;
-
 
         [Space]
         [Header("Crew Variables")]
@@ -98,10 +100,10 @@ namespace Trystin
         // Setsup Components
         public void SetupGunCrewMember(Artillery _OwnerGC)
         {
-            MovementScript = GetComponent<TestMovementAI>();
-            VistionScript = GetComponent<TestVisionAI>();
+            //MovementScript = GetComponent<TestMovementAI>();
+            //VistionScript = GetComponent<TestVisionAI>();
             OwnerGC = _OwnerGC;
-            SetUpSM();
+            //SetUpSM();
         }
         #endregion
     }

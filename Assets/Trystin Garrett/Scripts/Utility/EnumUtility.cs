@@ -51,4 +51,49 @@ namespace Trystin
         LoadingShell,
         LoadingComplete
     }
+
+
+    public enum PathRequestStatus
+    {
+        NoneRequested,
+        RequestedAndWaiting,
+        RecivedAndValid
+    }
+
+    public enum MovementStatus
+    {
+        Null,
+        Idle,
+        MovingToNextWapoint,
+        ArrivedAtWaypoint,
+        ArrivedAtTargetNode
+    }
+
+    public enum MovementSpeed
+    {
+        Idle,
+        Walking,
+        Jogging,
+        Running,
+        Sprinting
+    }
+
+    public enum WaypointStatus
+    {
+        AtWaypoint,
+        AtTargetNode,
+        BetweenWaypoints
+    }
+
+    public enum SearchDirection
+    {
+        North,
+        NorthEast,
+        East,
+        SouthEast,
+        South,
+        SouthWest,
+        West,
+        NorthWest
+    }
 }
