@@ -8,18 +8,6 @@ namespace Trystin
     {
         public static ArtillerySpawnManager Instance;
 
-        public enum ArtillerySpawnStatus
-        {
-            UnSpawned,
-            SpawnRequested,
-            GunDropPointFound,
-            GunDroppingIn,
-            GunLanded,
-            DroppingCrew,
-            CrewLanded,
-            Ready
-        }
-
         public enum ASMStatus
         {
             Inactive,
@@ -57,8 +45,6 @@ namespace Trystin
         [Space]
         [Header("Visual Debugging")]
         public bool VisualDebugging = false;
-
-
 
         private void Awake()
         {
@@ -126,9 +112,6 @@ namespace Trystin
             {
                 CurrentStatus = ASMStatus.CleaningUp;
                 CurrentRequestee.CurrentSpawnStatus = ArtillerySpawnStatus.Ready;
-
-                StartCoroutine( CurrentRequestee.ActivateCrew());
-
                 ResetSpawner();
             }
         }
@@ -182,21 +165,6 @@ namespace Trystin
                     PosibleEdgeDropSections.RemoveAt(RanIndex);
                 }
             }
-            // For Systematic spawn locations
-            //for (int SectionIndex = 0; SectionIndex < NodeSections.Count; ++SectionIndex)
-            //{
-            //    Node NV2I = NodeSections[SectionIndex];
-            //    Node[] SectionNodes = ReturnScanAreaNodes(NV2I.GridPostion, _DepthOfScanBox, RequiredXLengh, RequiredYLengh).ToArray();
-
-            //    for(int SectionNodeIndex = 0; SectionNodeIndex < SectionNodes.Length; ++SectionNodeIndex)
-            //    {
-            //        bool DropLocationFound = ScanNodeLocation(_GunCrewAreaX, _GunCrewAreaY, SectionNodes[SectionNodeIndex]);
-            //        if(DropLocationFound == true)
-            //        {
-            //            return SectionNodes[SectionNodeIndex];
-            //        }
-            //    }
-            //}
             return null;
         }
 
@@ -336,7 +304,6 @@ namespace Trystin
                     NewCrew.CallAnimateSpawnIn(_requestee, SpawnNode);
                     CrewMemberSpawnLocations.RemoveAt(RandInt);
                 }
-                //_requestee.AssignInitialCrewRoles();
             }
         }
 

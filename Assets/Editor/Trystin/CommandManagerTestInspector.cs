@@ -14,13 +14,20 @@ namespace Trystin
 
             CommandManager TargetTestCommanManger = (CommandManager)target;
 
-            if (GUILayout.Button("Test MovmentCommand"))
-            {
-                if (NodeManager.Instance.SetupCompletate)
-                    TargetTestCommanManger.TestMovementCommand();
-                else
-                    Debug.Log("Wait for NodeManager Setup is compleate");
-            }
+            //if (GUILayout.Button("Test MovmentCommand"))
+            //{
+            //    if (NodeManager.Instance.SetupCompletate)
+            //        TargetTestCommanManger.TestMovementCommand();
+            //    else
+            //        Debug.Log("Wait for NodeManager Setup is compleate");
+            //}
+            //if (GUILayout.Button("Test LoadGunCommand"))
+            //{
+            //    if (NodeManager.Instance.SetupCompletate)
+            //        TargetTestCommanManger.TestLoadGunCommand();
+            //    else
+            //        Debug.Log("Wait for NodeManager Setup is compleate");
+            //}
         }
     }
 }

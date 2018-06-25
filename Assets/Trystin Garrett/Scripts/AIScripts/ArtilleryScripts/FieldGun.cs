@@ -14,15 +14,20 @@ namespace Trystin
         public Node[] GunSpotterNodes = new Node[2];
 
         [Space]
-        [Header("Variables")]
+        [Header("Operational Variables")]
         public Artillery OwnerGC;
-        public bool HasSpawnCompleated = false;
+        public GunCrewMember Loader;
+        public GunCrewMember Spotter;
 
         [Space]
         [Header("Tracking Variables")]
         public FieldGunState CurrentState = FieldGunState.Idle;
         public float TrackingInterval = 0.5f;
         public float CurrentTime = 0;
+
+        [Space]
+        [Header("Spawn Variables")]
+        public bool HasSpawnCompleated = false;
 
         [Space]
         [Header("Debugging")]
@@ -40,14 +45,11 @@ namespace Trystin
         // Update is called once per frame
         void Update()
         {
+            if (NodeManager.Instance.CurrentGridState != NodeManager.ProgressState.Complete)
+                return;
+
             TrackPositionNodes();
         }
-
-
-
-
-
-
 
         //
         void TrackPositionNodes()
@@ -125,7 +127,7 @@ namespace Trystin
         }
         IEnumerator AnimateGunSpawnIn(Node _SpawnLocation)
         {
-            OwnerGC.CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.GunDroppingIn;
+            OwnerGC.CurrentSpawnStatus = ArtillerySpawnStatus.GunDroppingIn;
             transform.position = _SpawnLocation.WorldPosition;
 
             //Placeholderspawn animation
@@ -133,7 +135,7 @@ namespace Trystin
             Mesh.SetActive(true);
 
             HasSpawnCompleated = true;
-            OwnerGC.CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.GunLanded;
+            OwnerGC.CurrentSpawnStatus = ArtillerySpawnStatus.GunLanded;
         }
 
         #endregion

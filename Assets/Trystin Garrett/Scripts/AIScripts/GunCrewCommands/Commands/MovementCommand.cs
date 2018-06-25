@@ -22,7 +22,6 @@ namespace Trystin
         public Node TargetWaypoint;
         public Node CurrentWaypoint;
         public int CurrentWaypointIndex = 0;
-        [SerializeField] private Vector3 RotationToNextWaypoint;
 
         [Space]
         [Header ("Movement Variables")]
@@ -36,11 +35,11 @@ namespace Trystin
         public bool VisualDebugging = false;
         public int TestInt;
   
-        public MovementCommand(Node _TargetNode, GunCrewMember _GCM)
-        {
-            TargetNode = _TargetNode;
-            ThisGCM = _GCM;
-        }
+        //public MovementCommand(Node _TargetNode, GunCrewMember _GCM)
+        //{
+        //    TargetNode = _TargetNode;
+        //    ThisGCM = _GCM;
+        //}
         public void PassInfo( GunCrewMember _GCM, Node _TargetNode)
         {
             TargetNode = _TargetNode;
@@ -50,7 +49,7 @@ namespace Trystin
 
         public override void Start()
         {
-            //OnEnterCommand();
+
         }
 
         public override void OnEnterCommand()
@@ -192,14 +191,13 @@ namespace Trystin
             return WaypointStatus.BetweenWaypoints;
         }
 
-        //
+        //Undertakes the applying of velocity ot the RB as well as the game object rotation
         void MoveToWaypoint()
         {
             Vector3 LookAtTarget = new Vector3(CurrentWaypoint.WorldPosition.x, 0.3f, CurrentWaypoint.WorldPosition.z);
 
             float step = RotationSpeed * Time.deltaTime;
             Vector3 targetDir = LookAtTarget - transform.position;
-            RotationToNextWaypoint = targetDir;
             Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDir);
             ThisRB.velocity = transform.forward * Speed;
@@ -209,7 +207,9 @@ namespace Trystin
         void StopMovement()
         {
             ThisRB.velocity = Vector3.zero;
+            ThisRB.isKinematic = true;
             transform.rotation = Quaternion.Euler(transform.forward);
+            ThisRB.isKinematic = false;
         }
 
 
@@ -240,7 +240,7 @@ namespace Trystin
             }
         }
 
-        // I donlt know why but it needs to decalre variable values otherwise anything hardcoded will not be set when Adding compoonet.... Will always revery to 0...
+        // I donlt know why but it needs to decalre variable values otherwise anything hardcoded will not be set when Adding compoonet.... Will always revert to 0...
         void VariableSetup()
         {
             RotationSpeed = 10f;
@@ -249,7 +249,7 @@ namespace Trystin
         }
 
         //For ease of use getting to destroy rather than recycle it... Could implement later but getting this all working first.
-        void DecommissionCommand()
+        public override void DecommissionCommand()
         {
             StopMovement();
             ThisGCM.ActiveOrders.Remove(this);
@@ -275,6 +275,5 @@ namespace Trystin
                 }
             }
         }
-
     }
 }

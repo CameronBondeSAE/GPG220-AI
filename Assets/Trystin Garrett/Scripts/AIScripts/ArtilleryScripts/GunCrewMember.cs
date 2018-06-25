@@ -9,11 +9,8 @@ namespace Trystin
 
         [Header("AI Components")]
         public List<Command> ActiveOrders = new List<Command>();
+        public Command RoleCommand;
         public MovementCommand MovementOrder;
-
-        public StateMachine ThisStateMachine;
-        public TestMovementAI MovementScript;
-        public TestVisionAI VistionScript;
 
         [Space]
         [Header("Crew Variables")]
@@ -21,56 +18,19 @@ namespace Trystin
         public GameObject Mesh;
         public Node OccupiedNode;
         public AIStatus CurrentStatus = AIStatus.InActive;
-        public GunCrewRole CrewRole = GunCrewRole.UnAssigned;
-        public GunnerSubRole GunnerSubRole = GunnerSubRole.Idle;
-        public SpotterSubRole SpotterSubRole = SpotterSubRole.Idle;
-        public bool HasSpawnCompleated = false;
-
+        public ArtilleryCrewRole CrewRole = ArtilleryCrewRole.UnAssigned;
+        public float OrderDelay = 1.25f;
 
         // Update is called once per frame
         void Update()
         {
-            if(CurrentStatus == AIStatus.Active)
-                ThisStateMachine.UpdateSM();
-        }
+            if (OccupiedNode == null)
+                OccupiedNode = NodeManager.Instance.FindNodeFromWorldPosition(gameObject.transform.position);
 
-
-        //
-        public void CallChangeCrewRole(GunCrewRole _NewRole, GunnerSubRole _GunnerSubRole)
-        {
-            switch(_NewRole)
-            {
-                case GunCrewRole.GunOperator:
-                    CrewRole = GunCrewRole.GunOperator;
-                    GunnerSubRole = _GunnerSubRole;
-                    SpotterSubRole = SpotterSubRole.Idle;
-                    ThisStateMachine.SetupStateMachine(this);
-                    break;
-            }
         }
-        public void CallChangeCrewRole(GunCrewRole _NewRole, SpotterSubRole _SpotterSubRole)
-        {
-            switch (_NewRole)
-            {
-                case GunCrewRole.Spotter:
-                    CrewRole = GunCrewRole.Spotter;
-                    GunnerSubRole = GunnerSubRole.Idle;
-                    SpotterSubRole = _SpotterSubRole;
-                    ThisStateMachine.SetupStateMachine(this);
-                    break;
-            }
-        }
-
         #region Setup Methods
 
-        //
-        private void SetUpSM()
-        {
-            ThisStateMachine = new StateMachine();
-            ThisStateMachine.SetupStateMachine(this);
-        }
-
-        //
+        //Calls the spawn in and allows the GCM to do it's own thing.
         public void CallAnimateSpawnIn(Artillery _OwnerGC, Node _SpawnLocation)
         {
             SetupGunCrewMember(_OwnerGC);
@@ -94,16 +54,13 @@ namespace Trystin
 
             ++OwnerGC.CrewSetupCounter;
             if (OwnerGC.CrewSetupCounter == OwnerGC.CrewMembers.Length)
-                OwnerGC.CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.CrewLanded;
+                OwnerGC.CurrentSpawnStatus = ArtillerySpawnStatus.CrewLanded;
         }
 
         // Setsup Components
         public void SetupGunCrewMember(Artillery _OwnerGC)
         {
-            //MovementScript = GetComponent<TestMovementAI>();
-            //VistionScript = GetComponent<TestVisionAI>();
             OwnerGC = _OwnerGC;
-            //SetUpSM();
         }
         #endregion
     }

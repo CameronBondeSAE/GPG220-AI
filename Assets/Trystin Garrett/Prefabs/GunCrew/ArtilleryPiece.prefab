@@ -56,4 +56,5 @@ MonoBehaviour:
   CurrentSpawnStatus: 0
   CrewSetupCounter: 0
   HasPreDefinedLocation: 0
+  CurrentArtOrderStatus: 0
   VisualDebugging: 0

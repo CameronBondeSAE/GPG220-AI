@@ -47,11 +47,15 @@ namespace Trystin
             if (NC.Length == 1)
             {
                 Occupant = NC[0].gameObject.GetComponent<CharacterBase>();
+                if (Occupant == null)
+                    Occupant = NC[0].gameObject.GetComponentInParent<CharacterBase>();
                 if (Occupant != null)
                 {
                     IsOccupied = true;
                     return ColliderOwnerType.AI;
                 }
+                
+
             }
 
             if (NC.Length > 1)

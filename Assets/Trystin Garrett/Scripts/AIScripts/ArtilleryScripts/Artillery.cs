@@ -13,16 +13,17 @@ namespace Trystin
 
         [Space]
         [Header("Setup Variables")]
-        public ArtillerySpawnManager.ArtillerySpawnStatus CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.UnSpawned;
+        public ArtillerySpawnStatus CurrentSpawnStatus = ArtillerySpawnStatus.UnSpawned;
         public int CrewSetupCounter = 0;
         public bool HasPreDefinedLocation = false;
 
         [Space]
+        [Header("Operational Variables")]
+        public ArtilleryOrderStatus CurrentArtOrderStatus = ArtilleryOrderStatus.InActive;
+
+        [Space]
         [Header("Debugging")]
         public bool VisualDebugging = false;
-
-
-
 
         private void Awake()
         {
@@ -32,60 +33,60 @@ namespace Trystin
         // Use this for initialization
         void Start()
         {
-
+            RequestSpawnIn();
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            DetermineOrders();
         }
 
         //
         public void RequestSpawnIn()
         {
             ArtillerySpawnManager.Instance.RequestSpawn(this);
-            CurrentSpawnStatus = ArtillerySpawnManager.ArtillerySpawnStatus.SpawnRequested;
+            CurrentSpawnStatus = ArtillerySpawnStatus.SpawnRequested;
         }
 
-        public IEnumerator ActivateCrew()
-        {
 
-            yield return new WaitForSeconds(0.5f);
-            CrewMembers[0].CallChangeCrewRole(GunCrewRole.GunOperator, GunnerSubRole.Loader);
-            CrewMembers[0].CurrentStatus = AIStatus.Active;
+        void DetermineOrders()
+        {
+            switch (CurrentArtOrderStatus)
+            {
+                case ArtilleryOrderStatus.InActive:
+                    if (CurrentSpawnStatus == ArtillerySpawnStatus.CrewLanded)
+                        CurrentArtOrderStatus = ArtilleryOrderStatus.InitialOrders;
+                    break;
+                case ArtilleryOrderStatus.InitialOrders:
+                    GiveInitialCommands();
+                    CurrentArtOrderStatus = ArtilleryOrderStatus.Monitoring;
+                    break;
+                case ArtilleryOrderStatus.Monitoring:
+                    break;
+                case ArtilleryOrderStatus.Exploration:
+                    break;
+                case ArtilleryOrderStatus.FindingTarget:
+                    break;
+                case ArtilleryOrderStatus.ReOrganisingCrew:
+                    break;
+                default:
+                    break;
+            }
         }
 
 
         //
-        void ReassignAllCrewRoles()
+        public void GiveInitialCommands()
         {
-            //This will need to be called Also on a charaterbase death and check if the characterbase is a crew emmber
-
-
-        }
-
-
-
-
-        //
-        public void AssignInitialCrewRoles()
-        {
-            //for (int CrewIndex = 0; CrewIndex < CrewMembers.Length; CrewIndex++)
-            //{ 
-            //    if(CrewIndex >= CrewMembers.Length/2)
-            //        CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.GunOperator);
-            //    else
-            //        CrewMembers[CrewIndex].CallChangeCrewRole(GunCrewMember.GunCrewRole.Spotter);
-            //}
-            CrewMembers[0].CallChangeCrewRole(GunCrewRole.GunOperator, GunnerSubRole.Loader);
-            CrewMembers[1].CallChangeCrewRole(GunCrewRole.GunOperator, GunnerSubRole.Lookout);
-            //CrewMembers[2].CallChangeCrewRole(GunCrewRole.Spotter, SpotterSubRole.Radio);
-            //CrewMembers[3].CallChangeCrewRole(GunCrewRole.Spotter, SpotterSubRole.Runner);
-            //for (int CrewIndex = 0; CrewIndex < CrewMembers.Length; CrewIndex++)
-            //{
-            //    CrewMembers[CrewIndex].HasSpawnCompleated = true;
-            //}
+            if (CrewMembers[0] != null)
+            {
+                CommandManager.Instance.IssueLoadGunCommand(CrewMembers[0], FieldGun);
+            }
+            if (CrewMembers[1] != null)
+            {
+                CommandManager.Instance.IssueSpotForGunCommand(CrewMembers[1], FieldGun);
+            }
         }
 
         //
@@ -94,6 +95,7 @@ namespace Trystin
             bool NMExists = false;
             bool PMExists = false;
             bool GCSMExists = false;
+            bool CMExists = false;
 
             if(NodeManager.Instance != null)
                 NMExists = true;
@@ -101,6 +103,8 @@ namespace Trystin
                 PMExists = true;
             if (ArtillerySpawnManager.Instance != null)
                 GCSMExists = true;
+            if (CommandManager.Instance != null)
+                CMExists = true;
 
             if (!NMExists)
             {
@@ -112,6 +116,8 @@ namespace Trystin
                 NodeManager.Instance.gameObject.AddComponent<PathFinderManager>();
             if(!GCSMExists)
                 NodeManager.Instance.gameObject.AddComponent<ArtillerySpawnManager>();
+            if (!CMExists)
+                NodeManager.Instance.gameObject.AddComponent<CommandManager>();
         }
 
 

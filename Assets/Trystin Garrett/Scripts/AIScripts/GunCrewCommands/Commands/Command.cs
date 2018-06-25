@@ -15,5 +15,7 @@ namespace Trystin
         public abstract void FixedUpdate();
 
         public abstract void OnExitCommand();
+
+        public abstract void DecommissionCommand();
     }
 }

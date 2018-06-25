@@ -21,28 +21,29 @@ namespace Trystin
     }
 
 
-    public enum GunCrewRole
+    public enum ArtillerySpawnStatus
+    {
+        UnSpawned,
+        SpawnRequested,
+        GunDropPointFound,
+        GunDroppingIn,
+        GunLanded,
+        DroppingCrew,
+        CrewLanded,
+        Ready
+    }
+
+
+    public enum ArtilleryCrewRole
     {
         UnAssigned,
+        RadioOperator,
+        RunnerSpotter,
         Spotter,
         GunOperator
     }
 
-    public enum SpotterSubRole
-    {
-        Idle,
-        Runner,
-        Radio
-    }
-
-    public enum GunnerSubRole
-    {
-        Idle,
-        Loader,
-        Lookout,
-    }
-
-    public enum GSLoaderState
+    public enum GunLoaderState
     {
         Idle,
         RequestingPathToBreach,
@@ -52,6 +53,16 @@ namespace Trystin
         LoadingComplete
     }
 
+    public enum GunSpotterState
+    {
+        Idle,
+        RequestingPathToSpotterPos,
+        MovingToSpotterPos,
+        AtSpotterPos,
+        ScanningForTargets,
+        TargetFound,
+        CallingInStrike
+    }
 
     public enum PathRequestStatus
     {
@@ -95,5 +106,15 @@ namespace Trystin
         SouthWest,
         West,
         NorthWest
+    }
+
+    public enum ArtilleryOrderStatus
+    {
+        InActive,
+        InitialOrders,
+        Monitoring,
+        Exploration,
+        FindingTarget,
+        ReOrganisingCrew
     }
 }

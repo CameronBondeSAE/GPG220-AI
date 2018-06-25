@@ -13,18 +13,18 @@ namespace Trystin
         public override State ReturnState(object _StateEnum)
         {
             //Casting to an enum not the besting thing...
-            GunnerSubRole State = (GunnerSubRole)_StateEnum;
+            //GunnerSubRole State = (GunnerSubRole)_StateEnum;
 
-            switch (State)
-            {
-                case GunnerSubRole.Idle:
-                    return null;
-                case GunnerSubRole.Loader:
-                    return GSL;
-                case GunnerSubRole.Lookout:
+            //switch (State)
+            //{
+            //    case GunnerSubRole.Idle:
+            //        return null;
+            //    case GunnerSubRole.Loader:
+            //        return GSL;
+            //    case GunnerSubRole.Lookout:
 
-                    break;
-            }
+            //        break;
+            //}
             return NullState.Instance;
         }
 

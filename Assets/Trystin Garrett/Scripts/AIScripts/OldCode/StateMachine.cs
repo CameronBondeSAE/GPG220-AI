@@ -45,27 +45,27 @@ namespace Trystin
             SMOwner = _SMOwner;
             switch (SMOwner.CrewRole)
             {
-                case GunCrewRole.UnAssigned:
+                case ArtilleryCrewRole.UnAssigned:
 
                     break;
-                case GunCrewRole.Spotter:
+                case ArtilleryCrewRole.Spotter:
                     LoadedStateTable = SpotterStateTable;
                     SpotterStateTable.SetUpStates(this);
-                    ChangeState(LoadedStateTable.ReturnState(SpotterSubRole.Idle));
+                    //ChangeState(LoadedStateTable.ReturnState(SpotterSubRole.Idle));
                     break;
-                case GunCrewRole.GunOperator:
+                case ArtilleryCrewRole.GunOperator:
                     LoadedStateTable = GunnerStateTable;
                     GunnerStateTable.SetUpStates(this);
 
-                    switch(_SMOwner.GunnerSubRole)
-                    {
-                        case GunnerSubRole.Loader:
-                            ChangeState(LoadedStateTable.ReturnState(GunnerSubRole.Loader));
-                            break;
-                        case GunnerSubRole.Lookout:
+                    //switch(_SMOwner.GunnerSubRole)
+                    //{
+                    //    case GunnerSubRole.Loader:
+                    //        ChangeState(LoadedStateTable.ReturnState(GunnerSubRole.Loader));
+                    //        break;
+                    //    case GunnerSubRole.Lookout:
 
-                            break;
-                    }
+                    //        break;
+                    //}
                     break;
             }
 

@@ -413,7 +413,10 @@ namespace Trystin
             for (int NodeIndex = 0; NodeIndex < AIOccupiedNodes.Count; ++NodeIndex)
             {
                 if (AIOccupiedNodes[NodeIndex] != null)
+                {
                     AIOccupiedNodes[NodeIndex].IsOccupied = false;
+                    AIOccupiedNodes[NodeIndex].Occupant = null;
+                }
             }
             AIOccupiedNodes.Clear();
 
