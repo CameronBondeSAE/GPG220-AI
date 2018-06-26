@@ -161,8 +161,8 @@ namespace Rhys
                     m_Size = n.collider.bounds.size;
                     m_Min = n.collider.bounds.min;
                     m_Max = n.collider.bounds.max;
-                    OutputData(direction, m_Size, m_Min, m_Max);
-                    Debug.Log("Hit Local : " + n.point);                 
+                    //OutputData(direction, m_Size, m_Min, m_Max);
+                   // Debug.Log("Hit Local : " + n.point);                 
                 }
             }
 
@@ -188,9 +188,9 @@ namespace Rhys
 
         public void Retarget()
         {
-            if (Vector3.Distance(target.transform.position, transform.position) <= 1)
+            if (Vector3.Distance(target.transform.position, transform.position) <= 2)
             {
-                Defult.gameObject.transform.position = new Vector3(transform.position.x + Random.Range(-50, 50), transform.position.y, transform.position.z + Random.Range(-50, 50));
+                Defult.gameObject.transform.position = manager.map[(int) manager.bounding.bounds.size.x - Random.Range(0, (int)manager.bounding.bounds.size.x), (int) manager.bounding.bounds.size.z - Random.Range(0, (int)manager.bounding.bounds.size.x)].Location;
             }
             float dist = Mathf.Infinity;
             if (Enemys != null)
