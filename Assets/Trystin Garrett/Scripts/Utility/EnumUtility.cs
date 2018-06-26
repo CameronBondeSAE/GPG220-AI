@@ -64,6 +64,16 @@ namespace Trystin
         CallingInStrike
     }
 
+    public enum RunnerSpotterState
+    {
+        Idle,
+        SearchingForTarget,
+        TargetFound,
+        CallingInStrike,
+        Retreating
+    }
+
+
     public enum PathRequestStatus
     {
         NoneRequested,
@@ -96,16 +106,17 @@ namespace Trystin
         BetweenWaypoints
     }
 
-    public enum SearchDirection
+    public enum Direction
     {
-        North,
-        NorthEast,
-        East,
-        SouthEast,
-        South,
         SouthWest,
         West,
-        NorthWest
+        NorthWest,
+        South,
+        Centre,
+        North,
+        SouthEast,
+        East,
+        NorthEast,
     }
 
     public enum ArtilleryOrderStatus

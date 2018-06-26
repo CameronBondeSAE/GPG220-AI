@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
-using Tystin.NodeUtility;
-using Tystin;
 
 namespace Trystin
 {
@@ -32,9 +30,16 @@ namespace Trystin
         public int GridYLength = 100;
         public float GridXScale = 1;
         public float GridYScale = 1;
+        public Vector3 WorldPositionOffset = new Vector3(-50, 0.3f, -50);
+
+        public int NumberOfQuadrentsX = 3;
+        public int NumberOfQuadrentsY = 3;
+        public float QuadrentScaleX { get{ return GridXLength / NumberOfQuadrentsX; } }
+        public float QuadrentScaleY { get { return GridYLength / NumberOfQuadrentsY; } }
+
 
         public Node[,] NodeGrid;
-
+        public Quadrent[,] QuadrentNodeGrid = new Quadrent[3, 3];
 
         [Space]
         [Header("Setup Variables")]
@@ -66,8 +71,8 @@ namespace Trystin
 
         [Space]
         [Header("Debugging")]
-        public bool ToggleWireFrame = false;
-        
+        public bool ToggleWireFrameGridNodes = false;
+        public bool ToggleWireFrameQuadrants = false;
 
         private void Awake()
         {
@@ -165,11 +170,11 @@ namespace Trystin
                 {
                     ++CurrentNodeCount;
                     Node NewNodeScript = new Node();
-                    NewNodeScript.GridPostion = new Vector2Int(XIndex, YIndex);
-                    NewNodeScript.WorldPosition = new Vector3((NewNodeScript.GridPostion.X * GridXScale), 0.3f, (NewNodeScript.GridPostion.Y * GridYScale));
+                    NewNodeScript.GridPosition = new Vector2Int(XIndex, YIndex);
+                    NewNodeScript.WorldPosition = new Vector3((NewNodeScript.GridPosition.X * GridXScale), 0.3f, (NewNodeScript.GridPosition.Y * GridYScale)) + WorldPositionOffset;
                     NewNodeScript.TileSize = new Vector3(GridXScale - 0.01f, 0.1f, GridYScale - 0.01f);
                     NewTileGrid[XIndex, YIndex] = NewNodeScript;
-                    NewNodeScript.GridPostion = new Vector2Int(XIndex, YIndex);
+                    NewNodeScript.GridPosition = new Vector2Int(XIndex, YIndex);
                 }
             }
             NodeGrid = NewTileGrid;
@@ -216,8 +221,8 @@ namespace Trystin
                     {
                         continue;
                     }
-                    int CheckX = _NodeTile.GridPostion.X + XIndex;
-                    int CheckZ = _NodeTile.GridPostion.Y + ZIndex;
+                    int CheckX = _NodeTile.GridPosition.X + XIndex;
+                    int CheckZ = _NodeTile.GridPosition.Y + ZIndex;
 
                     if (CheckX >= 0 && CheckX < GridXLength && CheckZ >= 0 && CheckZ < GridYLength)
                         if (NodeGrid[CheckX, CheckZ] != null)
@@ -229,6 +234,57 @@ namespace Trystin
 
             return Neighbours.ToArray();
         }
+
+        //
+        void SetupQuardrents()
+        {
+            float QuadrentNodeIntervalX = QuadrentScaleX;
+            float QuadrentNodeIntervalY = QuadrentScaleY;
+            int EnumCast = 0;
+
+            //Initial Setup
+            for (int XIndex = 0; XIndex < 3; XIndex++)
+            {
+                for (int YIndex = 0; YIndex < 3; YIndex++)
+                {
+                    Quadrent NewQuad = new Quadrent();
+                    QuadrentNodeGrid[XIndex, YIndex] = NewQuad;
+                    NewQuad.GridPosition = new Vector2Int(XIndex, YIndex);
+
+                    NewQuad.WorldPosition = new Vector3(((QuadrentNodeIntervalX * (XIndex + 1)) - (QuadrentNodeIntervalX / 2)), 0.3f, ((QuadrentNodeIntervalY * (YIndex + 1)) - (QuadrentNodeIntervalY / 2)));
+                    NewQuad.QuadrentSize = new Vector3(QuadrentNodeIntervalX, 0.3f, QuadrentNodeIntervalY);
+                    NewQuad.QuadrentPostion = (Direction)EnumCast;
+                    ++EnumCast;
+                }
+            }
+            //Neighbour Setup
+            for (int XIndex = 0; XIndex < 3; ++XIndex)
+                for (int YIndex = 0; YIndex < 3; ++YIndex)
+                    if (QuadrentNodeGrid[XIndex, YIndex] != null)
+                    {
+                        Quadrent CurrentQuad = QuadrentNodeGrid[XIndex, YIndex];
+                        List<Quadrent> Neighbours = new List<Quadrent>();
+
+                        for (int XNeighbourIndex = -1; XNeighbourIndex <= 1; XNeighbourIndex++)
+                        {
+                            for (int ZIndex = -1; ZIndex <= 1; ZIndex++)
+                            {
+                                if (XNeighbourIndex == 0 && ZIndex == 0)
+                                {
+                                    continue;
+                                }
+                                int CheckX = CurrentQuad.GridPosition.X + XNeighbourIndex;
+                                int CheckZ = CurrentQuad.GridPosition.Y + ZIndex;
+
+                                if (CheckX >= 0 && CheckX < 3 && CheckZ >= 0 && CheckZ < 3)
+                                    if (QuadrentNodeGrid[CheckX, CheckZ] != null)
+                                        Neighbours.Add(QuadrentNodeGrid[CheckX, CheckZ]);
+                            }
+                        }
+                        CurrentQuad.NeighbouringTiles = Neighbours.ToArray();
+                    }
+        }
+
         #endregion
 
         #region GridPing
@@ -264,6 +320,8 @@ namespace Trystin
         }
         IEnumerator SweepTerrain()
         {
+            Collider FloorCollider = FindFloor();
+
             //Debug.Log("NM:    Sorting Terrain from AI");
             int CurrentNodeCount = 0;
 
@@ -273,7 +331,7 @@ namespace Trystin
                 {
                     ++CurrentNodeCount;
 
-                    switch (NodeGrid[XIndex, YIndex].ColliderOverlapCheck(NodeGrid[XIndex, YIndex]))
+                    switch (NodeGrid[XIndex, YIndex].ColliderOverlapCheck(NodeGrid[XIndex, YIndex], FloorCollider))
                     {
                         case Node.ColliderOwnerType.Null:
 
@@ -300,6 +358,7 @@ namespace Trystin
         {
             CurrentPingState = PingState.Culling;
             StartCoroutine(CleanUpObsticlesTiles());
+            SetupQuardrents(); 
         }
         IEnumerator CleanUpObsticlesTiles()
         {
@@ -309,7 +368,7 @@ namespace Trystin
 
             for (int ObTiles = 0; ObTiles < TerrainOccupiedNodes.Count; ++ObTiles)
             {
-                TempV2I = TerrainOccupiedNodes[ObTiles].GridPostion;
+                TempV2I = TerrainOccupiedNodes[ObTiles].GridPosition;
                 NodeGrid[TempV2I.X, TempV2I.Y] = null;
                 ++CurrentTerrainRemovalCount;
 
@@ -320,6 +379,20 @@ namespace Trystin
             CurrentPingState = PingState.Complete;
             //Debug.Log("NM:    Cleaning Up obsticle Tiles Compleate!");
         }
+
+        //
+        Collider FindFloor()
+        {
+            Collider[] NC = Physics.OverlapBox(Vector3.zero, new Vector3(10, 10, 10));
+            for (int ColIndex = 0; ColIndex < NC.Length; ColIndex++)
+            {
+                Floor FoundFloor = NC[ColIndex].GetComponent<Floor>();
+                if (FoundFloor != null)
+                    return NC[ColIndex];
+            }
+            return null;
+        }
+
         #endregion
 
         #region VisualDebugging
@@ -327,17 +400,8 @@ namespace Trystin
         //
         private void OnDrawGizmos()
         {
-            if (ToggleWireFrame == false)
+            if (ToggleWireFrameGridNodes == false)
                 return;
-
-            //if (TestArray != null)
-            //{
-            //    for (int XIndex = 0; XIndex < TestArray.Length; ++XIndex)
-            //    {
-            //        Gizmos.color = Color.magenta;
-            //        Gizmos.DrawWireSphere(TestArray[XIndex], 0.1f);
-            //    }
-            //}
 
             if (NodeGrid != null && CurrentGridState == ProgressState.Complete)
             {
@@ -371,6 +435,18 @@ namespace Trystin
                     }
                 }
             }
+
+            if(ToggleWireFrameQuadrants && CurrentNeighbourState == ProgressState.Complete)
+            {
+                for (int XIndex = 0; XIndex < 3; ++XIndex)
+                    for (int YIndex = 0; YIndex < 3; ++YIndex)
+                        if (QuadrentNodeGrid[XIndex, YIndex] != null)
+                        {
+                            Gizmos.color = Color.green;
+                            Gizmos.DrawWireCube(QuadrentNodeGrid[XIndex, YIndex].WorldPosition, QuadrentNodeGrid[XIndex, YIndex].QuadrentSize);
+                        }
+            }
+
             //if(PathFound != null)
             //{
             //    for (int NodeIndex = 0; NodeIndex < PathFound.Count; ++NodeIndex)
@@ -399,6 +475,29 @@ namespace Trystin
             }
 
             Node ReturnNode = NodeGrid[XIntIndex, YIntIndex];
+            if (ReturnNode != null)
+            {
+                return ReturnNode;
+            }
+            else
+                return null;
+        }
+
+        //
+        public Quadrent FindQuadrentFromWorldPosition(Vector3 _WorldPos)
+        {
+            float XIndex = _WorldPos.x / QuadrentScaleX;
+            float YIndex = _WorldPos.z / QuadrentScaleY;
+
+            int XIntIndex = Mathf.FloorToInt(XIndex);
+            int YIntIndex = Mathf.FloorToInt(YIndex);
+
+            if (XIntIndex > NumberOfQuadrentsX || YIntIndex > NumberOfQuadrentsY || XIntIndex < 0 || YIntIndex < 0)
+            {
+                return null;
+            }
+
+            Quadrent ReturnNode = QuadrentNodeGrid[XIntIndex, YIntIndex];
             if (ReturnNode != null)
             {
                 return ReturnNode;
@@ -492,6 +591,7 @@ namespace Trystin
 
             return Node;
         }
+
         #endregion
     }
 }

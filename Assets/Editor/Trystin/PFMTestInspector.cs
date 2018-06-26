@@ -18,7 +18,8 @@ namespace Trystin
             {
                 if (NodeManager.Instance.SetupCompletate)
                 {
-                    TargetTestPFM.TestDirectionList = TargetTestPFM.ReturnDirectionalSearchNode(NodeManager.Instance.FindNodeFromWorldPosition(TargetTestPFM.TestTransform.position), TargetTestPFM.RadiusOfSearch, TargetTestPFM.SearchDirection);
+                    Quadrent Gotquad = NodeManager.Instance.FindQuadrentFromWorldPosition(TargetTestPFM.gameObject.transform.position);
+                    Debug.Log(Gotquad.QuadrentPostion);
                 }
                 else
                     Debug.Log("Wait for NodeManager Setup is compleate");

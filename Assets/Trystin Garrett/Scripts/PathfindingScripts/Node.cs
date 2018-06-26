@@ -14,7 +14,7 @@ namespace Trystin
             Object
         }
 
-        public Vector2Int GridPostion;
+        public Vector2Int GridPosition;
         public Vector3 TileSize;
         public Vector3 WorldPosition;
         public Node[] NeighbouringTiles;
@@ -35,7 +35,7 @@ namespace Trystin
         //}
 
         //
-        public ColliderOwnerType ColliderOverlapCheck(Node _Node)
+        public ColliderOwnerType ColliderOverlapCheck(Node _Node, Collider _FloorCol)
         {
             ColliderOwnerType ColliderType = ColliderOwnerType.Null;
 
@@ -46,6 +46,9 @@ namespace Trystin
 
             if (NC.Length == 1)
             {
+                if(NC[0] == _FloorCol)
+                    return ColliderOwnerType.Null;
+
                 Occupant = NC[0].gameObject.GetComponent<CharacterBase>();
                 if (Occupant == null)
                     Occupant = NC[0].gameObject.GetComponentInParent<CharacterBase>();
@@ -54,14 +57,14 @@ namespace Trystin
                     IsOccupied = true;
                     return ColliderOwnerType.AI;
                 }
-                
-
             }
 
             if (NC.Length > 1)
             {
                 for (int index = 0; index < NC.Length; ++index)
                 {
+                    if (NC[index] == _FloorCol)
+                        continue;
                     bool Check = CheckColliderDistance(NC[index], _Node);
                     if (Check)
                         ColliderType = ColliderOwnerType.Object;
@@ -69,6 +72,8 @@ namespace Trystin
             }
             else if (NC.Length == 1)
             {
+                if (NC[0] == _FloorCol)
+                    return ColliderOwnerType.Null;
                 bool Check = CheckColliderDistance(NC[0], _Node);
                 if (Check)
                     ColliderType = ColliderOwnerType.Object;

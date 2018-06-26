@@ -8,6 +8,7 @@ namespace Trystin
     {
 
         [Header("AI Components")]
+        public Vision ThisVision;
         public List<Command> ActiveOrders = new List<Command>();
         public Command RoleCommand;
         public MovementCommand MovementOrder;

@@ -46,8 +46,8 @@ namespace Tystin
             //
             public int GetDistanceBetweenNode(Trystin.Node _NodeA, Trystin.Node _NodeB)
             {
-                int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
-                int DistY = Mathf.Abs(_NodeA.GridPostion.Y - _NodeB.GridPostion.Y);
+                int DistX = Mathf.Abs(_NodeA.GridPosition.X - _NodeB.GridPosition.X);
+                int DistY = Mathf.Abs(_NodeA.GridPosition.Y - _NodeB.GridPosition.Y);
 
                 if (DistX > DistY)
                 {
