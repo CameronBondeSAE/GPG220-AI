@@ -4,10 +4,8 @@ using UnityEngine;
 using Tystin.NodeUtility;
 namespace Trystin
 {
-
     public class PathFinderManager : MonoBehaviour
     {
-
         public static PathFinderManager Instance;
 
         public NodeManager NM;
@@ -16,17 +14,6 @@ namespace Trystin
 
         public Queue<PathRequest> PathRequests = new Queue<PathRequest>();
         public Queue<PathRequest> CompleatedRequests = new Queue<PathRequest>();
-
-
-
-        public Node TestDirectionList;
-        public SearchDirection SearchDirection = SearchDirection.North;
-        public int RadiusOfSearch = 5;
-        public bool VisualDebugging = false;
-        public Transform TestTransform;
-
-
-
 
         public bool FrameToggle;
 
@@ -67,14 +54,12 @@ namespace Trystin
         public void RequestPathFromNodes(Node _StartingNode, Node _TargetNode, MovementCommand _Requestee)
         {
             PathRequest PR = new PathRequest(_StartingNode, _TargetNode, _Requestee);
-            //_Requestee.MovementScript.TargetWaypoint = _TargetNode;
             PathRequests.Enqueue(PR);
         }
 
         //This should be queued to be handled when ready to rather than a immediate method call
         public void RequestRandomPathFromVec3(Vector3 _CurrentPos, MovementCommand _Requestee)
         {
-            //Debug.Log("PFM:   Random Request Made");
             Node StartingNode = NM.FindNodeFromWorldPosition(_CurrentPos);
             Node TargetNode = NM.GetRandNode();
 
@@ -85,18 +70,14 @@ namespace Trystin
                 while (TargetNode == null)
                 {
                     ++RandAttempts;
-                    //Debug.Log("PFM:   Retrying Random Node Find... Attempt: " + RandAttempts);
                     TargetNode = NM.GetRandNode();
-
                     if (RandAttempts > 20)
                         break;
                 }
 
             }
 
-            //Debug.Log("PFM:   Found Random Node! Starting Node is: " + StartingNode.GridPostion.X + "/" + StartingNode.GridPostion.Y + " To " + TargetNode.GridPostion.X + "/" + TargetNode.GridPostion.Y);
             PathRequest PR = new PathRequest(StartingNode, TargetNode, _Requestee);
-            //_Requestee.MovementScript.TargetWaypoint = TargetNode;
             PathRequests.Enqueue(PR);
         }
 
@@ -107,7 +88,6 @@ namespace Trystin
             Node TargetNode = NM.FindNodeFromWorldPosition(_TargetPos);
 
             PathRequest PR = new PathRequest(StartingNode, TargetNode, _Requestee);
-            //_Requestee.MovementScript.TargetWaypoint = TargetNode;
             PathRequests.Enqueue(PR);
         }
 
@@ -121,7 +101,6 @@ namespace Trystin
                 if (PathFinders[PFIndex].CurrentStatus == Pathfinder.PathfinderStatus.Incative)
                 {
                     PathRequest PR = PathRequests.Dequeue();
-                    //Debug.Log("PFM:   Request Designated from " + PR.Requestee.gameObject.name);
                     PathFinders[PFIndex].SubmitFindPath(PR, this, NM);
                     break;
                 }
@@ -137,11 +116,7 @@ namespace Trystin
             for (int CRIndex = 0; CRIndex < CompleatedRequests.Count; ++CRIndex)
             {
                 PathRequest CPR = CompleatedRequests.Dequeue();
-
-                //if (CPR.PathIsFound == false)
-                //    RetryPath(CPR);
-                //else
-                    CPR.Requestee.RecivePathRequest(CPR);
+                CPR.Requestee.RecivePathRequest(CPR);
             }
         }
         //
@@ -154,26 +129,19 @@ namespace Trystin
             PathRequests.Enqueue(_CPR);
         }
 
-        IEnumerator Wait()
+        //To return a reachable node within a radius and direction    TODO: Check against occupied nodes perhaps...
+        public Node ReturnDirectionalSearchNode(Node _OriginNode, int _Radius, Direction _Direction)
         {
-            yield return new WaitForSeconds(0.25f);
-        }
-
-        //
-        public Node ReturnDirectionalSearchNode(Node _OriginNode, int _Radius, SearchDirection _Direction)
-        {
-            TestDirectionList = null;
             Vector2Int Direction = ReturnAdditonValues(_Direction);
             int MaxRadius = _Radius - ClampRadius(_Direction, _Radius);
 
             for (int RadiusIndex = MaxRadius; RadiusIndex > 0; --RadiusIndex)
             {
-                Debug.Log("Bam");
                 int XINdex = (Direction.X * RadiusIndex);
                 int YINdex = (Direction.Y * RadiusIndex);
 
-                int XRef = XINdex + _OriginNode.GridPostion.X;
-                int YRef = YINdex + _OriginNode.GridPostion.Y;
+                int XRef = XINdex + _OriginNode.GridPosition.X;
+                int YRef = YINdex + _OriginNode.GridPosition.Y;
 
                 if (XRef < 0 || XRef > (NM.GridXLength - 1) || YRef < 0 || YRef > (NM.GridYLength - 1))
                     continue;
@@ -184,32 +152,32 @@ namespace Trystin
             return null;
         }
 
-        //
-        Vector2Int ReturnAdditonValues(SearchDirection _Direction)
+        //Returns Directional Grid multiplier     TODO: Make this ugly code elegant...
+        Vector2Int ReturnAdditonValues(Direction _Direction)
         {
             switch (_Direction)
             {
-                case SearchDirection.North:
+                case Direction.North:
                     return new Vector2Int(1,0);
-                case SearchDirection.NorthEast:
+                case Direction.NorthEast:
                     return new Vector2Int(1, 1);
-                case SearchDirection.East:
+                case Direction.East:
                     return new Vector2Int(0, 1);
-                case SearchDirection.SouthEast:
+                case Direction.SouthEast:
                     return new Vector2Int(-1, 1);
-                case SearchDirection.South:
+                case Direction.South:
                     return new Vector2Int(-1, 0);
-                case SearchDirection.SouthWest:
+                case Direction.SouthWest:
                     return new Vector2Int(-1, -1);
-                case SearchDirection.West:
+                case Direction.West:
                     return new Vector2Int(0, -1);
-                case SearchDirection.NorthWest:
+                case Direction.NorthWest:
                     return new Vector2Int(1, -1);
             }
             return new Vector2Int(0, 0);
         }
-        // This allows search Radius to keep to the Vision Shape
-        int ClampRadius(SearchDirection _Direction, int _Radius)
+        // This allows search Radius to keep to the Vision Shape within 4 - 13 nodes.    TODO: Make this ugly code elegant
+        int ClampRadius(Direction _Direction, int _Radius)
         {
             int Ajustmnet = 2;
             if (_Radius > 5)
@@ -225,33 +193,32 @@ namespace Trystin
             }
             switch (_Direction)
             {
-                case SearchDirection.NorthEast:
+                case Direction.NorthEast:
                     return Ajustmnet;
-                case SearchDirection.SouthEast:
+                case Direction.SouthEast:
                     return Ajustmnet;
-                case SearchDirection.SouthWest:
+                case Direction.SouthWest:
                     return Ajustmnet;
-                case SearchDirection.NorthWest:
+                case Direction.NorthWest:
                     return Ajustmnet;
             }
             return 0;
         }
 
         //
-        private void OnDrawGizmos()
-        {
-            if (VisualDebugging == false)
-                return;
-            if (TestDirectionList != null)
-            {
-                float WireSphereSize = TestDirectionList.TileSize.x / 4;
-                    Gizmos.color = Color.magenta;
-                    Gizmos.DrawWireSphere(TestDirectionList.WorldPosition, WireSphereSize);
-            }
-        }
+        //public Direction DetermineQuadrant(Node _CurrentNode)
+        //{
+        //    int XPercentage = (_CurrentNode.GridPostion.X / NodeManager.Instance.GridXLength) * 100;
+        //    int YPercentage = (_CurrentNode.GridPostion.Y / NodeManager.Instance.GridYLength) * 100;
+        //    int SectionExtents = NodeManager.Instance.GridYLength / 3;
+
+        //    if (XPercentage <= SectionExtents && YPercentage <= SectionExtents)
+        //        return Direction.SouthWest;
+
+        //}
     }
 
-    //
+    //Hold Path request information to use later
     public class PathRequest
     {
         public PathRequest(Node _StartingNode, Node _TargetNode, MovementCommand _Requestee)
@@ -262,12 +229,10 @@ namespace Trystin
             PathIsFound = false;
             IsBeingProcessed = false;
             CompletedPath = null;
-            //SkipDiagnals = _SkipDiagnals;
         }
 
         public bool PathIsFound;
         public bool IsBeingProcessed;
-        public bool SkipDiagnals;
         public Node StartingNode;
         public Node TargetNode;
         public MovementCommand Requestee;

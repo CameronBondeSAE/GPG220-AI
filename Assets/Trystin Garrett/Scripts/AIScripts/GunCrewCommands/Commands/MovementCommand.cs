@@ -28,7 +28,7 @@ namespace Trystin
         public MovementSpeed CurrentMovementSpeed = MovementSpeed.Walking;
         public float Speed = 1f;
         public float RotationSpeed = 10f;
-        public float WaypointTolerence = 0.4f;
+        public float WaypointTolerence = 0.2f;
 
         [Space]
         [Header("Debugging")]
@@ -57,7 +57,7 @@ namespace Trystin
             ThisGCM.ActiveOrders.Add(this);
             ThisGCM.MovementOrder = this;
             ThisRB = GetComponent<Rigidbody>();
-            VariableSetup();
+            //VariableSetup();
             StopMovement();
             ThisGCM.OccupiedNode = NodeManager.Instance.FindNodeFromWorldPosition(ThisGCM.transform.position);
             RequestPath(ThisGCM.OccupiedNode, TargetNode, this);
@@ -244,7 +244,7 @@ namespace Trystin
         void VariableSetup()
         {
             RotationSpeed = 10f;
-            WaypointTolerence = 0.15f;
+            WaypointTolerence = 0.3f;
             ChangeSpeed(MovementSpeed.Walking); 
         }
 

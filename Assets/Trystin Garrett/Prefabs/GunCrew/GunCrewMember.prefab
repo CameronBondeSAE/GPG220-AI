@@ -37,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4009666604091170}
   - component: {fileID: 114650302382520326}
+  - component: {fileID: 114985928620550966}
   - component: {fileID: 136774244821553830}
   - component: {fileID: 54632796451100908}
   m_Layer: 0
@@ -141,12 +142,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a35519fb288636439d72aa11f05f7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: GunCrewMember
   debugText: 
   speedMultiplier: 1
   decelerationMultiplier: 0.9
   damageMultiplier: 1
   target: {x: 0, y: 0, z: 0}
+  ThisVision: {fileID: 114985928620550966}
   ActiveOrders: []
   RoleCommand: {fileID: 0}
   MovementOrder: {fileID: 0}
@@ -154,6 +156,25 @@ MonoBehaviour:
   Mesh: {fileID: 1251812254550766}
   CurrentStatus: 0
   CrewRole: 0
+  OrderDelay: 1.25
+--- !u!114 &114985928620550966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1428616897110710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d164604f66cabd74a9f02320a0fb88af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VisionRange: 9
+  NonCrewInVisionRange: []
+  CrewInVisionRange: []
+  VisualUpdateTiming: 0
+  VisualUpdateTimingInterval: 0.5
+  VisualKnowledgeDebugging: 0
+  VisualSightDebugging: 0
 --- !u!136 &136774244821553830
 CapsuleCollider:
   m_ObjectHideFlags: 1

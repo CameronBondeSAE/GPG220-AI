@@ -120,11 +120,11 @@ namespace Trystin
 
                     int DistanceBetweenNodes = GetDistanceBetweenNode(CurrentNode, NeighbourRef);
 
-                    if (CurrentPR.SkipDiagnals)
-                    {
-                        //if (DistanceBetweenNodes == 14 && NeighbourRef != TargetNode)
-                        //    continue;
-                    }
+                    //if (CurrentPR.SkipDiagnals)
+                    //{
+                    //    //if (DistanceBetweenNodes == 14 && NeighbourRef != TargetNode)
+                    //    //    continue;
+                    //}
 
                     int NewMovCostToNeighbour = CurrentNode.GCost + DistanceBetweenNodes;
 
@@ -163,8 +163,8 @@ namespace Trystin
         //
         public int GetDistanceBetweenNode(Node _NodeA, Node _NodeB)
         {
-            int DistX = Mathf.Abs(_NodeA.GridPostion.X - _NodeB.GridPostion.X);
-            int DistY = Mathf.Abs(_NodeA.GridPostion.Y - _NodeB.GridPostion.Y);
+            int DistX = Mathf.Abs(_NodeA.GridPosition.X - _NodeB.GridPosition.X);
+            int DistY = Mathf.Abs(_NodeA.GridPosition.Y - _NodeB.GridPosition.Y);
 
             if (DistX > DistY)
                 return 14 * DistY + 10 * (DistX - DistY);

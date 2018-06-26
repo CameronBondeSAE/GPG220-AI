@@ -6,9 +6,11 @@ namespace Cam
 {
 	public class Controller : MonoBehaviour
 	{
+		public GameObject go;
 
 		void Update()
 		{
+
 		}
 	}
 

@@ -9,11 +9,9 @@ namespace Rhys
         protected Manager() { } // guarantee this will be always a singleton only - can't use the constructor!
 
         public string myGlobalVar = "whatever";
-        private Collider bounding;
+        public Collider bounding;
 
-        public GameObject[,] map;
-
-        public GameObject node = new GameObject("node");
+        public Space[,] map;
 
         private void Start()
         {
@@ -30,18 +28,20 @@ namespace Rhys
 
 
 
-              int length = (int) bounding.bounds.size.x ;
+              int length = (int) bounding.bounds.size.x;
               int height = (int) bounding.bounds.size.z;
-            
 
-            map = new GameObject[length, height];
+            Vector3 local = new Vector3(0, 0, 0);
+
+            map = new Space[length, height];
 
             for(int i = 0; i < length; i++)
             {
                 for(int j = 0; j < height; j++)
                 {
-                    map[i, j] = Instantiate(node, new Vector3(i, 1, j), new Quaternion(0, 0, 0, 0));
-                    print(map[i, j]);
+                    local.x = (int)bounding.bounds.extents.x - i;
+                    local.z = (int)bounding.bounds.extents.z - j;
+                    map[i, j] = new Space(true, local);
                 }
             }
         }

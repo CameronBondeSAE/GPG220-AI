@@ -152,7 +152,7 @@ namespace Trystin
             {
                 int RanIndex = Random.Range(0, PosibleEdgeDropSections.Count);
                 Node NV2I = PosibleEdgeDropSections[RanIndex];
-                Node[] SectionNodes = ReturnScanAreaNodes(NV2I.GridPostion, _DepthOfScanBox, RequiredXLengh, RequiredYLengh).ToArray();
+                Node[] SectionNodes = ReturnScanAreaNodes(NV2I.GridPosition, _DepthOfScanBox, RequiredXLengh, RequiredYLengh).ToArray();
 
                 for (int SectionNodeIndex = 0; SectionNodeIndex < SectionNodes.Length; ++SectionNodeIndex)
                 {
@@ -240,10 +240,10 @@ namespace Trystin
             List<Node> CrewSpawnLocations = new List<Node>();
             _CrewLocations = CrewSpawnLocations;
 
-            if (_Node.GridPostion.X > (NodeManager.Instance.GridXLength / 2 + _GunCrewAreaX))
+            if (_Node.GridPosition.X > (NodeManager.Instance.GridXLength / 2 + _GunCrewAreaX))
                 StartingXIterationValue = false;
 
-            if (_Node.GridPostion.Y > (NodeManager.Instance.GridYLength / 2 + _GunCrewAreaY))
+            if (_Node.GridPosition.Y > (NodeManager.Instance.GridYLength / 2 + _GunCrewAreaY))
                 StartingYIterationValue = false;
 
             for (int XIndex = 0; XIndex < _GunCrewAreaX; ++XIndex)
@@ -257,18 +257,18 @@ namespace Trystin
                     if (!StartingYIterationValue)
                         ModIndexY = -ModIndexY;
 
-                    if (NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)] == null)
+                    if (NodeManager.Instance.NodeGrid[(_Node.GridPosition.X + ModIndexX), (_Node.GridPosition.Y + ModIndexY)] == null)
                         return false;
-                    if (NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)].IsOccupied == true)
+                    if (NodeManager.Instance.NodeGrid[(_Node.GridPosition.X + ModIndexX), (_Node.GridPosition.Y + ModIndexY)].IsOccupied == true)
                         return false;
 
                     if (XIndex == CentreXIndex && YIndex == CentreYIndex)
-                        _SpawnCentre = NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)];
+                        _SpawnCentre = NodeManager.Instance.NodeGrid[(_Node.GridPosition.X + ModIndexX), (_Node.GridPosition.Y + ModIndexY)];
 
                     if (XIndex == 0 || XIndex == _GunCrewAreaX - 1)
-                        CrewSpawnLocations.Add(NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)]);
+                        CrewSpawnLocations.Add(NodeManager.Instance.NodeGrid[(_Node.GridPosition.X + ModIndexX), (_Node.GridPosition.Y + ModIndexY)]);
                     if (YIndex == 0 || YIndex == _GunCrewAreaY - 1)
-                        CrewSpawnLocations.Add(NodeManager.Instance.NodeGrid[(_Node.GridPostion.X + ModIndexX), (_Node.GridPostion.Y + ModIndexY)]);
+                        CrewSpawnLocations.Add(NodeManager.Instance.NodeGrid[(_Node.GridPosition.X + ModIndexX), (_Node.GridPosition.Y + ModIndexY)]);
                 }
             }
             return true;
