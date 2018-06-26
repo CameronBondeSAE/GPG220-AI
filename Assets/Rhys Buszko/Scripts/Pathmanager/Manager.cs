@@ -39,8 +39,8 @@ namespace Rhys
             {
                 for(int j = 0; j < height; j++)
                 {
-                    local.x = length - i;
-                    local.z = height - j;
+                    local.x = (int)bounding.bounds.extents.x - i;
+                    local.z = (int)bounding.bounds.extents.z - j;
                     map[i, j] = new Space(true, local);
                 }
             }
