@@ -25,6 +25,7 @@ namespace Rhys
 
         Health My_Health;
         Body My_Body;
+        private Pathfinding My_Path;
 
         public float Speed_Mult = 1;
         public Vector3 dir;
@@ -37,6 +38,11 @@ namespace Rhys
             My_Body = GetComponent<Body>();
             My_Body.Initalize_Me();
             manager = Manager.Instance;
+            My_Path = GetComponent<Pathfinding>();
+
+            Defult = Instantiate(RightEye);
+
+
         }
 
         // Update is called once per frame
@@ -191,10 +197,7 @@ namespace Rhys
 
         public void Retarget()
         {
-            if (Vector3.Distance(target.transform.position, transform.position) <= 2)
-            {
-                Defult.gameObject.transform.position = manager.map[(int) manager.bounding.bounds.size.x - Random.Range(0, (int)manager.bounding.bounds.size.x), (int) manager.bounding.bounds.size.z - Random.Range(0, (int)manager.bounding.bounds.size.x)].Location;
-            }
+            //My_Path.FindPath(transform.position,target.transform.position);
             float dist = Mathf.Infinity;
             if (Enemys != null)
             {
