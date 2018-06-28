@@ -17,8 +17,10 @@ namespace Trystin
         public Vector2Int GridPosition;
         public Vector3 TileSize;
         public Vector3 WorldPosition;
+        public Vector3 NodeAngle;
         public Node[] NeighbouringTiles;
         public NodeNeighbourConnection[] NeighbourConnectionsType;
+        public bool[] ConnectionCorners;
         public CharacterBase Occupant;
 
 

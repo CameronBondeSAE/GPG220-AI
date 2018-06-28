@@ -27,6 +27,14 @@ namespace Trystin
             {
                 TargetTestNMV2.RemoveNonFloorTiles();
             }
+            if (GUILayout.Button("Setup Neighbour Tiles"))
+            {
+                TargetTestNMV2.NeighbourSetThreadCall();
+            }
+            if (GUILayout.Button("Test Random Tile"))
+            {
+                TargetTestNMV2.TestTile();
+            }
         }
     }
 }

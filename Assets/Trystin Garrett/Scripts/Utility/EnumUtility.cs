@@ -10,6 +10,12 @@ namespace Trystin
         GridSizeIndependent
     }
 
+    public enum GridNavigationType
+    {
+        SingleLayer,
+        MultiLayer
+    }
+
     public enum ProgressState
     {
         Inactive,
@@ -30,7 +36,9 @@ namespace Trystin
         Flat,
         Hop,
         Jump,
-        Climb
+        Climb,
+        UnScaleable,
+        None,
     }
 
     public enum FieldGunState
