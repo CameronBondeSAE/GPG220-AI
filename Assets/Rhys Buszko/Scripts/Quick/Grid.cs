@@ -57,11 +57,25 @@ namespace Rhys
             {
                 for (int y = 0; y < gridSizeY; y++)
                 {
+                    bool walkable = true;
                     Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius) + Vector3.up;
 
-
-                    bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius,0,false));
-
+                    if (Physics.CheckSphere(worldPoint, nodeRadius, 1, QueryTriggerInteraction.Ignore))
+                    {
+                        RaycastHit n;
+                        Physics.Raycast(worldPoint, transform.right , out n, 1, 1, QueryTriggerInteraction.Ignore);
+                        if (n.collider != null)
+                        {
+                            if (n.collider.gameObject.GetComponent<Controller>() == null)
+                            {
+                                if (n.collider.gameObject.GetComponentInChildren<Controller>() == null)
+                                {
+                                    walkable = false;
+                                }
+                            }
+                        }
+                    }
+                 
                     grid[x, y] = new Node(walkable, worldPoint, x, y);
                 }
             }
