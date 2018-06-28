@@ -10,21 +10,6 @@ namespace Trystin
     {
         public static NodeManager Instance;
 
-        public enum ProgressState
-        {
-            Inactive,
-            InProgress,
-            Complete
-        }
-
-        public enum PingState
-        {
-            Inactive,
-            Sweeping,
-            Culling,
-            Complete
-        }
-
         [Header("Grid Variables")]
         public int GridXLength = 100;
         public int GridYLength = 100;
@@ -358,7 +343,7 @@ namespace Trystin
         {
             CurrentPingState = PingState.Culling;
             StartCoroutine(CleanUpObsticlesTiles());
-            SetupQuardrents(); 
+            SetupQuardrents();
         }
         IEnumerator CleanUpObsticlesTiles()
         {
@@ -436,7 +421,7 @@ namespace Trystin
                 }
             }
 
-            if(ToggleWireFrameQuadrants && CurrentNeighbourState == ProgressState.Complete)
+            if (ToggleWireFrameQuadrants && CurrentNeighbourState == ProgressState.Complete)
             {
                 for (int XIndex = 0; XIndex < 3; ++XIndex)
                     for (int YIndex = 0; YIndex < 3; ++YIndex)
@@ -524,22 +509,11 @@ namespace Trystin
                 if (ActiveAICB[AIIndex] != null)
                 {
                     Vector3 AIPos = ActiveAICB[AIIndex].transform.position;
+                    CheckForChildrenColliders(AIIndex);
 
-                    Collider[] AIColArray = ActiveAICB[AIIndex].GetComponentsInChildren<Collider>();
-                    if(AIColArray.Length > 1)
-                        for(int ColIndex = 0; ColIndex < AIColArray.Length; ++ColIndex)
-                        {
-                            Node ColNode = FindNodeFromWorldPosition(AIColArray[ColIndex].bounds.center);
-                            if (ColNode != null)
-                            {
-                                ColNode.IsOccupied = true;
-                                ColNode.Occupant = ActiveAICB[AIIndex];
-                                AIOccupiedNodes.Add(ColNode);
-                            }
-                        }
-
+                    // If check about the above?
                     Collider AICol = ActiveAICB[AIIndex].GetComponent<Collider>();
-                    if(AICol == null)
+                    if (AICol == null)
                         AICol = ActiveAICB[AIIndex].GetComponentInChildren<Collider>();
 
                     if (AICol == null)
@@ -572,6 +546,26 @@ namespace Trystin
                     AIOccupiedNodes.Add(CentreNode);
                 }
             }
+        }
+
+        //
+        void CheckForChildrenColliders(int _AIIndex)
+        {
+            if (ActiveAICB[_AIIndex].GetComponent<FieldGun>() == null)
+                return;
+
+            Collider[] AIColArray = ActiveAICB[_AIIndex].GetComponentsInChildren<Collider>();
+            if (AIColArray.Length > 1)
+                for (int ColIndex = 0; ColIndex < AIColArray.Length; ++ColIndex)
+                {
+                    Node ColNode = FindNodeFromWorldPosition(AIColArray[ColIndex].bounds.center);
+                    if (ColNode != null)
+                    {
+                        ColNode.IsOccupied = true;
+                        ColNode.Occupant = ActiveAICB[_AIIndex];
+                        AIOccupiedNodes.Add(ColNode);
+                    }
+                }
         }
 
         //

@@ -18,7 +18,9 @@ namespace Trystin
         public Vector3 TileSize;
         public Vector3 WorldPosition;
         public Node[] NeighbouringTiles;
+        public NodeNeighbourConnection[] NeighbourConnectionsType;
         public CharacterBase Occupant;
+
 
         public bool IsOccupied;
         public bool IsInProximity;
@@ -46,7 +48,7 @@ namespace Trystin
 
             if (NC.Length == 1)
             {
-                if(NC[0] == _FloorCol)
+                if (NC[0] == _FloorCol || NC[0].isTrigger == true)
                     return ColliderOwnerType.Null;
 
                 Occupant = NC[0].gameObject.GetComponent<CharacterBase>();
@@ -63,7 +65,7 @@ namespace Trystin
             {
                 for (int index = 0; index < NC.Length; ++index)
                 {
-                    if (NC[index] == _FloorCol)
+                    if (NC[index] == _FloorCol || NC[index].isTrigger == true)
                         continue;
                     bool Check = CheckColliderDistance(NC[index], _Node);
                     if (Check)
@@ -72,7 +74,7 @@ namespace Trystin
             }
             else if (NC.Length == 1)
             {
-                if (NC[0] == _FloorCol)
+                if (NC[0] == _FloorCol || NC[0].isTrigger == true)
                     return ColliderOwnerType.Null;
                 bool Check = CheckColliderDistance(NC[0], _Node);
                 if (Check)

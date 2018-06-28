@@ -45,7 +45,7 @@ namespace Trystin
         // Update is called once per frame
         void Update()
         {
-            if (NodeManager.Instance.CurrentGridState != NodeManager.ProgressState.Complete)
+            if (NodeManager.Instance.CurrentGridState != ProgressState.Complete)
                 return;
 
             TrackPositionNodes();

@@ -4,6 +4,35 @@ using UnityEngine;
 
 namespace Trystin
 {
+    public enum GridCreationMethod
+    {
+        GridSizeDependent,
+        GridSizeIndependent
+    }
+
+    public enum ProgressState
+    {
+        Inactive,
+        InProgress,
+        Complete
+    }
+
+    public enum PingState
+    {
+        Inactive,
+        Sweeping,
+        Culling,
+        Complete
+    }
+
+    public enum NodeNeighbourConnection
+    {
+        Flat,
+        Hop,
+        Jump,
+        Climb
+    }
+
     public enum FieldGunState
     {
         Idle,
