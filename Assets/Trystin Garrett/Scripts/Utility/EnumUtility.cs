@@ -35,9 +35,11 @@ namespace Trystin
     {
         Flat,
         Hop,
+        Incline,
         Jump,
         Climb,
         UnScaleable,
+        Drop,
         None,
     }
 

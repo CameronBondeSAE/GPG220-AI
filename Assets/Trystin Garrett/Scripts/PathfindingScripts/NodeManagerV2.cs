@@ -10,10 +10,25 @@ namespace Trystin
         public Vector2 NodeRatio = new Vector2(1, 1);
         public float NodeElevationFromCollider = 0.3f;
         public float HighestReachableYValue;
-        public float ObsticleOverlapPercentageAllowance;
-        public float JumpIntervalHeight;
-        public float ClimbIntervalHeight;
-        public float UnScalableIntervalHeight;
+
+        [Space]
+        [Header("Node/Obsticale Removal Variables")]
+        public float ObsticleOverlapPercentageAllowance = 0.1f;
+
+        [Space]
+        [Header("Obsticale Traverse Interval Start Heights")]
+        public float JumpIntervalHeight = 0.3f;
+        public float ClimbIntervalHeight = 1.1f;
+        public float UnScalableIntervalHeight = 2.1f;
+
+        [Space]
+        [Header("Incline Movement Angles")]
+        public float InclineConnectionMin = 0.05f;
+        public float InclineConnectionMax = 0.3f;
+
+
+        [Space]
+        [Header("Grid Setup")]
         public GridNavigationType SelectedNavType = GridNavigationType.SingleLayer;
         public GridCreationMethod SelectedMethod = GridCreationMethod.GridSizeIndependent;
 
@@ -27,7 +42,7 @@ namespace Trystin
         [Space]
         [Header("Node Variables")]
         public Vector3 GridStartPos;
-        public float NodeHight = 0.25f;
+        public float NodeHight;
 
         [Space]
         [Header("Grid Variables")]
@@ -48,15 +63,12 @@ namespace Trystin
         [Header("NodeRemoval/Relocaton Variables")]
         public float FloorCheckDistance;
         public float CheckOverLap;
-        private float CombinedCheckDistance;
+        public float CombinedCheckDistance;
 
         [Space]
         [Header("Debugging")]
         public bool VisualDebugging = false;
         public Node FoundRandNode;
-        //public List<Node> HopNodes = new List<Node>();
-        //public List<Node> JumpNodes = new List<Node>();
-        //public List<Node> ClimbNodes = new List<Node>();
 
         public void GetFloorGridDimentions()
         {
@@ -66,15 +78,21 @@ namespace Trystin
             FloorXLength = ColBounds.size.x;
             FloorYLength = ColBounds.size.z;
 
-            if (FloorElevation == 0)
+            if (HighestReachableYValue != 0)
+            {
                 FloorElevation = HighestReachableYValue;
+                FloorCheckDistance = HighestReachableYValue * 2;
+            }
             else
+            {
                 FloorElevation = ColBounds.size.y;
+                HighestReachableYValue = FloorElevation;
+                FloorCheckDistance = ColBounds.size.y;
+            }
             GridStartPos = new Vector3((ColBounds.center.x - ColBounds.extents.x), (FloorElevation + NodeElevationFromCollider), (ColBounds.center.z - ColBounds.extents.z));
 
             GridXScale = NodeRatio.x;
             GridYScale = NodeRatio.y;
-            FloorCheckDistance = ColBounds.size.y;
             NodePositionGridScaleOffset = new Vector2((GridXScale / 2), (GridYScale / 2));
             CheckOverLap = 1f - ObsticleOverlapPercentageAllowance;
 
@@ -137,8 +155,9 @@ namespace Trystin
                     {
                         RepositionNode(NodeGrid[XIndex, YIndex], LocalHit);
 
-                        if (Physics.CheckBox(NodeGrid[XIndex, YIndex].WorldPosition, HalfExents))
-                            NodeGrid[XIndex, YIndex] = null;
+                        //Does not like pro builder...
+                        //if (Physics.CheckBox(NodeGrid[XIndex, YIndex].WorldPosition, HalfExents))
+                        //    NodeGrid[XIndex, YIndex] = null;
                     }
                     else
                         NodeGrid[XIndex, YIndex] = null;
@@ -177,7 +196,10 @@ namespace Trystin
             for (int XIndex = 0; XIndex < GridXLength; ++XIndex)
                 for (int YIndex = 0; YIndex < GridYLength; ++YIndex)
                     if (NodeGrid[XIndex, YIndex] != null)
+                    {
                         SetNeighbouringNodeTiles(NodeGrid[XIndex, YIndex]);
+                    }
+
 
             CurrentNeighbourState = ProgressState.Complete;
         }
@@ -230,6 +252,8 @@ namespace Trystin
                     }
                 }
             }
+            IsCornerTurn = DetermineCorners(Neighbours, NeighbourConnections);
+
             _NodeTile.NeighbouringTiles = Neighbours;
             _NodeTile.NeighbourConnectionsType = NeighbourConnections;
             _NodeTile.ConnectionCorners = IsCornerTurn;
@@ -252,43 +276,75 @@ namespace Trystin
         {
             float AJDistance = GridXScale;
             float HypDistance = Vector3.Distance(_CentreNode.WorldPosition, _NeighbourNode.WorldPosition);
-            float HeightDifference = Mathf.Abs(_NeighbourNode.WorldPosition.y - _CentreNode.WorldPosition.y);
+            float HeightDifference = (_NeighbourNode.WorldPosition.y - _CentreNode.WorldPosition.y);
+            float IsNegative = Mathf.Sign(HeightDifference);
+            HeightDifference = Mathf.Abs(HeightDifference);
             if (_IsDiagnal)
                 AJDistance = GridXScale * 1.4f;
+
+            float AngleBetweenNodes = Mathf.Sin(HeightDifference / HypDistance);
+            if (AngleBetweenNodes >= InclineConnectionMin && AngleBetweenNodes <= InclineConnectionMax)
+                return NodeNeighbourConnection.Incline;
 
             if ((HeightDifference <= 0.05f))
                 return NodeNeighbourConnection.Flat;
             if ((HeightDifference > 0.05f) && (HeightDifference < JumpIntervalHeight))
-                return NodeNeighbourConnection.Hop;
+                    return NodeNeighbourConnection.Hop;
+
             if ((HeightDifference >= JumpIntervalHeight) && (HeightDifference < ClimbIntervalHeight))
-                return NodeNeighbourConnection.Jump;
+                    return NodeNeighbourConnection.Jump;
+
             if ((HeightDifference >= ClimbIntervalHeight) && (HeightDifference < UnScalableIntervalHeight))
-                return NodeNeighbourConnection.Climb;
+            {
+                if(IsNegative == -1)
+                    return NodeNeighbourConnection.Drop;
+                else
+                    return NodeNeighbourConnection.Climb;
+            }
             if ((HeightDifference >= UnScalableIntervalHeight))
                 return NodeNeighbourConnection.UnScaleable;
 
             return NodeNeighbourConnection.None;
         }
 
-        // DODO: Need to include edge tiles as corners too!!!!
-        bool[] DetermineCorners(List<Node> _Neighbours, List<NodeNeighbourConnection> _NeighbourConnections)
+        // DODO: Need to include edge tiles as corners too!!!! DOn't know if this is working
+        bool[] DetermineCorners(Node[] _Neighbours, NodeNeighbourConnection[] _NeighbourConnections)
         {
-            bool[] Corners = new bool[_NeighbourConnections.Count];
-            for (int NeighIndex = 0; NeighIndex < _Neighbours.Count; NeighIndex += 2)
-            {
-                if(_Neighbours[NeighIndex] != null)
-                {
-                    int IncreasingIndex = NeighIndex + 1;
-                    int DecreasingIndex = NeighIndex - 1;
-                    if (IncreasingIndex > _Neighbours.Count)
-                        IncreasingIndex = 0;
-                    if (DecreasingIndex < 0)
-                        DecreasingIndex = _Neighbours.Count;
+            bool[] Corners = new bool[_NeighbourConnections.Length];
 
-                    if((int)_NeighbourConnections[IncreasingIndex] > 2 || (int)_NeighbourConnections[DecreasingIndex] > 2)
-                        Corners[NeighIndex] = true;
-                }
-            }
+            if (_Neighbours[0] != null)
+                if ((int)_NeighbourConnections[1] >= 3 || (int)_NeighbourConnections[3] >= 3)
+                    Corners[0] = true;
+
+            if (_Neighbours[2] != null)
+                if ((int)_NeighbourConnections[1] >= 3 || (int)_NeighbourConnections[4] >= 3)
+                    Corners[2] = true;
+
+            if (_Neighbours[5] != null)
+                if ((int)_NeighbourConnections[6] >= 3 || (int)_NeighbourConnections[3] >= 3)
+                    Corners[5] = true;
+
+            if (_Neighbours[7] != null)
+                if ((int)_NeighbourConnections[6] >= 3 || (int)_NeighbourConnections[4] >= 3)
+                    Corners[7] = true;
+            //for (int NeighIndex = 0; NeighIndex < _Neighbours.Length; ++NeighIndex)
+            //{
+            //    if(_Neighbours[NeighIndex] != null)
+            //    {
+            //        if(NeighIndex == 0 || NeighIndex == 2 || NeighIndex == 5|| NeighIndex == 7)
+            //        {
+            //            int IncreasingIndex = NeighIndex + 1;
+            //            int DecreasingIndex = NeighIndex - 1;
+            //            if (IncreasingIndex > _Neighbours.Length - 1)
+            //                IncreasingIndex = 0;
+            //            if (DecreasingIndex < 0)
+            //                DecreasingIndex = _Neighbours.Length - 1;
+
+            //            if ((int)_NeighbourConnections[IncreasingIndex] >= 2 || (int)_NeighbourConnections[DecreasingIndex] >= 2)
+            //                Corners[NeighIndex] = true;
+            //        }
+            //    }
+            //}
             return Corners;
         }
 
@@ -314,6 +370,7 @@ namespace Trystin
             {
                 FoundRandNode = RandNode;
                 Debug.Log(RandNode.GridPosition.X + "/" + RandNode.GridPosition.Y);
+
                 //if(RandNode.NeighbouringTiles[0] == null)
                 //    Debug.Log("NO Neighbour");
                 //if (RandNode.NeighbourConnectionsType[0] == null)
@@ -331,7 +388,21 @@ namespace Trystin
             NodeGrid = null;
             CurrentGridState = ProgressState.Inactive;
             CurrentNeighbourState = ProgressState.Inactive;
-        }
+            FloorXLength = 0;
+            FloorYLength = 0;
+            FloorElevation = 0;
+            FloorCollider = null;
+            NodeHight = 0;
+            GridXLength = 0;
+            GridYLength = 0;
+            GridXScale = 0;
+            GridYScale = 0;
+            FloorCheckDistance = 0;
+            CheckOverLap = 0;
+            CombinedCheckDistance = 0;
+            GridStartPos = Vector3.zero;
+            FoundRandNode = null;
+    }
 
 
 
@@ -369,17 +440,21 @@ namespace Trystin
 
                     for (int NeighIndex = 0; NeighIndex < FoundRandNode.NeighbouringTiles.Length; ++NeighIndex)
                     {
-                        Gizmos.color = Color.white;
+                        Gizmos.color = Color.clear;
                         if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.Flat)
                             Gizmos.color = Color.cyan;
                         if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.Hop)
                             Gizmos.color = Color.blue;
+                        if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.Incline)
+                            Gizmos.color = Color.grey;
                         if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.Jump)
                             Gizmos.color = Color.green;
                         if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.Climb)
                             Gizmos.color = Color.yellow;
-                        if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.UnScaleable)
+                        if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.Drop)
                             Gizmos.color = Color.red;
+                        if (FoundRandNode.NeighbourConnectionsType[NeighIndex] == NodeNeighbourConnection.UnScaleable)
+                            Gizmos.color = Color.white;
                         if(FoundRandNode.NeighbouringTiles[NeighIndex] != null)
                             Gizmos.DrawWireCube(FoundRandNode.NeighbouringTiles[NeighIndex].WorldPosition, FoundRandNode.TileSize);
 

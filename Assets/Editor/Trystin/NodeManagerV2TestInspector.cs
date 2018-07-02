@@ -20,7 +20,6 @@ namespace Trystin
             }
             if (GUILayout.Button("SetUpGrid"))
             {
-                TargetTestNMV2.ResetGrid();
                 TargetTestNMV2.CallCreateGrid();
             }
             if (GUILayout.Button("Remove Non-Floor Tiles"))
@@ -34,6 +33,10 @@ namespace Trystin
             if (GUILayout.Button("Test Random Tile"))
             {
                 TargetTestNMV2.TestTile();
+            }
+            if (GUILayout.Button("Rest Tile Gid"))
+            {
+                TargetTestNMV2.ResetGrid();
             }
         }
     }
