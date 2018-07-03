@@ -14,6 +14,6 @@ public class MoveCamera : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		transform.Translate(Input.GetAxis("Horizontal"));
+		//transform.Translate(Input.GetAxis("Horizontal"));
 	}
 }
