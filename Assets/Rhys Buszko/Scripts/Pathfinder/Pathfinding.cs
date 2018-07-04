@@ -9,10 +9,11 @@ namespace Rhys
 
         public Transform seeker, target;
         Manager grid;
+        public List<Node> foundpath;
 
-        void Strat()
+        void Awake()
         {
-            grid = GetComponent<Controller>().manager;
+            grid = Manager.Instance;
         }
 
         public void FindPath(Vector3 startPos, Vector3 targetPos)
@@ -79,6 +80,7 @@ namespace Rhys
 
             path.Reverse();
 
+            foundpath = path;
             grid.path = path;
 
         }

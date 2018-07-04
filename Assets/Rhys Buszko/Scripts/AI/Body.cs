@@ -54,7 +54,7 @@ public class Body : CharacterBase {
     {
         Quaternion rot = Quaternion.LookRotation(dir);
         
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 8);
         Rigid.velocity = transform.forward * (Speed * multiplier);
 
     }

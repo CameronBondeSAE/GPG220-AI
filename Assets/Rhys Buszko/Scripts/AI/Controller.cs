@@ -19,13 +19,16 @@ namespace Rhys
         public RaycastHit hitLeft;
         public RaycastHit hitRight;
 
-        public Manager manager;
+        int damage = 5;
 
-        List<Collider> Enemys;
+        public Manager manager;
+        public bool attack, run, wander;
+
+        List<Collider> Enemys = new List<Collider>();
 
         Health My_Health;
         Body My_Body;
-        private Pathfinding My_Path;
+        public Pathfinding My_Path;
 
         public float Speed_Mult = 1;
         public Vector3 dir;
@@ -42,6 +45,9 @@ namespace Rhys
 
             Defult = Instantiate(RightEye);
 
+            Defult.transform.position = new Vector3(Random.Range(-manager.gridWorldSize.x, manager.gridWorldSize.x), 1, Random.Range(-manager.gridWorldSize.y, manager.gridWorldSize.y));
+
+            target = Defult;
 
         }
 
@@ -96,12 +102,42 @@ namespace Rhys
                 target = Defult;
             }
 
-            Collisions();
+            Retarget();
+
+            if(attack == true)
+            {
+                My_Body.Ability1();
+                target.GetComponent<Health>().Change(damage, My_Body);
+            }
+
         }
 
         private void FixedUpdate()
         {
-            Retarget();
+            Collisions();
+            if (target == Defult)
+            {
+                float mesure = Mathf.Infinity;
+                if (My_Path.foundpath == null)
+                {
+                    My_Path.FindPath(transform.position, target.transform.position);
+                }
+                else if (My_Path.foundpath.Count <= 1)
+                {
+                    Defult.transform.position = new Vector3(Random.Range(-manager.gridWorldSize.x, manager.gridWorldSize.x), 1, Random.Range(-manager.gridWorldSize.y, manager.gridWorldSize.y));
+                    My_Path.FindPath(transform.position, target.transform.position);
+                }
+                else
+                {
+                    mesure = Vector3.Distance(transform.position, My_Path.foundpath[0].worldPosition);
+                    Defult.transform.position = My_Path.foundpath[0].worldPosition;
+                }
+
+                if (mesure <= 1)
+                {
+                    My_Path.foundpath.RemoveAt(0);
+                }
+            }
         }
 
         private void Collisions()
@@ -109,7 +145,7 @@ namespace Rhys
             dir = (target.transform.position - transform.position).normalized;
             Speed_Mult = 1;
 
-            if (Physics.Raycast(transform.position, transform.forward, out hitForward, 5, 1, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, transform.forward, out hitForward, 2, 1, QueryTriggerInteraction.Ignore))
             {
                 if (hitForward.transform != transform)
                 {
@@ -120,7 +156,7 @@ namespace Rhys
             }
 
 
-            if (Physics.Raycast(transform.position, LeftEye.transform.forward, out hitLeft, 7, 1, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, LeftEye.transform.forward, out hitLeft, 1, 1, QueryTriggerInteraction.Ignore))
             {
 
                 if (hitLeft.transform != transform)
@@ -131,7 +167,7 @@ namespace Rhys
                 }
             }
 
-            if (Physics.Raycast(transform.position, RightEye.transform.forward, out hitRight, 5, 1, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, RightEye.transform.forward, out hitRight, 1, 1, QueryTriggerInteraction.Ignore))
             {
                 if (hitRight.transform != transform)
                 {
@@ -141,54 +177,12 @@ namespace Rhys
                 }
 
             }
-            
-            Direction(hitForward, hitRight, hitLeft);
 
             My_Body.Movement(dir, Speed_Mult);
 
 
         }
-    
-
-        public Vector3 Direction(RaycastHit forward, RaycastHit right, RaycastHit left)
-        {
-            Vector3 direction = new Vector3(0,0,0);
-            Vector3 m_Size, m_Min, m_Max;
-
-            List<RaycastHit> hit = new List<RaycastHit>
-            {
-                forward,
-                right,
-                left
-            };
-
-            foreach(RaycastHit n in hit)
-            {
-                if(n.collider != null)
-                {
-                    direction = n.collider.bounds.center;
-                    m_Size = n.collider.bounds.size;
-                    m_Min = n.collider.bounds.min;
-                    m_Max = n.collider.bounds.max;
-                    //OutputData(direction, m_Size, m_Min, m_Max);
-                   // Debug.Log("Hit Local : " + n.point);                 
-                }
-            }
-
-            return direction;
-
-
-        }
-
-
-        void OutputData(Vector3 m_Center, Vector3 m_Size, Vector3 m_Min, Vector3 m_Max)
-        {
-            //Output to the console the center and size of the Collider volume
-            Debug.Log("Collider Center : " + m_Center);
-            Debug.Log("Collider Size : " + m_Size);
-            Debug.Log("Collider bound Minimum : " + m_Min);
-            Debug.Log("Collider bound Maximum : " + m_Max);
-        }
+   
 
         public void Wander()
         {
@@ -197,7 +191,7 @@ namespace Rhys
 
         public void Retarget()
         {
-            //My_Path.FindPath(transform.position,target.transform.position);
+
             float dist = Mathf.Infinity;
             if (Enemys != null)
             {
@@ -209,6 +203,7 @@ namespace Rhys
                         if (mesure < dist)
                         {
                             target = n.gameObject;
+                            attack = true;
                         }
                     }
                 }
@@ -229,6 +224,21 @@ namespace Rhys
         public void Run()
         {
 
+        }
+
+        public void OnDrawGizmos()
+        {
+            if(My_Path == null)
+                return;
+
+            if (My_Path.foundpath == null)
+                return;
+
+            for (int PathIndex = 0; PathIndex < My_Path.foundpath.Count; PathIndex++)
+            {
+                Gizmos.DrawSphere(My_Path.foundpath[PathIndex].worldPosition, 0.5f);
+
+            }
         }
 
     }

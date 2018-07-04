@@ -22,6 +22,8 @@ namespace Rhys
         float nodeDiameter;
         int gridSizeX, gridSizeY;
 
+        public List<Node> path;
+
         void Awake()
         {
 
@@ -59,20 +61,22 @@ namespace Rhys
                 {
                     bool walkable = true;
                     Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius) + Vector3.up;
+                    Collider[] checkGroup;
 
-                    if (Physics.CheckSphere(worldPoint, nodeRadius, 1, QueryTriggerInteraction.Ignore))
+                    checkGroup = Physics.OverlapSphere(worldPoint, nodeRadius,1, QueryTriggerInteraction.Ignore);
+
+                    if (checkGroup != null)
                     {
-                        RaycastHit n;
-                        Physics.Raycast(worldPoint, transform.right , out n, 1, 1, QueryTriggerInteraction.Ignore);
-                        if (n.collider != null)
+                        foreach (Collider n in checkGroup)
                         {
-                            if (n.collider.gameObject.GetComponent<Controller>() == null)
-                            {
-                                if (n.collider.gameObject.GetComponentInChildren<Controller>() == null)
+                                if (n.gameObject.GetComponent<Controller>() == null)
                                 {
-                                    walkable = false;
+                                    if (n.gameObject.GetComponentInChildren<Controller>() == null)
+                                    {
+                                        walkable = false;
+                                    }
                                 }
-                            }
+                            
                         }
                     }
                  
@@ -118,7 +122,7 @@ namespace Rhys
             return grid[x, y];
         }
 
-        public List<Node> path;
+
 
         void OnDrawGizmos()
         {
