@@ -27,8 +27,39 @@ GameObject:
   - component: {fileID: 114610348325204454}
   - component: {fileID: 114744543886266242}
   - component: {fileID: 114760692582159224}
+  - component: {fileID: 54385699829263570}
   m_Layer: 0
   m_Name: Necromancer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1721014551916688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4717482530001878}
+  m_Layer: 0
+  m_Name: Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1901970241720538
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4619981609500206}
+  m_Layer: 0
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,12 +72,40 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1614063370329456}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.091481, y: 5.250848, z: -0.15240288}
+  m_LocalPosition: {x: 40.52, y: -0.1048398, z: -1.5341301}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4717482530001878}
+  - {fileID: 4619981609500206}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4619981609500206
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1901970241720538}
+  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4485869342872224}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!4 &4717482530001878
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1721014551916688}
+  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4485869342872224}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!23 &23182370309278378
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -60,7 +119,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -89,6 +147,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1614063370329456}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54385699829263570
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1614063370329456}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!114 &114316557879129628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -116,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundGraphSerialization: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4724.973,"y":-5130.97},"nodes":[{"_position":{"x":5437.0,"y":5166.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":5058.0,"y":5289.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":4852.0,"y":5381.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_position":{"x":5090.0,"y":5388.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"9a463aac-6c40-4ff5-bb63-689fe1278f12"},"checkType":"GreaterThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":4775.0,"y":5461.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"9"},{"_condition":{"valueA":{"_name":"Energy","_targetVariableID":"3b8e3f84-f4a5-4b0c-86f9-3934fa2c26c8"},"checkType":"GreaterThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":4924.0,"y":5469.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"13"},{"_action":{"actions":[{"method":{"_baseInfo":"Energy|Change|System.Void","_paramsInfo":"System.Single"},"parameters":[{"_type":"System.Single","_value":{"$content":-50.0,"$type":"System.Single"}}],"parameterIsByRef":[false],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"},{"method":{"_baseInfo":"CharacterBase|Ability2|System.Void","_paramsInfo":""},"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"},{"log":{"_value":"I''m
+  boundGraphSerialization: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4620.0,"y":-4970.0},"nodes":[{"_position":{"x":5437.0,"y":5166.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":5058.0,"y":5289.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":4852.0,"y":5381.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_position":{"x":5090.0,"y":5388.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"8"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"9a463aac-6c40-4ff5-bb63-689fe1278f12"},"checkType":"GreaterThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":4775.0,"y":5461.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"9"},{"_condition":{"valueA":{"_name":"Energy","_targetVariableID":"3b8e3f84-f4a5-4b0c-86f9-3934fa2c26c8"},"checkType":"GreaterThan","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":4924.0,"y":5469.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"13"},{"_action":{"actions":[{"method":{"_baseInfo":"Energy|Change|System.Void","_paramsInfo":"System.Single"},"parameters":[{"_type":"System.Single","_value":{"$content":-50.0,"$type":"System.Single"}}],"parameterIsByRef":[false],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"},{"method":{"_baseInfo":"CharacterBase|Ability2|System.Void","_paramsInfo":""},"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"},{"log":{"_value":"I''m
     raising undead!"},"$type":"NodeCanvas.Tasks.Actions.DebugLogText"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":4945.0,"y":5537.0},"_tag":"Raise
     undead","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"17"},{"_position":{"x":5439.0,"y":5289.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"33"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":5278.0,"y":5380.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"34"},{"_position":{"x":5506.0,"y":5393.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"38"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"9a463aac-6c40-4ff5-bb63-689fe1278f12"},"checkType":"LessOrEqualTo","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5255.0,"y":5485.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"39"},{"_condition":{"valueA":{"_name":"Energy","_targetVariableID":"3b8e3f84-f4a5-4b0c-86f9-3934fa2c26c8"},"checkType":"GreaterOrEqualTo","valueB":{"_value":25},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5396.0,"y":5478.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"43"},{"_action":{"actions":[{"log":{"_value":"I''m
     siphoning health from the enemy!"},"secondsToRun":5.0,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},{"method":{"_baseInfo":"CharacterBase|Ability1|System.Void","_paramsInfo":""},"parameters":[],"parameterIsByRef":[],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"},{"method":{"_baseInfo":"Energy|Change|System.Void","_paramsInfo":"System.Single"},"parameters":[{"_type":"System.Single","_value":{"$content":-25.0,"$type":"System.Single"}}],"parameterIsByRef":[false],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"},{"method":{"_baseInfo":"Health|Change|System.Void","_paramsInfo":"System.Single|CharacterBase"},"parameters":[{"_type":"System.Single","_value":{"$content":25.0,"$type":"System.Single"}},{"_type":"CharacterBase","_value":{"$content":1,"$type":"Michelle.Brain"}}],"parameterIsByRef":[false,false,false,false,false,false,false],"returnValue":{},"$type":"NodeCanvas.Tasks.Actions.ExecuteFunction_Multiplatform"}],"$type":"NodeCanvas.Framework.ActionList"},"_position":{"x":5355.0,"y":5570.0},"_tag":"siphon
@@ -162,6 +235,12 @@ MonoBehaviour:
   - {fileID: 1336612062051888, guid: f9b4a676399153749ba161eccaaf2c60, type: 2}
   - {fileID: 1336612062051888, guid: f9b4a676399153749ba161eccaaf2c60, type: 2}
   myPosition: {x: 0, y: 0, z: 0}
+  rightEye: {fileID: 1901970241720538}
+  leftEye: {fileID: 1721014551916688}
+  direction: {x: 0, y: 0, z: 0}
+  defaultTarget: {fileID: 0}
+  currentTarget: {fileID: 0}
+  rigid: {fileID: 54385699829263570}
 --- !u!114 &114744543886266242
 MonoBehaviour:
   m_ObjectHideFlags: 1
