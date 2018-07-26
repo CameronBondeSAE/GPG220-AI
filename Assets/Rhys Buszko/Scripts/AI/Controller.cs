@@ -19,7 +19,7 @@ namespace Rhys
         public RaycastHit hitLeft;
         public RaycastHit hitRight;
 
-        int damage = 5;
+        int damage = -5;
 
         public Manager manager;
         public bool attack, run, wander;
@@ -106,8 +106,15 @@ namespace Rhys
 
             if(attack == true)
             {
-                My_Body.Ability1();
-                target.GetComponent<Health>().Change(damage, My_Body);
+                if (target != null)
+                {
+                    My_Body.Ability1();
+                    target.GetComponent<Health>().Change(damage, target);
+                }
+                else
+                {
+                    attack = false;
+                }
             }
 
         }

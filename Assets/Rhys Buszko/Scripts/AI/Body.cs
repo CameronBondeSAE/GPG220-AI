@@ -43,6 +43,7 @@ public class Body : CharacterBase {
     {
         print("I Died");
         debugText = "I Died";
+        Destroy(gameObject);
     }
 
     public void Initalize_Me()
