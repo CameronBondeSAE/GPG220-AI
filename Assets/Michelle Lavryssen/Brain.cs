@@ -10,7 +10,7 @@ namespace Michelle
 
         public bool isEnemyNear;
         public GameObject Necromancer;
-        public GameObject[] undead;
+        public GameObject undead;
         public Vector3 myPosition;
         public GameObject rightEye;
         public GameObject leftEye;
@@ -34,7 +34,7 @@ namespace Michelle
 
         void Update()
         {
-            myPosition = GameObject.Find("Necromancer").transform.position;
+            myPosition = transform.position;
         }
 
         private void FixedUpdate()
@@ -106,17 +106,14 @@ namespace Michelle
 
         public void instantiateUndead()
         {
-            GameObject[] clone = undead;
-            Vector3 UndeadSpawnPosition = new Vector3(myPosition.x + Random.Range(-0.5f, 0.5f), myPosition.y, myPosition.z + Random.Range(-0.5f, 0.5f));
-            Instantiate(clone[0], UndeadSpawnPosition, Quaternion.identity);
-            Instantiate(clone[1], UndeadSpawnPosition, Quaternion.identity);
-            Instantiate(clone[2], UndeadSpawnPosition, Quaternion.identity);
-            Instantiate(clone[3], UndeadSpawnPosition, Quaternion.identity);
-            Instantiate(clone[4], UndeadSpawnPosition, Quaternion.identity);
-            foreach (GameObject n in clone)
+
+            for (int i = 0; i < 5; i++)
             {
-                n.GetComponent<UndeadTimer>().necro = gameObject;
-            }
+                Vector3 UndeadSpawnPosition = new Vector3(myPosition.x + Random.Range(-0.5f, 0.5f), myPosition.y, myPosition.z + Random.Range(-0.5f, 0.5f));
+                GameObject clone = Instantiate(undead, UndeadSpawnPosition, Quaternion.identity);
+                clone.GetComponent<UndeadTimer>().necro = gameObject;
+            }       
+            
             //instantiates undead minions and then destroys them after 10 seconds
         }
 
