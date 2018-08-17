@@ -5,7 +5,7 @@ using UnityEngine;
 public class Body : CharacterBase {
 
     public float Speed = 10.0f;
-    public Rigidbody Rigid;
+
 
     
 
@@ -46,12 +46,7 @@ public class Body : CharacterBase {
         Destroy(gameObject);
     }
 
-    public void Initalize_Me()
-    {
-        Rigid = GetComponent<Rigidbody>();
-    }
-
-    public void Movement(Vector3 dir, float multiplier)
+    public void Movement(Vector3 dir, float multiplier, Rigidbody Rigid)
     {
         Quaternion rot = Quaternion.LookRotation(dir);
         

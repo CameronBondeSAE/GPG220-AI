@@ -19,27 +19,36 @@ namespace Rhys
         public RaycastHit hitLeft;
         public RaycastHit hitRight;
 
+
+        public float AttackTimmer = 0;
         int damage = -5;
 
         public Manager manager;
         public bool attack, run, wander;
 
         List<Collider> Enemys = new List<Collider>();
+        List<Vector3> health = new List<Vector3>();
+        List<Vector3> energy = new List<Vector3>();
 
+        public Pathfinding My_Path;
         Health My_Health;
         Body My_Body;
-        public Pathfinding My_Path;
+        Energy My_Energy;
+        
 
         public float Speed_Mult = 1;
         public Vector3 dir;
+
+        Rigidbody rigid;
 
         // Use this for initialization
         void Start()
         {
             My_Health = GetComponent<Health>();
+            My_Energy = GetComponent<Energy>();
             My_Health.OnDeathEvent += Death;
             My_Body = GetComponent<Body>();
-            My_Body.Initalize_Me();
+
             manager = Manager.Instance;
             My_Path = GetComponent<Pathfinding>();
 
@@ -48,6 +57,8 @@ namespace Rhys
             Defult.transform.position = new Vector3(Random.Range(-manager.gridWorldSize.x, manager.gridWorldSize.x), 1, Random.Range(-manager.gridWorldSize.y, manager.gridWorldSize.y));
 
             target = Defult;
+
+            rigid = gameObject.GetComponent<Rigidbody>();
 
         }
 
@@ -106,10 +117,22 @@ namespace Rhys
 
             if(attack == true)
             {
-                if (target != null)
+                if (target != Defult)
                 {
-                    My_Body.Ability1();
-                    target.GetComponent<Health>().Change(damage, target);
+                    if (My_Energy.Amount >= 5 )
+                    {
+                        if (AttackTimmer >= 1)
+                        {
+                            My_Body.Ability1();
+                            target.GetComponent<Health>().Change(damage, target);
+                            My_Energy.Change(-5);
+                            AttackTimmer = 0;
+                        }
+                        else
+                        {
+                            AttackTimmer = AttackTimmer + Time.deltaTime;
+                        }
+                    }
                 }
                 else
                 {
@@ -185,7 +208,16 @@ namespace Rhys
 
             }
 
-            My_Body.Movement(dir, Speed_Mult);
+
+            if(My_Energy.Amount >= 5.0f )
+            {
+                My_Body.Movement(dir, Speed_Mult, rigid);
+                My_Energy.Change(-0.01f);
+            }
+            else
+            {
+                rigid.velocity = new Vector3(0,0,0);
+            }
 
 
         }
