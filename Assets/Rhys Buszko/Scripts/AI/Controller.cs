@@ -47,6 +47,7 @@ namespace Rhys
             My_Health = GetComponent<Health>();
             My_Energy = GetComponent<Energy>();
             My_Health.OnDeathEvent += Death;
+            My_Health.OnHealingEvent += heal;
             My_Body = GetComponent<Body>();
 
             manager = Manager.Instance;
@@ -64,8 +65,27 @@ namespace Rhys
 
         // Update is called once per frame
 
+        private void heal()
+        {
+            float dist = Mathf.Infinity;
+            Vector3 ToRemove;
+            foreach(Vector3 n in health)
+            {
+                if (n != null)
+                {
+                    float mesure = Vector3.Distance(transform.position, n);
+                    if (mesure < dist)
+                    {
+                        ToRemove = n;
+                    }
+                }
+            }
+
+        }
+
         private void Death()
         {
+            Destroy(Defult);
             My_Body.OnDeath();
         }
 
@@ -82,6 +102,16 @@ namespace Rhys
                     
                 }
             }
+
+            if(other.gameObject.GetComponent<HealthPickup>() != null)
+            {
+                health.Add(other.gameObject.transform.position);
+            }
+            if (other.gameObject.GetComponent<EnergyPickup>() != null)
+            {
+                energy.Add(other.gameObject.transform.position);
+            }
+
 
         }
 
@@ -115,7 +145,39 @@ namespace Rhys
 
             Retarget();
 
-            if(attack == true)
+
+            if (run == true && wander == false)
+            {
+                if(My_Energy.Amount >= 20)
+                {
+                    RaycastHit forwardhit;
+
+                    if (Physics.Raycast(transform.position, transform.forward, out forwardhit, 50, 1, QueryTriggerInteraction.Ignore))
+                    {
+                        if (hitForward.transform != transform)
+                        {
+                            Debug.DrawLine(transform.position, hitForward.point, Color.blue);
+                            if (!hitForward.collider.bounds.Contains((hitForward.point + gameObject.transform.forward * 50)))
+                            {
+                                Defult.transform.position = hitForward.point + gameObject.transform.forward * 50;
+                                gameObject.transform.position = Defult.transform.position;
+                            }
+                            else
+                            {
+                                Defult.transform.position = hitForward.point;
+                                gameObject.transform.position = Defult.transform.position;
+                            }
+                        }
+                    }
+                    else
+                    {
+                         gameObject.transform.position = gameObject.transform.position + gameObject.transform.forward * 50;
+                    }
+                    My_Energy.Change(-20);
+                    My_Body.Ability2();
+                }
+            }
+            else if(attack == true)
             {
                 if (target != Defult)
                 {
@@ -232,22 +294,62 @@ namespace Rhys
         {
 
             float dist = Mathf.Infinity;
-            if (Enemys != null)
+            if (My_Health.Amount >= 40 && My_Energy.Amount >= 20)
             {
-                foreach (Collider n in Enemys)
+                if (Enemys != null)
                 {
-                    if (n != null)
+                    foreach (Collider n in Enemys)
                     {
-                        float mesure = Vector3.Distance(transform.position, n.transform.position);
-                        if (mesure < dist)
+                        if (n != null)
                         {
-                            target = n.gameObject;
-                            attack = true;
+                            float mesure = Vector3.Distance(transform.position, n.transform.position);
+                            if (mesure < dist)
+                            {
+                                target = n.gameObject;
+                                attack = true;
+                                wander = false;
+                            }
                         }
                     }
                 }
+                else
+                {
+                    wander = true;
+                }
             }
+            else if (My_Health.Amount < 40)
+            {
+                foreach (Vector3 n in health)
+                {
+                    if (n != null)
+                    {
+                        float mesure = Vector3.Distance(transform.position, n);
+                        if (mesure < dist)
+                        {
+                            Defult.transform.position = n;
+                            target = Defult;
+                        }
+                    }
+                }
+                run = true;
+            }
+            else if (My_Energy.Amount < 20)
+            {
+                foreach (Vector3 n in energy)
+                {
+                    if (n != null)
+                    {
+                        float mesure = Vector3.Distance(transform.position, n);
+                        if (mesure < dist)
+                        {
+                            Defult.transform.position = n;
+                            target = Defult;
 
+                        }
+                    }
+                }
+                run = true;
+            }
             if(target == null)
             {
                 target = Defult;

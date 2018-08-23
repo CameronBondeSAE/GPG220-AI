@@ -48,10 +48,10 @@ public class Health : MonoBehaviour
 	public void Awake()
 	{
 		owner = gameObject;
-		lineRenderer = gameObject.AddComponent<LineRenderer>();
+		lineRenderer = gameObject.GetComponent<LineRenderer>();
 		Material material = Resources.Load<Material>("HealthLine");
 		
-		lineRenderer.material = material;
+	    lineRenderer.material = material;
 
 //		lineRenderer.wid
 	}
@@ -132,8 +132,8 @@ public class Health : MonoBehaviour
 	public void DrawLine(Transform damager, Transform damageReceiver, float amountOfChange, Color colour)
 	{
 
-		//		lineRenderer.startColor = colour;
-		//		lineRenderer.endColor = colour;
+			lineRenderer.startColor = colour;
+				lineRenderer.endColor = colour;
 		lineRenderer.startWidth = (amountOfChange / 10f) / 2f;
 		lineRenderer.endWidth = amountOfChange / 10f;
 
