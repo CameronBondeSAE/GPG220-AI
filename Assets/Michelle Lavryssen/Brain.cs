@@ -21,7 +21,10 @@ namespace Michelle
         public GameObject defaultTarget;
         public GameObject currentTarget;
         public Rigidbody rigid;
+        public GameObject targetEnemy;
+        public float syphonAmount;
   
+
 
 
         override public void Start()
@@ -29,17 +32,58 @@ namespace Michelle
             defaultTarget = Instantiate(rightEye);
             defaultTarget.transform.position = new Vector3(Random.Range(2, 300), 1, Random.Range(2, 300));
             currentTarget = defaultTarget;
+            rigid = GetComponent<Rigidbody>();
+   
         }
 
 
         void Update()
         {
             myPosition = transform.position;
+
+            if (isEnemyNear == true)
+
+            {
+                if (gameObject.GetComponent<Health>().Amount <= 50 && gameObject.GetComponent<Energy>().Amount >= 25)
+                {
+                    Ability1(); // siphon health
+                    
+                }
+                if (gameObject.GetComponent<Health>().Amount > 50 && gameObject.GetComponent<Energy>().Amount > 70)
+                {
+
+                    Ability2(); // spawn undead
+                    
+                }
+                if (gameObject.GetComponent<Health>().Amount <= 25 && gameObject.GetComponent<Energy>().Amount >= 10)
+                {
+                    Ability3(); //make bone wall and flee
+                    
+                }
+            }
+
         }
 
         private void FixedUpdate()
         {
             Collisions();
+
+
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.name != "Necromancer" && other.gameObject.name != "undead(Clone)")
+            {
+                targetEnemy = other.gameObject;
+                isEnemyNear = true;
+                currentTarget = other.gameObject;
+            }
+        }
+        public void OnTriggerExit(Collider other)
+        {
+            isEnemyNear = false;
+            currentTarget = defaultTarget;
         }
 
         public void Collisions()
@@ -75,23 +119,29 @@ namespace Michelle
             }
 
 
+
             Quaternion rot = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 8);
 
             rigid.velocity = transform.forward * 5;
+
+
+
+
 
         }
 
         public override void Ability1()
         {
             base.Ability1();
-            debugText = "Im siphoning health";
+            print ("Im siphoning health");
+            SiphonHealth();
         }
 
         public override void Ability2()
         {
             base.Ability2();
-            debugText = "I'm raising undead";
+            print ("Im raising undead");
             instantiateUndead();
 
 
@@ -100,8 +150,9 @@ namespace Michelle
         public override void Ability3()
         {
             base.Ability3();
-            debugText = "I'm creating a bone shield between myself and the enemy";
+            print ("Im raising a bone wall and running away");
         }
+
 
 
         public void instantiateUndead()
@@ -112,11 +163,22 @@ namespace Michelle
                 Vector3 UndeadSpawnPosition = new Vector3(myPosition.x + Random.Range(-0.5f, 0.5f), myPosition.y, myPosition.z + Random.Range(-0.5f, 0.5f));
                 GameObject clone = Instantiate(undead, UndeadSpawnPosition, Quaternion.identity);
                 clone.GetComponent<UndeadTimer>().necro = gameObject;
-            }       
-            
+                clone.GetComponent<UndeadTimer>().targetEnemy = targetEnemy;
+            }
+
             //instantiates undead minions and then destroys them after 10 seconds
+
+            gameObject.GetComponent<Energy>().Amount -= 70;
         }
 
+        public void SiphonHealth()
+        {
+            gameObject.GetComponent<Energy>().Amount -= 25;
+            targetEnemy.GetComponent<Health>().Amount -= syphonAmount;
+            gameObject.GetComponent<Health>().Amount += syphonAmount;
+            
+
+        }
 
 
     }
