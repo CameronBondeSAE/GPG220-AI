@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 373756}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -963,7 +963,7 @@ GameObject:
   - component: {fileID: 45443334}
   m_Layer: 0
   m_Name: Cube (7)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -1535,7 +1535,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45254
+  m_Name: pb_Mesh18758
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -1691,7 +1691,7 @@ GameObject:
   - component: {fileID: 271122517}
   m_Layer: 0
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -2078,7 +2078,7 @@ GameObject:
   - component: {fileID: 275484189}
   m_Layer: 0
   m_Name: Cube (6)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -2528,7 +2528,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-843768
+  m_Name: pb_Mesh18928
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2738,7 +2738,7 @@ GameObject:
   - component: {fileID: 474067354}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -3125,7 +3125,7 @@ GameObject:
   - component: {fileID: 484238723}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -3502,7 +3502,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45486
+  m_Name: pb_Mesh19002
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -3648,7 +3648,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45382
+  m_Name: pb_Mesh18886
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -3843,7 +3843,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45240
+  m_Name: pb_Mesh18744
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -3999,7 +3999,7 @@ GameObject:
   - component: {fileID: 605941905}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -4435,7 +4435,7 @@ GameObject:
   - component: {fileID: 769995934}
   m_Layer: 0
   m_Name: Cylinder
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -6556,7 +6556,7 @@ GameObject:
   - component: {fileID: 876132479}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -6987,7 +6987,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45446
+  m_Name: pb_Mesh18972
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -7242,7 +7242,7 @@ GameObject:
   - component: {fileID: 978469382}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -8720,7 +8720,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45302
+  m_Name: pb_Mesh18806
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -8876,7 +8876,7 @@ GameObject:
   - component: {fileID: 1248241830}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -9271,7 +9271,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45200
+  m_Name: pb_Mesh18700
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -9417,7 +9417,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45348
+  m_Name: pb_Mesh18852
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -9588,7 +9588,7 @@ MonoBehaviour:
   prefabs:
   - {fileID: 1614063370329456, guid: f4937a0b70a39b44d981add170f27cd2, type: 2}
   - {fileID: 1966706611021462, guid: 990a36dcabbb42f43a56fe4ff9a19e90, type: 2}
-  - {fileID: 1490341823448034, guid: b70b0f3f2deb45540975976b408821da, type: 2}
+  - {fileID: 0}
   maxClones: 3
   arenaSize: 35
   timedSpawnInterval: 0
@@ -9742,7 +9742,7 @@ GameObject:
   - component: {fileID: 1512941649}
   m_Layer: 0
   m_Name: Cube (9)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -10119,7 +10119,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45318
+  m_Name: pb_Mesh18822
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -10316,7 +10316,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45214
+  m_Name: pb_Mesh18714
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -10462,7 +10462,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45162
+  m_Name: pb_Mesh18662
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -10765,7 +10765,7 @@ GameObject:
   - component: {fileID: 1738545676}
   m_Layer: 0
   m_Name: Stairs
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
@@ -14731,7 +14731,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45176
+  m_Name: pb_Mesh18676
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -14926,7 +14926,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh45280
+  m_Name: pb_Mesh18784
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -15095,6 +15095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterBases: []
+  DeadGameObject: {fileID: 0}
   uiOffset: 0
   HealthEnergyUIPrefab: {fileID: 114364150981853576, guid: b0e33f6eb6c0d9843b9969b390de7a94,
     type: 2}
@@ -15127,7 +15128,7 @@ GameObject:
   - component: {fileID: 2058827232}
   m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 127
