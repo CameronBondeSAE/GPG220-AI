@@ -122,7 +122,7 @@ public class UndeadTimer : CharacterBase
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.name != "Necromancer" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)")
+        if (other.gameObject.name != "Necromancer(Clone)" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)"  && other.gameObject.tag != "Obstacle" && other.gameObject.name != "Health pickup(Clone)" && other.gameObject.name != "Energy pickup(Clone)" && other.gameObject.tag != "Floor" && other.gameObject.tag != "Bounds")
         {
             if (other.gameObject == targetEnemy)
             {
@@ -157,9 +157,14 @@ public class UndeadTimer : CharacterBase
 
     public void baseattack()
     {
-        currentTarget.GetComponent<Health>().Amount -= 1;
-        print("im attacking" + targetEnemy);
-
+        if (currentTarget != null)
+        {
+            if (currentTarget.GetComponent<Health>())
+            {
+                currentTarget.GetComponent<Health>().Amount -= 1;
+                print("im attacking" + targetEnemy);
+            }
+        }
     }
 
     public void ResetTarget()
