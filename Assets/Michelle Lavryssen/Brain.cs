@@ -95,10 +95,13 @@ namespace Michelle
             Collisions();
             if (targetEnemy != null)
             {
-                if (targetEnemy.GetComponent<Health>().Amount > 0 && retargetTimer <= 0)
+                if (targetEnemy.GetComponent<Health>())
                 {
-                    currentTarget = targetEnemy;
-                    retargetTimer = 10;
+                    if (targetEnemy.GetComponent<Health>().Amount > 0 && retargetTimer <= 0)
+                    {
+                        currentTarget = targetEnemy;
+                        retargetTimer = 10;
+                    }
                 }
             }
 
@@ -107,7 +110,7 @@ namespace Michelle
 
         public void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.name != "Necromancer" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)" && other.gameObject.name != "Right(Clone)")
+            if (other.gameObject.name != "Necromancer(Clone)" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)" && other.gameObject.name != "Right(Clone)" && other.gameObject.tag != "Obstacle" && other.gameObject.name != "Health pickup(Clone)" && other.gameObject.name != "Energy pickup(Clone)" && other.gameObject.tag != "Floor" && other.gameObject.tag != "Bounds")
             {
                 if (retargetTimer <= 0)
                 {
@@ -125,7 +128,7 @@ namespace Michelle
         }
         public void OnTriggerStay(Collider other)
         {
-            if (other.gameObject.name != "Necromancer" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)" && other.gameObject.name != "Right(Clone)")
+            if (other.gameObject.name != "Necromancer(Clone)" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)" && other.gameObject.name != "Right(Clone)" && other.gameObject.tag != "Obstacle" && other.gameObject.name != "Health pickup(Clone)" && other.gameObject.name != "Energy pickup(Clone)" && other.gameObject.tag != "Floor" && other.gameObject.tag != "Bounds")
             {
 
                 isEnemyNear = true;
@@ -223,6 +226,8 @@ namespace Michelle
             {
 
 
+
+
                 // Vector3 UndeadSpawnPosition = new Vector3(myPosition.x + Random.Range(-0.5f, 0.5f), myPosition.y, myPosition.z + Random.Range(-0.5f, 0.5f));
                 Vector3 UndeadSpawnPosition;
                 UndeadSpawnPosition.x = myPosition.x + ((TargetEnemyPos.x - myPosition.x) / 2);
@@ -245,10 +250,13 @@ namespace Michelle
 
         public void SiphonHealth()
         {
-            gameObject.GetComponent<Energy>().Amount -= 25;
-            targetEnemy.GetComponent<Health>().Amount -= syphonAmount;
-            gameObject.GetComponent<Health>().Amount += syphonAmount;
+            if (targetEnemy.GetComponent<Health>())
+            {
 
+                gameObject.GetComponent<Energy>().Amount -= 25;
+                targetEnemy.GetComponent<Health>().Amount -= syphonAmount;
+                gameObject.GetComponent<Health>().Amount += syphonAmount;
+            }
 
         }
 
@@ -290,7 +298,10 @@ namespace Michelle
 
         public void MoveDefaultTarget()
         {
-            defaultTarget.transform.position = new Vector3(Random.Range(2, 300), 0, Random.Range(2, 300));
+            GameObject bounds = GameObject.FindGameObjectWithTag("Bounds");
+
+            defaultTarget.transform.position = new Vector3(Random.Range(47, -48), 0, Random.Range(47, -47));
+
 
         }
 
