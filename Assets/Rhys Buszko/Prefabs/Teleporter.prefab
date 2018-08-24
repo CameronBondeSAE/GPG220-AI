@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 54623601150145740}
   - component: {fileID: 120878902742346960}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Teleporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1966706611021462}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -25.04, y: 0.9, z: -9.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4998631096556274}
@@ -122,8 +122,9 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 32bb244d3f0ab674a87f686061c09bb6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -192,8 +193,11 @@ MonoBehaviour:
   LeftEye: {fileID: 1622487479227430}
   RightEye: {fileID: 1612051736728700}
   Defult: {fileID: 0}
+  AttackTimmer: 0
   manager: {fileID: 0}
-  Error: 0
+  attack: 0
+  run: 0
+  wander: 0
   My_Path: {fileID: 0}
   Speed_Mult: 1
   dir: {x: 50.432266, y: 0, z: 0.9017464}
@@ -269,7 +273,6 @@ MonoBehaviour:
   damageMultiplier: 1
   target: {x: 0, y: 0, z: 0}
   Speed: 10
-  Rigid: {fileID: 54623601150145740}
 --- !u!120 &120878902742346960
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -283,6 +286,7 @@ LineRenderer:
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 0}
   m_StaticBatchInfo:
@@ -313,12 +317,15 @@ LineRenderer:
     widthCurve:
       serializedVersion: 2
       m_Curve:
-      - serializedVersion: 2
+      - serializedVersion: 3
         time: 0
         value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
