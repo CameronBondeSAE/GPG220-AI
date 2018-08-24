@@ -70,11 +70,15 @@ public class UndeadTimer : CharacterBase
 
         Collisions();
 
-        if (targetEnemy.GetComponent<Health>().Amount <= 0)
+		Health health = targetEnemy.GetComponent<Health>();
+		if (targetEnemy != null)
         {
-            ResetTarget();
+			if (health && health.Amount <= 0)
+			{
+				ResetTarget();
+			}
 
-        }
+		}
 
     }
     public void Collisions()

@@ -139,13 +139,16 @@ public class Health : MonoBehaviour
 
 		lineRenderer.startColor = colour;
 		lineRenderer.endColor = colour;
-		lineRenderer.startWidth = (amountOfChange / 10f) / 2f;
-		lineRenderer.endWidth = amountOfChange / 10f;
+//		lineRenderer.startWidth = (amountOfChange / 10f) / 2f;
+		lineRenderer.startWidth = 0.5f;
+//		lineRenderer.endWidth = amountOfChange / 10f;
+		lineRenderer.endWidth = 0.5f;
 
 		lineRenderer.SetPosition(0, damager.position);
 		lineRenderer.SetPosition(1, damageReceiver.position);
 
-		DOTween.To(delegate (float value) { lineRenderer.material.color = new Color(colour.r, colour.g, colour.b, value); }, 1f, 0f, amountOfChange / 10f);
+//		DOTween.To(delegate (float value) { lineRenderer.material.color = new Color(colour.r, colour.g, colour.b, value); }, 1f, 0f, amountOfChange / 10f);
+		DOTween.To(delegate (float value) { lineRenderer.material.color = new Color(colour.r, colour.g, colour.b, value); }, 1f, 0f, 1f);
 	}
 
 	private void CheckForDeath()

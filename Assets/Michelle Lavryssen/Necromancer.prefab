@@ -30,6 +30,7 @@ GameObject:
   - component: {fileID: 54385699829263570}
   - component: {fileID: 135489727370117354}
   - component: {fileID: 120185474665444140}
+  - component: {fileID: 114001014781735956}
   m_Layer: 0
   m_Name: Necromancer
   m_TagString: Untagged
@@ -74,7 +75,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1614063370329456}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.065849, y: 1, z: -16.150724}
+  m_LocalPosition: {x: -0.9212911, y: 2.41, z: -10.216571}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4717482530001878}
@@ -123,7 +124,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b0ad6af169871314ea8a1e34890db58b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -165,6 +166,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &114001014781735956
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1614063370329456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 525bb2d5d87e6514686a4b2dab92b7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Necromancer
+  debugText: 
+  speedMultiplier: 1
+  decelerationMultiplier: 0.9
+  damageMultiplier: 1
+  target: {x: 0, y: 0, z: 0}
 --- !u!114 &114316557879129628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -195,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aad115aca74ce3c4891b3f6de0b4aae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundGraphSerialization: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-4683.0,"y":-4919.0},"nodes":[{"_position":{"x":5435.0,"y":4987.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":6679.0,"y":5323.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":6695.0,"y":5457.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_action":{"log":{"_value":"I''m
+  boundGraphSerialization: '{"version":2.8,"type":"NodeCanvas.BehaviourTrees.BehaviourTree","translation":{"x":-5282.0,"y":-5091.0},"nodes":[{"_position":{"x":5435.0,"y":4987.0},"$type":"NodeCanvas.BehaviourTrees.Selector","$id":"2"},{"_position":{"x":6679.0,"y":5323.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"3"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":6695.0,"y":5457.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"4"},{"_action":{"log":{"_value":"I''m
     wandering!"},"secondsToRun":3.0,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":6945.0,"y":5482.0},"_tag":"wander","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"8"},{"_position":{"x":6121.0,"y":5297.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"11"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":6172.0,"y":5427.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"12"},{"_position":{"x":6380.0,"y":5431.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"16"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"9a463aac-6c40-4ff5-bb63-689fe1278f12"},"checkType":"LessOrEqualTo","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":6245.0,"y":5552.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"17"},{"_condition":{"valueA":{"_name":"Energy","_targetVariableID":"3b8e3f84-f4a5-4b0c-86f9-3934fa2c26c8"},"checkType":"LessThan","valueB":{"_value":10},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":6379.0,"y":5548.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"21"},{"_action":{"log":{"_value":"I''m
     running away!"},"secondsToRun":5.0,"$type":"NodeCanvas.Tasks.Actions.DebugLogText"},"_position":{"x":6491.0,"y":5624.0},"_tag":"run
     away!","$type":"NodeCanvas.BehaviourTrees.ActionNode","$id":"25"},{"_position":{"x":5768.0,"y":5291.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"28"},{"_condition":{"valueA":{"_name":"IsEnemyNear","_targetVariableID":"78e9fc31-8f78-40dc-9df1-7ad95ace04c2"},"valueB":{"_value":true},"$type":"NodeCanvas.Tasks.Conditions.CheckBoolean"},"_position":{"x":5710.0,"y":5380.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"29"},{"_position":{"x":5948.0,"y":5396.0},"$type":"NodeCanvas.BehaviourTrees.Sequencer","$id":"33"},{"_condition":{"valueA":{"_name":"Health","_targetVariableID":"9a463aac-6c40-4ff5-bb63-689fe1278f12"},"checkType":"LessOrEqualTo","valueB":{"_value":50},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5757.0,"y":5472.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"34"},{"_condition":{"valueA":{"_name":"Energy","_targetVariableID":"3b8e3f84-f4a5-4b0c-86f9-3934fa2c26c8"},"checkType":"GreaterOrEqualTo","valueB":{"_value":10},"$type":"NodeCanvas.Tasks.Conditions.CheckInt"},"_position":{"x":5896.0,"y":5513.0},"$type":"NodeCanvas.BehaviourTrees.ConditionNode","$id":"38"},{"_action":{"log":{"_value":"I''m
