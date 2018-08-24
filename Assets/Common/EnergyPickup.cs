@@ -7,10 +7,15 @@ public class EnergyPickup : PickupBase
 	{
 		base.OnTriggerEnter(other);
 
-		if (other.GetComponent<Energy>())
+
+		if (!other.isTrigger)
 		{
-			other.GetComponent<Energy>().Change(amount);
-			Destroy(gameObject);
+
+			if (other.GetComponent<Energy>())
+			{
+				other.GetComponent<Energy>().Change(amount);
+				Destroy(gameObject);
+			}
 		}
 	}
 }
