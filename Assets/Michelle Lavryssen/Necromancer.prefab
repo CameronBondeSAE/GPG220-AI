@@ -120,6 +120,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -231,6 +232,7 @@ MonoBehaviour:
   isEnemyNear: 0
   Necromancer: {fileID: 1614063370329456}
   undead: {fileID: 1336612062051888, guid: f9b4a676399153749ba161eccaaf2c60, type: 2}
+  Bonewall: {fileID: 1340865624967782, guid: 877ccbbf3d7a9d8418310807d487f58d, type: 2}
   myPosition: {x: 0, y: 0, z: 0}
   rightEye: {fileID: 1901970241720538}
   leftEye: {fileID: 1721014551916688}
@@ -240,6 +242,11 @@ MonoBehaviour:
   rigid: {fileID: 0}
   targetEnemy: {fileID: 0}
   syphonAmount: 25
+  BonewallTimer: 0
+  Distance: 0
+  TargetEnemyPos: {x: 0, y: 0, z: 0}
+  retargetTimer: 0
+  standinobject: {fileID: 0}
 --- !u!114 &114744543886266242
 MonoBehaviour:
   m_ObjectHideFlags: 1

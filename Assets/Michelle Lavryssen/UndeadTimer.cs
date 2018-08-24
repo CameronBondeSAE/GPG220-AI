@@ -26,18 +26,17 @@ public class UndeadTimer : CharacterBase
     // Use this for initialization
     public void randomizePositions()
     {
-        gameObject.transform.position += new Vector3(Random.Range(necro.transform.position.x - 0.5f, necro.transform.position.x + 0.5f), 0, Random.Range(necro.transform.position.z - 0.5f, necro.transform.position.z + 0.5f));
+        //gameObject.transform.position += new Vector3(Random.Range(necro.transform.position.x - 0.5f, necro.transform.position.x + 0.5f), 0, Random.Range(necro.transform.position.z - 0.5f, necro.transform.position.z + 0.5f));
     }
 
     void Start()
     {
-        defaultTarget = Instantiate(rightEye);
-        defaultTarget.transform.position = new Vector3(Random.Range(2, 300), 1, Random.Range(2, 300));
+        defaultTarget = necro;
         currentTarget = defaultTarget;
         rigid = GetComponent<Rigidbody>();
-        randomizePositions();
+        //randomizePositions();
         currentTarget = necro;
-        attacktimer = 5;
+        attacktimer = 1;
 
 
     }
@@ -53,22 +52,29 @@ public class UndeadTimer : CharacterBase
             currentTarget = targetEnemy;
 
         }
+        else
+        {
+            ResetTarget();
+
+        }
 
         if (targetTime <= 0)
         {
-
-            Destroy(defaultTarget, 1);
             Destroy(gameObject, 1);
-
-
         }
-       
+
     }
 
     public void FixedUpdate()
     {
 
         Collisions();
+
+        if (targetEnemy.GetComponent<Health>().Amount <= 0)
+        {
+            ResetTarget();
+
+        }
 
     }
     public void Collisions()
@@ -105,16 +111,18 @@ public class UndeadTimer : CharacterBase
 
 
 
+
         Quaternion rot = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 8);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 15);
 
         rigid.velocity = transform.forward * 5;
 
+
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.name != "Necromancer" && other.gameObject.name != "undead(Clone)")
+        if (other.gameObject.name != "Necromancer" && other.gameObject.name != "undead(Clone)" && other.gameObject.name != "Bonewall(Clone)")
         {
             if (other.gameObject == targetEnemy)
             {
@@ -130,18 +138,40 @@ public class UndeadTimer : CharacterBase
     public override void Ability1()
     {
         base.Ability1();
-        print("im attacking" + targetEnemy);
 
-        if (attacktimer <= 0)
+        if (targetEnemy != null)
         {
-            baseattack();
-            attacktimer = 5;
+            if (attacktimer <= 0)
+            {
+                baseattack();
+                attacktimer = 1;
+            }
+        }
+        else
+        {
+
+            ResetTarget();
+
         }
     }
 
     public void baseattack()
     {
-        currentTarget.GetComponent<Health>().Amount -= 5;
+        currentTarget.GetComponent<Health>().Amount -= 1;
+        print("im attacking" + targetEnemy);
+
+    }
+
+    public void ResetTarget()
+    {
+
+        if (necro.GetComponent<Michelle.Brain>().targetEnemy != null)
+        {
+            targetEnemy = necro.GetComponent<Michelle.Brain>().targetEnemy;
+        }
+
+        currentTarget = defaultTarget;
+
     }
 
 
