@@ -30,6 +30,8 @@ namespace Rhys
         List<Vector3> health = new List<Vector3>();
         List<Vector3> energy = new List<Vector3>();
 
+        Collider bounding;
+
         public Pathfinding My_Path;
         Health My_Health;
         Body My_Body;
@@ -60,6 +62,17 @@ namespace Rhys
             target = Defult;
 
             rigid = gameObject.GetComponent<Rigidbody>();
+
+            GameObject[] setup = FindObjectsOfType<GameObject>();
+
+            foreach (GameObject n in setup)
+            {
+                if (n.tag == "Bounds")
+                {
+
+                    bounding = n.GetComponent<Collider>();
+                }
+            }
 
         }
 
@@ -151,6 +164,7 @@ namespace Rhys
                 if(My_Energy.Amount >= 20)
                 {
                     RaycastHit forwardhit;
+                    float setY = gameObject.transform.position.y;
 
                     if (Physics.Raycast(transform.position, transform.forward, out forwardhit, 50, 1, QueryTriggerInteraction.Ignore))
                     {
@@ -160,18 +174,40 @@ namespace Rhys
                             if (!hitForward.collider.bounds.Contains((hitForward.point + gameObject.transform.forward * 50)))
                             {
                                 Defult.transform.position = hitForward.point + gameObject.transform.forward * 50;
+                                gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1, gameObject.transform.position.z);
                                 gameObject.transform.position = Defult.transform.position;
                             }
                             else
                             {
                                 Defult.transform.position = hitForward.point;
-                                gameObject.transform.position = Defult.transform.position;
+                                if (bounding.bounds.Contains(Defult.transform.position))
+                                {
+                                    gameObject.transform.position = Defult.transform.position;
+                                }
+                                else
+                                {
+                                   Defult.transform.position = new Vector3(bounding.bounds.center.x, 1, bounding.bounds.center.z);
+                                   gameObject.transform.position = new Vector3(bounding.bounds.center.x, 1, bounding.bounds.center.z);
+                             
+                                }
                             }
                         }
                     }
                     else
                     {
-                         gameObject.transform.position = gameObject.transform.position + gameObject.transform.forward * 50;
+                        
+                        gameObject.transform.position = gameObject.transform.position + gameObject.transform.forward * 50;
+                        gameObject.transform.position = new Vector3(gameObject.transform.position.x, 1, gameObject.transform.position.z);
+                        if (bounding.bounds.Contains(Defult.transform.position))
+                        {
+                            gameObject.transform.position = Defult.transform.position;
+                        }
+                        else
+                        {
+                            Defult.transform.position = new Vector3(bounding.bounds.center.x, 1, bounding.bounds.center.z);
+                            gameObject.transform.position = new Vector3(bounding.bounds.center.x,1,bounding.bounds.center.z);
+
+                        }
                     }
                     My_Energy.Change(-20);
                     My_Body.Ability2();
