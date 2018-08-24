@@ -7,14 +7,18 @@ public class HealthPickup : PickupBase
 	{
 		base.OnTriggerEnter(other);
 
-		Health health = other.GetComponent<Health>();
 
-		if (health)
-		{
-			health.Change(amount, gameObject);
+        if (!other.isTrigger)
+        {
+            Health health = other.GetComponent<Health>();
 
-			Destroy(gameObject);
-		}
+            if (health)
+            {
+                health.Change(amount, gameObject);
+
+                Destroy(gameObject);
+            }
+        }
 	}
 
 }

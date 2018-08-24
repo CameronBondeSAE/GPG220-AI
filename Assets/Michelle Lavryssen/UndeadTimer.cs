@@ -44,6 +44,10 @@ public class UndeadTimer : CharacterBase
     // Update is called once per frame
     void Update()
     {
+        if(gameObject.GetComponent<Health>().Amount <=0)
+        {
+            Destroy(gameObject);
+        }
         myPosition = transform.position;
         targetTime -= Time.deltaTime;
         attacktimer -= Time.deltaTime;

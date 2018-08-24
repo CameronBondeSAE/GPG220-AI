@@ -8,7 +8,7 @@ public class bonewall : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        lifetime = 60;
+        lifetime = 10;
 	}
 	
 	// Update is called once per frame

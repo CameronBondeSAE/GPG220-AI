@@ -46,6 +46,12 @@ namespace Michelle
 
         void Update()
         {
+            if (gameObject.GetComponent<Health>().Amount <= 0)
+            {
+                print("Necromancer Died");
+                Destroy(gameObject);
+
+            }
             myPosition = transform.position;
             BonewallTimer -= Time.deltaTime;
             if (targetEnemy != null)
@@ -222,7 +228,7 @@ namespace Michelle
         public void instantiateUndead()
         {
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 3; i++)
             {
 
 

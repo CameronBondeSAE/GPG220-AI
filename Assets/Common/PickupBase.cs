@@ -19,7 +19,12 @@ public class PickupBase : MonoBehaviour
 
 	public virtual void OnTriggerEnter(Collider other)
 	{
-		if (OnPickedup != null) OnPickedup();
-		if (OnPickedupBase != null) OnPickedupBase(this);
-	}
+
+        if (!other.isTrigger)
+        {
+            if (OnPickedup != null) OnPickedup();
+            if (OnPickedupBase != null) OnPickedupBase(this);
+        }
+
+    }
 }

@@ -21,7 +21,7 @@ namespace Rhys
 
 
         public float AttackTimmer = 0;
-        int damage = -5;
+        int damage = -15;
 
         public Manager manager;
         public bool attack, run, wander;
