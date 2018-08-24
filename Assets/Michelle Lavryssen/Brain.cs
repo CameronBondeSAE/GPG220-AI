@@ -226,7 +226,7 @@ namespace Michelle
                 // Vector3 UndeadSpawnPosition = new Vector3(myPosition.x + Random.Range(-0.5f, 0.5f), myPosition.y, myPosition.z + Random.Range(-0.5f, 0.5f));
                 Vector3 UndeadSpawnPosition;
                 UndeadSpawnPosition.x = myPosition.x + ((TargetEnemyPos.x - myPosition.x) / 2);
-                UndeadSpawnPosition.y = myPosition.y + ((TargetEnemyPos.y - myPosition.y) / 2);
+                UndeadSpawnPosition.y = myPosition.y;
                 UndeadSpawnPosition.z = myPosition.z + ((TargetEnemyPos.z - myPosition.z) / 2);
 
                 UndeadSpawnPosition.x += Random.Range(-0.5f, 0.5f);
