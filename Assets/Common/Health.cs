@@ -4,6 +4,7 @@ using System.Collections;
 using DG.Tweening;
 using JMiles42;
 
+[RequireComponent(typeof(LineRenderer))]
 public class Health : MonoBehaviour
 {
 	// Variables
@@ -50,10 +51,10 @@ public class Health : MonoBehaviour
 		owner = gameObject;
 		lineRenderer = gameObject.GetComponent<LineRenderer>();
 		Material material = Resources.Load<Material>("HealthLine");
-		
-	    lineRenderer.material = material;
 
-//		lineRenderer.wid
+		lineRenderer.material = material;
+
+		//		lineRenderer.wid
 	}
 
 	public void Change(float amountOfChange, CharacterBase healthChangeDealer)
@@ -79,29 +80,33 @@ public class Health : MonoBehaviour
 		lastHealthChangedAmount = amountOfChange;
 
 		// Fire off events
-		if (amountOfChange > 0) {
+		if (amountOfChange > 0)
+		{
 			if (OnHealingEvent != null) OnHealingEvent();
 		}
-		else {
+		else
+		{
 			if (OnHurtEvent != null) OnHurtEvent();
 		}
 
 		if (healthChangeDealer != null)
 		{
-			if (amountOfChange > 0) {
+			if (amountOfChange > 0)
+			{
 				lastHealingDealer = healthChangeDealer;
 				if (owner != null) DrawLine(healthChangeDealer.transform, owner.transform, amountOfChange, Color.green);
 			}
-			else {
+			else
+			{
 				lastDamagingDealer = healthChangeDealer;
-				if (owner != null) DrawLine(healthChangeDealer.transform, owner.transform, amountOfChange,  Color.red);
+				if (owner != null) DrawLine(healthChangeDealer.transform, owner.transform, amountOfChange, Color.red);
 			}
-				Debug.DrawLine(transform.position, healthChangeDealer.transform.position, Color.red, 0.50f);
+			Debug.DrawLine(transform.position, healthChangeDealer.transform.position, Color.red, 0.50f);
 
 		}
 		CheckForDeath();
 	}
-	
+
 	[Obsolete("Use the Change function that takes a GameObject")]
 	public void Change(float amountOfChange)
 	{
@@ -132,8 +137,8 @@ public class Health : MonoBehaviour
 	public void DrawLine(Transform damager, Transform damageReceiver, float amountOfChange, Color colour)
 	{
 
-			lineRenderer.startColor = colour;
-				lineRenderer.endColor = colour;
+		lineRenderer.startColor = colour;
+		lineRenderer.endColor = colour;
 		lineRenderer.startWidth = (amountOfChange / 10f) / 2f;
 		lineRenderer.endWidth = amountOfChange / 10f;
 

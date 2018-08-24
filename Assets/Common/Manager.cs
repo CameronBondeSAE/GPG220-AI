@@ -6,6 +6,8 @@ public class Manager : MonoBehaviour
 {
 	public List<CharacterBase> CharacterBases;
 
+	public GameObject DeadGameObject;
+
 	[SerializeField]
 	private float uiOffset;
 
